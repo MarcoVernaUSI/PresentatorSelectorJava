@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/home/dev/Desktop/Materials/lib/json-simple-1.1.jar"/>
 	<classpathentry kind="lib" path="/home/dev/Desktop/Materials/lib/commons-lang-2.6/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="/home/dev/Desktop/Materials/lib/swt-3.1.2-gtk-linux-x86/swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

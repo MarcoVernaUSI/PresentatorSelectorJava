@@ -30,6 +30,12 @@ public class Candidates {
         return this.candidates.get(i);
     }
     
+    // return random speaker
+    public Candidate getRandomSpeaker() {
+        int i = (int)(Math.random()*((candidates.size()-1)+1));
+        return this.candidates.get(i);
+    }
+    
     // remove multiple speakers from the list
     public void removeSpeakers(Integer[] indices) {
         
