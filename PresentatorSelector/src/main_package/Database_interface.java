@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,14 +20,22 @@ public class Database_interface {
     public Database_interface(String path) {
         super();
         this.path = path;
-        this.default_path = StringUtils.substring(path, 0, path.length() - 5) + " default.json";
+        this.default_path = StringUtils.substring(path, 0, path.length() - 5) + "_default.json";
     }
     
     // Load the database into the list
     public ArrayList<Candidate> load_database(boolean _default) {       
         ArrayList<Candidate> database = new ArrayList<>();
+        String current_path = this.path;
         
-        try (FileReader reader = new FileReader(this.path))
+        //check to see if the default or current database must be loaded
+        if (_default) {
+            current_path = this.default_path;
+            }
+
+        
+        
+        try (FileReader reader = new FileReader(current_path))
         {
             //Read JSON file
             Object obj = jsonParser.parse(reader);

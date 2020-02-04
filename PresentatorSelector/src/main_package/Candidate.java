@@ -23,5 +23,10 @@ public class Candidate {
         this.surname = surname;
     }
     
+    // Candidate to string method
+    public String printCandidate(){
+        return (this.getFname() + " " + this.getSurname());
+    }
+    
     
 }
