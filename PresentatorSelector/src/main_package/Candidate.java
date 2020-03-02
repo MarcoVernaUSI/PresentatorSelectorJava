@@ -5,7 +5,7 @@ public class Candidate {
     private String surname;
     
     public Candidate(String fname, String surname) {
-        super();
+        //super();
         this.fname = fname;
         this.surname = surname;
     }

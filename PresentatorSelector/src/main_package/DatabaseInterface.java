@@ -11,13 +11,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 // Class for interact with the json list containing the candidates
-public class Database_interface {
+public class DatabaseInterface {
     private final String path;
     private final String default_path; 
     private final JSONParser jsonParser = new JSONParser();
     
     
-    public Database_interface(String path) {
+    public DatabaseInterface(String path) {
         super();
         this.path = path;
         this.default_path = StringUtils.substring(path, 0, path.length() - 5) + "_default.json";
@@ -33,8 +33,6 @@ public class Database_interface {
             current_path = this.default_path;
             }
 
-        
-        
         try (FileReader reader = new FileReader(current_path))
         {
             //Read JSON file
@@ -78,6 +76,7 @@ public class Database_interface {
         }
     }
     
+    // Return a string with the candidate name and surname
     private Candidate parseCandidate(JSONObject obj) {
         return new Candidate((String) obj.get("fname"), (String) obj.get("surname"));
     }

@@ -7,9 +7,9 @@ import java.util.Collections;
 public class Candidates {
     private ArrayList<Candidate> candidates;
     private final Log log;
-    private final Database_interface db;
+    private final DatabaseInterface db;
 
-    public Candidates(ArrayList<Candidate> candidates, Log log, Database_interface db) {
+    public Candidates(ArrayList<Candidate> candidates, Log log, DatabaseInterface db) {
         super();
         this.candidates = candidates;
         this.log = log;
