@@ -26,7 +26,7 @@ public class Log {
     public List<LogEntry> loadLog() {       
         _log = new ArrayList<>();
         
-        try (FileReader reader = new FileReader(this._path))
+        try (FileReader reader = new FileReader(_path))
         {
             //Read JSON file
             Object obj = _jsonParser.parse(reader);
@@ -51,14 +51,14 @@ public class Log {
     public void save_entry(Candidate speaker, Action action) {
         Date actual_date = new Date();
         LogEntry entry = new LogEntry(speaker.printCandidate(), action, actual_date);
-        this._log.add(entry);
-        this.update_log();
+        _log.add(entry);
+        update_log();
     }
     
     // Dump the log to the json file
     public void update_log() {
         JSONArray entries_list = new JSONArray();
-        for (LogEntry entry : this._log) {
+        for (LogEntry entry : _log) {
             JSONObject wentry = new JSONObject();
             wentry.put("name",entry.getSpeaker());
             wentry.put("action",entry.getAction().name());
@@ -66,7 +66,7 @@ public class Log {
             entries_list.add(wentry);
         }
         //Write JSON file
-        try (FileWriter file = new FileWriter(this._path)) {
+        try (FileWriter file = new FileWriter(_path)) {
             file.write(entries_list.toJSONString());
             file.flush();
         } catch (IOException e) {
@@ -76,18 +76,16 @@ public class Log {
     
     // Clear the log
     public void clear_log() {
-        this._log.clear();
-        this.update_log();
+        _log.clear();
+        update_log();
     }
     
     // print the whole log
     public String print_log() {
         String log_print = "";
-        for (LogEntry entry : this._log) {
+        for (LogEntry entry : _log) {
             log_print = log_print + "\n" + entry.getEntry(); 
         }
         return log_print;
     }
-        
-
 }

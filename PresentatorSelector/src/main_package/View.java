@@ -1,8 +1,12 @@
 package main_package;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -14,22 +18,25 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class View extends JPanel
     implements ListSelectionListener {
-    // List of candidates
     private final Candidates candidates;
     private final Log log;
-    private final JList<String> candidate_list;
-    private final DefaultListModel<String> candidate_listModel;
+    private final JList<String> candidateList;
+    private final DefaultListModel<String> candidateListModel;
     private final JTextField speakerName;
     private final JButton removeButton;
     private final JButton selectButton;
@@ -41,38 +48,40 @@ public class View extends JPanel
 
         this.log = log;
         this.candidates = candidates;
-        this.candidate_listModel = new DefaultListModel<>();
+        candidateListModel = new DefaultListModel<>();
         updateList();
 
         // Create the list and put it in a scroll pane.
-        this.candidate_list = new JList<>(candidate_listModel);
-        candidate_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        candidate_list.setSelectedIndex(0);
-        candidate_list.addListSelectionListener(this);
-        candidate_list.setVisibleRowCount(10);
-        JScrollPane listScrollPane = new JScrollPane(candidate_list);
-
+        candidateList = new JList<>(candidateListModel);
+        candidateList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        candidateList.setSelectedIndex(0);
+        candidateList.addListSelectionListener(this);
+        candidateList.setVisibleRowCount(10);
+        candidateList.setCellRenderer(new MyListCellRenderer());
+        JScrollPane listScrollPane = new JScrollPane(candidateList);
+        
+        // add mouse listener for absents
+        candidateList.addMouseListener(new AbsentListener());
+        
         // Create the select speaker button
-        this.selectButton = new JButton("Select random speaker");
+        selectButton = new JButton("Select random speaker");
         selectButton.addActionListener(new SelectListener());
 
         // Create the remove speaker button
-        this.removeButton = new JButton("Remove speaker");
+        removeButton = new JButton("Remove speaker");
         removeButton.addActionListener(new RemoveListener());
 
         // Create the add speaker button
-        this.addButton = new JButton("Add speaker");
+        addButton = new JButton("Add speaker");
         addButton.addActionListener(new AddListener());
 
         // Print log button
-        this.logButton = new JButton("print Log");
+        logButton = new JButton("print Log");
         logButton.addActionListener(new logListener());
 
-        // Create the add speaker button
-
         // Create the extracted speaker box
-        this.speakerName = new JTextField(20);
-        this.speakerName.setEditable(false);
+        speakerName = new JTextField(20);
+        speakerName.setEditable(false);
 
         // Create a panel that uses BoxLayout.
         JPanel buttonPane = new JPanel();
@@ -94,34 +103,33 @@ public class View extends JPanel
         buttonPane2.add(speakerName);
         buttonPane2.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
+        JLabel description = new JLabel("right click for toggle/untoggle absent status");
+        
+        add(description,BorderLayout.AFTER_LINE_ENDS);
         add(listScrollPane, BorderLayout.PAGE_START);
         add(buttonPane, BorderLayout.CENTER);
         add(buttonPane2, BorderLayout.PAGE_END);
-
     }
 
     // Consistency between view and model
     public void updateList() {
-        candidate_listModel.removeAllElements();
-        for (Candidate candidate : this.candidates.getCandidates()) {
-            candidate_listModel.addElement(candidate.printCandidate());
+        candidateListModel.removeAllElements();
+        for (Candidate candidate : candidates.getCandidates()) {
+            candidateListModel.addElement(candidate.printCandidate());
         }
-        if (candidate_listModel.getSize() == 0) { // Nobody's left, disable
-                                                  // firing.
+        if (candidateListModel.getSize() == 0) {
+                                                 
             selectButton.setEnabled(false);
-
         }
-
     }
 
     // This method is required by ListSelectionListener.
     @Override
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting() == false) {
-            if (candidate_list.getSelectedIndex() == -1) {
+            if (candidateList.getSelectedIndex() == -1) {
                 // No selection, disable remove button.
                 removeButton.setEnabled(false);
-
             } else {
                 // Selection, enable the remove button.
                 removeButton.setEnabled(true);
@@ -141,8 +149,10 @@ public class View extends JPanel
         @Override
         public void actionPerformed(ActionEvent e) {
             // get selected index
-            int index = candidate_list.getSelectedIndex();
-            candidates.removeSpeakers(new Integer[] { index });
+            String speaker = candidateList.getSelectedValue();  
+            //int index = candidateList.getSelectedIndex();
+            //candidates.removeSpeakers(new Integer[] { index });
+            candidates.removeSpeakers(speaker);  
             updateList();
         }
     }
@@ -151,7 +161,6 @@ public class View extends JPanel
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println(log.print_log());
-            ;
         }
     }
 
@@ -162,6 +171,47 @@ public class View extends JPanel
             addButton.setEnabled(false);
         }
     }
+    
+    class AbsentListener extends MouseAdapter {
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if ( SwingUtilities.isRightMouseButton(e) ) {      
+                candidateList.setSelectedIndex(candidateList.locationToIndex(e.getPoint()));
+
+                 JPopupMenu menu = new JPopupMenu();
+                 JMenuItem setAbsent = new JMenuItem("toggle absent or not");
+                 setAbsent.addActionListener(new ActionListener() {
+                     @Override
+                    public void actionPerformed(ActionEvent e) {
+                         candidates.setAbsent(candidateList.getSelectedValue());
+                     }
+                 });
+                 menu.add(setAbsent);
+                 menu.show(candidateList, e.getPoint().x, e.getPoint().y);            
+             }
+         }
+    }
+    
+    class MyListCellRenderer extends JLabel implements ListCellRenderer {
+        public MyListCellRenderer() {
+            setOpaque(true);
+        }
+        @Override
+        public Component getListCellRendererComponent(JList paramlist, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            setText(value.toString());
+            if (candidates.checkAbsent(value.toString())) {
+                setBackground(Color.RED);
+            } else
+                setBackground(Color.white);
+            if (isSelected) {
+                setBackground(getBackground().darker());
+           }
+            return this;
+        }
+    }
+    
+    
 
     // Add Frame
     class AddFrame {
@@ -194,9 +244,6 @@ public class View extends JPanel
         }
 
         public AddFrame() {
-            // f.setUndecorated(true);
-            // f.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
-            // f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
             f.setTitle("Add candidate");
             f.setBounds(20, 20, 300, 150);
             f.setResizable(false);

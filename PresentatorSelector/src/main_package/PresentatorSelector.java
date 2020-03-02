@@ -15,11 +15,6 @@ public class PresentatorSelector {
         
         // load database
         Candidates candidates = new Candidates(db.load_database(), log, db);
-        
-        // RIMUOVERE DOPO SVILUPPO
-        // restore default candidates and clear log
-        candidates.restore_default();
-        log.clear_log();
    
        // Create View
        final View gui = new View(candidates, log);
