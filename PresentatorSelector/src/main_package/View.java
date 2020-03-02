@@ -3,12 +3,16 @@ package main_package;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -57,7 +61,7 @@ implements ListSelectionListener {
         
         // Create the add speaker button
         this.addButton = new JButton("Add speaker");
-        addButton.addActionListener(new RemoveListener());
+        addButton.addActionListener(new AddListener());
  
  
         
@@ -115,11 +119,11 @@ implements ListSelectionListener {
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting() == false) {   
             if (candidate_list.getSelectedIndex() == -1) {
-            //No selection, disable fire button.
+            //No selection, disable remove button.
                 removeButton.setEnabled(false);
  
             } else {
-            //Selection, enable the fire button.
+            //Selection, enable the remove button.
                 removeButton.setEnabled(true);
             }
         }
@@ -142,6 +146,89 @@ implements ListSelectionListener {
             updateList();
         }
     }
+    
+    
+    
+    
+    
+    
+    class AddListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e){
+            new AddFrame();
+            addButton.setEnabled(false);
+        }
+    }
+    
+    class AddFrame {
+        private final JFrame f = new JFrame("Add");
+        private final JButton innerAddButton;
+        private final JTextField fnameField;
+        private final JTextField surnameField;
+        
+        class innerAddListener implements ActionListener {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // get input in boxes
+                String fname = fnameField.getText();
+                String surname = surnameField.getText();
+                if ((fname.trim().length()>0) & (surname.trim().length()>0)) {
+                    candidates.addSpeaker(fname, surname);
+                    updateList();
+                }
+                addButton.setEnabled(true);
+                f.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                f.dispose();
+            }
+        }
+        
+        class closeListener extends WindowAdapter {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                addButton.setEnabled(true);
+            }
+        }
+        
+        public AddFrame() {
+            //f.setUndecorated(true);
+            //f.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+            //f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            f.setTitle("Add candidate");
+            f.setBounds(20,20,300,150);
+            f.setResizable(false);
+            f.setVisible(true);
+            f.addWindowListener(new closeListener());
+            
+            // Create the add speaker button
+            this.innerAddButton = new JButton("Add speaker");
+            innerAddButton.addActionListener(new innerAddListener());
+            
+            this.fnameField = new JTextField(20);
+            this.surnameField = new JTextField(20);
+            
+            
+          //Create a panel that uses BoxLayout.
+            JPanel innerPane = new JPanel();
+            innerPane.setLayout(new BoxLayout(innerPane,
+                                               BoxLayout.Y_AXIS));
+            
+            innerPane.add(new JLabel("Name:"));
+            innerPane.add(this.fnameField);
+            innerPane.add(new JLabel("Surname:"));
+            innerPane.add(this.surnameField);
+            innerPane.add(this.innerAddButton);
+            innerPane.add(Box.createHorizontalStrut(5));
+            innerPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+            
+               
+            
+            
+            
+            f.getContentPane().add(innerPane);
+        }
+       
+        
+     }
  
     
 }
