@@ -14,7 +14,7 @@ public class PresentatorSelector {
         Log log = new Log("src/log.json");
         
         // load database
-        Candidates candidates = new Candidates(db.load_database(), log, db);
+        Candidates candidates = new Candidates(db.loadDatabase(), log, db);
    
        // Create View
        final View gui = new View(candidates, log);

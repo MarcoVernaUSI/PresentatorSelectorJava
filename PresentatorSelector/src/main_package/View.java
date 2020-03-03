@@ -150,8 +150,6 @@ public class View extends JPanel
         public void actionPerformed(ActionEvent e) {
             // get selected index
             String speaker = candidateList.getSelectedValue();  
-            //int index = candidateList.getSelectedIndex();
-            //candidates.removeSpeakers(new Integer[] { index });
             candidates.removeSpeakers(speaker);  
             updateList();
         }
@@ -160,7 +158,7 @@ public class View extends JPanel
     class logListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(log.print_log());
+            System.out.println(log.printLog());
         }
     }
 

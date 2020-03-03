@@ -12,34 +12,32 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;  
 
 public class Log {
-    private final String _path;
-    private final JSONParser _jsonParser = new JSONParser();
-    private List<LogEntry> _log;
+    private final String path;
+    private final JSONParser jsonParser = new JSONParser();
+    private List<LogEntry> log;
     
     public Log(String path) {
-        super();
-        _path = path;
-        _log = loadLog();
+        this.path = path;
+        this.log = loadLog();
     }
     
  // Load the database into the list
     public List<LogEntry> loadLog() {       
-        _log = new ArrayList<>();
+        log = new ArrayList<>();
         
-        try (FileReader reader = new FileReader(_path))
+        try (FileReader reader = new FileReader(path))
         {
             //Read JSON file
-            Object obj = _jsonParser.parse(reader);
+            Object obj = jsonParser.parse(reader);
             
             JSONArray entriesList = (JSONArray) obj;
             for (Object object : entriesList) {
-                _log.add(parseEntry((JSONObject) object));
+                log.add(parseEntry((JSONObject) object));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         } 
-        
-        return _log;
+        return log;
     }
     
     // Parsing the json object entry in an LogEntry object
@@ -48,26 +46,26 @@ public class Log {
     }
     
     // Add an entry to the log
-    public void save_entry(Candidate speaker, Action action) {
-        Date actual_date = new Date();
-        LogEntry entry = new LogEntry(speaker.printCandidate(), action, actual_date);
-        _log.add(entry);
-        update_log();
+    public void saveEntry(Candidate speaker, Action action) {
+        Date actualDate = new Date();
+        LogEntry entry = new LogEntry(speaker.printCandidate(), action, actualDate);
+        log.add(entry);
+        updateLog();
     }
     
     // Dump the log to the json file
-    public void update_log() {
-        JSONArray entries_list = new JSONArray();
-        for (LogEntry entry : _log) {
+    public void updateLog() {
+        JSONArray entriesList = new JSONArray();
+        for (LogEntry entry : log) {
             JSONObject wentry = new JSONObject();
             wentry.put("name",entry.getSpeaker());
             wentry.put("action",entry.getAction().name());
             wentry.put("date",entry.getDate());
-            entries_list.add(wentry);
+            entriesList.add(wentry);
         }
         //Write JSON file
-        try (FileWriter file = new FileWriter(_path)) {
-            file.write(entries_list.toJSONString());
+        try (FileWriter file = new FileWriter(path)) {
+            file.write(entriesList.toJSONString());
             file.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,17 +73,17 @@ public class Log {
     }
     
     // Clear the log
-    public void clear_log() {
-        _log.clear();
-        update_log();
+    public void clearLog() {
+        log.clear();
+        updateLog();
     }
     
     // print the whole log
-    public String print_log() {
-        String log_print = "";
-        for (LogEntry entry : _log) {
-            log_print = log_print + "\n" + entry.getEntry(); 
+    public String printLog() {
+        String logPrint = "";
+        for (LogEntry entry : log) {
+            logPrint = logPrint + "\n" + entry.getEntry(); 
         }
-        return log_print;
+        return logPrint;
     }
 }

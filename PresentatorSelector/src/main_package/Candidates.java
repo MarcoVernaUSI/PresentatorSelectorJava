@@ -1,8 +1,6 @@
 package main_package;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Candidates {
@@ -22,7 +20,7 @@ public class Candidates {
         Candidate speaker = new Candidate(fname, surname);
         candidates.add(speaker);
         Action action = Action.ADDED;
-        log.save_entry(speaker, action);
+        log.saveEntry(speaker, action);
         db.updateDatabase(this.candidates);
     }
     
@@ -33,7 +31,7 @@ public class Candidates {
     
     // return random speaker
     public Candidate getRandomSpeaker() {
-        // Create a temp list without the absent
+        // Create a temporary list without the absent
         List<Candidate> tmpList = new ArrayList<>(candidates);
         for (int i = tmpList.size()-1; i >= 0; i--) {
             if (tmpList.get(i).isAbsent()) {
@@ -44,36 +42,22 @@ public class Candidates {
         return tmpList.get(i);
     }
     
-    // remove multiple speakers from the list
-    public void removeSpeakers(Integer[] indices) {
-        
-        // sort the indices in reverse way
-        Arrays.sort(indices, Collections.reverseOrder());
-        Action action = Action.REMOVED;
-        for (Integer i : indices) {
-            // save on the log
-            log.save_entry(candidates.get(i), action);
-            candidates.remove((int)i);
-        }
-        db.updateDatabase(candidates);
-    }
-    
- // remove multiple speakers from the list
+    // remove a speaker from the list
     public void removeSpeakers(String speaker) {
         Action action = Action.REMOVED;
         int idx = 0;
         for (Candidate candidate : candidates) {
             if (candidate.printCandidate().equals(speaker)) {
-                log.save_entry(candidate, action);
+                log.saveEntry(candidate, action);
                 candidates.remove(idx);
                 break;
             }
-            idx++;
-            // save on the log
+            idx++;     
         }
         db.updateDatabase(candidates);
     }
 
+    // set a given speaker absent
     public void setAbsent(String speaker) {
         for (Candidate candidate : candidates) {
             if (candidate.printCandidate().equals(speaker)) {
@@ -83,6 +67,7 @@ public class Candidates {
         }
     }
     
+    // check if a given speaker is absent
     public boolean checkAbsent(String speaker) {
         boolean _default = false;
         for (Candidate candidate : candidates) {
@@ -92,7 +77,6 @@ public class Candidates {
         }
         return _default;
     }
-    
     
     public List<Candidate> getCandidates() {
         return candidates;

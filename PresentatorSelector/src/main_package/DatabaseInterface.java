@@ -14,13 +14,12 @@ public class DatabaseInterface {
     private final String path;
     private final JSONParser jsonParser = new JSONParser();
     
-    
     public DatabaseInterface(String path) {
         this.path = path;
     }
     
     // Load the database into the list
-    public List<Candidate> load_database() {       
+    public List<Candidate> loadDatabase() {       
         List<Candidate> database = new ArrayList<>();
         String currentPath = path;
 
