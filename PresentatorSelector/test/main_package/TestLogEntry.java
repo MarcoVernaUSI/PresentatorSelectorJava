@@ -2,35 +2,31 @@ package main_package;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
-
-import org.junit.Before;
 import org.junit.Test;
 
-public class TestLogEntry {
-    static LogEntry logEntry;
+import main_package.builders.LogEntryBuilder;
 
-    @Before
-    public static void setUpLogEntry(){
-        // default values
-        String speaker = "Bob Semple";
-        Action action = Action.ADDED;
-        @SuppressWarnings("deprecation")
-        Date date = new Date(1939,9,1,0,0,0);
-        logEntry = new LogEntry(speaker,action,date);
-    }
+public class TestLogEntry {
+   
 
     @Test
-    public void testGetDate() {
+    public void getDate() {
+        LogEntry logEntry = new LogEntryBuilder().withDate("01/09/1939 00:00:00").build();
+        
         String formattedDate = logEntry.getDate();
         
-        assertEquals(formattedDate, "1939-09-01 00:00:00");
+        assertEquals(formattedDate, "01/09/1939 00:00:00");
     }
     
     @Test
-    public void testGetEntry() {
+    public void getEntry() {
+        LogEntry logEntry = new LogEntryBuilder()
+            .withDate("01/09/1939 00:00:00")
+            .withAction(Action.ADDED)
+            .withSpeaker("Bob Semple").build();
+        
         String entry = logEntry.getEntry();
         
-        assertEquals(entry, "Bob Semple ADDED in date 1939-09-01 00:00:00");
+        assertEquals(entry, "Bob Semple ADDED in date 01/09/1939 00:00:00");
     }
 }

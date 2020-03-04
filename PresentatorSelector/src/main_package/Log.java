@@ -12,10 +12,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;  
 
 public class Log {
-    private final String path;
+    private String path;
     private final JSONParser jsonParser = new JSONParser();
+
     private List<LogEntry> log;
-    
+
     public Log(String path) {
         this.path = path;
         this.log = loadLog();
@@ -45,15 +46,7 @@ public class Log {
         return new LogEntry((String) obj.get("name"), Action.valueOf((String) obj.get("action")), (String) obj.get("date"));
     }
     
-    // Add an entry to the log
-    public void saveEntry(Candidate speaker, Action action) {
-        Date actualDate = new Date();
-        LogEntry entry = new LogEntry(speaker.printCandidate(), action, actualDate);
-        log.add(entry);
-        updateLog();
-    }
-    
-    // Dump the log to the json file
+ // Dump the log to the json file
     public void updateLog() {
         JSONArray entriesList = new JSONArray();
         for (LogEntry entry : log) {
@@ -72,6 +65,14 @@ public class Log {
         }
     }
     
+    // Add an entry to the log
+    public void saveEntry(Candidate speaker, Action action) {
+        Date actualDate = new Date();
+        LogEntry entry = new LogEntry(speaker.printCandidate(), action, actualDate);
+        log.add(entry);
+        updateLog();
+    }
+    
     // Clear the log
     public void clearLog() {
         log.clear();
@@ -85,5 +86,21 @@ public class Log {
             logPrint = logPrint + "\n" + entry.getEntry(); 
         }
         return logPrint;
+    }
+    
+    public void setPath(String path) {
+        this.path = path;
+    }
+    
+    public void setLog(List<LogEntry> log) {
+        this.log = log;
+    }
+    
+    public String getPath() {
+        return path;
+    }
+    
+    public List<LogEntry> getLog() {
+        return log;
     }
 }

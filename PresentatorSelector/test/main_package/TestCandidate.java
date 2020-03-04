@@ -2,29 +2,36 @@ package main_package;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
+
+import main_package.builders.CandidateBuilder;
 
 public class TestCandidate {
     
-    static Candidate candidate;
-    
-    @Before
-    public void setUpCandidate(){
-        candidate = new Candidate("Bob","Semple");
-    }
-
     @Test
-    public void testPrintCandidate() {
+    public void printCandidate() {
+        Candidate candidate= new CandidateBuilder().withName("Bob","Semple").build();
+        
         String candidateName = candidate.printCandidate();
         
         assertEquals(candidateName, "Bob Semple");
     }
     
     @Test
-    public void testAbsentDefaultValue() {
+    public void absentDefaultValue() {
+        Candidate candidate= new CandidateBuilder().build();
+        
         boolean absentValue = candidate.isAbsent();
         
         assertEquals(absentValue, false);
+    }
+    
+    @Test
+    public void isAbsent() {
+        Candidate candidate= new CandidateBuilder().withAbsent(true).build();
+        
+        boolean absentValue = candidate.isAbsent();
+        
+        assertEquals(absentValue, true);
     }
 }
