@@ -46,11 +46,11 @@ public class TestLog {
     public void loadLog() {
         Log log = new LogBuilder().build();
         
-        List<LogEntry> log_list=log.loadLog();
+        List<LogEntry> logList=log.loadLog();
         
         // DOMANDA QUI USO GET ENTRY, viene testato?
-        assertEquals(log_list.get(0).getEntry(),"Bob Semple ADDED in date 01/09/1939 00:00:00");
-        assertEquals(log_list.get(1).getEntry(),"George Pearce REMOVED in date 02/11/1932 00:00:00");  
+        assertEquals(logList.get(0).getEntry(),"Bob Semple ADDED in date 01/09/1939 00:00:00");
+        assertEquals(logList.get(1).getEntry(),"George Pearce REMOVED in date 02/11/1932 00:00:00");  
      }
     
     // WRITE FILE TEST

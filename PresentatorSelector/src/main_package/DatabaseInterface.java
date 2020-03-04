@@ -11,7 +11,7 @@ import org.json.simple.parser.JSONParser;
 
 // Class for interact with the json list containing the candidates
 public class DatabaseInterface {
-    private final String path;
+    private String path;
     private final JSONParser jsonParser = new JSONParser();
     
     public DatabaseInterface(String path) {
@@ -59,5 +59,13 @@ public class DatabaseInterface {
     // Return a string with the candidate name and surname
     private Candidate parseCandidate(JSONObject obj) {
         return new Candidate((String) obj.get("fname"), (String) obj.get("surname"));
+    }
+    
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
