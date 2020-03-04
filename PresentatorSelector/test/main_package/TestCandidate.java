@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class TestCandidate {
     
-    Candidate candidate;
+    static Candidate candidate;
     
     @Before
     public void setUpCandidate(){
