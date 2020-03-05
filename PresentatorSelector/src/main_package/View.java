@@ -31,6 +31,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main_package.PresentatorMain.Selector;
+
 public class View extends JPanel
     implements ListSelectionListener {
     private final Candidates candidates;
@@ -43,11 +45,12 @@ public class View extends JPanel
     private final JButton addButton;
     private final JButton logButton;
 
-    public View(Candidates candidates, Log log) {
+    public View(Selector selector) {
         super(new BorderLayout());
+    
 
-        this.log = log;
-        this.candidates = candidates;
+        this.log = selector.getLog();
+        this.candidates = selector.getCandidates();
         candidateListModel = new DefaultListModel<>();
         updateList();
 

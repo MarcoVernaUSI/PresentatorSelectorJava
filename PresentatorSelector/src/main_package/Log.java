@@ -1,106 +1,63 @@
 package main_package;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;  
+import org.json.simple.JSONObject;  
 
-public class Log {
-    private String path;
-    private final JSONParser jsonParser = new JSONParser();
+public class Log implements dbInterface{
 
-    private List<LogEntry> log;
+    private final JsonDatabase _db;
+    private final List<LogEntry> _log = new ArrayList<>();
 
-    public Log(String path) {
-        this.path = path;
-        this.log = loadLog();
+    public Log(JsonDatabase db) {
+        _db = db;
+        loadDatabase(_db);
     }
     
- // Load the database into the list
-    public List<LogEntry> loadLog() {       
-        log = new ArrayList<>();
-        
-        try (FileReader reader = new FileReader(path))
-        {
-            //Read JSON file
-            Object obj = jsonParser.parse(reader);
-            
-            JSONArray entriesList = (JSONArray) obj;
-            for (Object object : entriesList) {
-                log.add(parseEntry((JSONObject) object));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } 
-        return log;
+    @Override
+    public void loadDatabase (JsonDatabase db){
+        for (JSONObject obj :  db.load()) {
+            _log.add(new LogEntry((String) obj.get("name"), (String) obj.get("date")));   
+        }  
     }
     
-    // Parsing the json object entry in an LogEntry object
-    private LogEntry parseEntry(JSONObject obj) {
-        return new LogEntry((String) obj.get("name"), Action.valueOf((String) obj.get("action")), (String) obj.get("date"));
-    }
-    
- // Dump the log to the json file
-    public void updateLog() {
-        JSONArray entriesList = new JSONArray();
-        for (LogEntry entry : log) {
-            JSONObject wentry = new JSONObject();
-            wentry.put("name",entry.getSpeaker());
-            wentry.put("action",entry.getAction().name());
-            wentry.put("date",entry.getDate());
-            entriesList.add(wentry);
+    @Override
+    public void dumpDatabase(){
+        JSONArray objectsList = new JSONArray();
+        for (LogEntry entry : _log) {
+            JSONObject obj = new JSONObject();
+            obj.put("name",entry.getSpeaker());
+            obj.put("date",entry.getDate());
+            objectsList.add(obj);
         }
-        //Write JSON file
-        try (FileWriter file = new FileWriter(path)) {
-            file.write(entriesList.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        _db.update(objectsList);
     }
     
     // Add an entry to the log
-    public void saveEntry(Candidate speaker, Action action) {
-        Date actualDate = new Date();
-        LogEntry entry = new LogEntry(speaker.printCandidate(), action, actualDate);
-        log.add(entry);
-        updateLog();
+    public void saveEntry(String speaker, boolean absent) {
+        if (absent){
+            Date actualDate = new Date();
+            LogEntry entry = new LogEntry(speaker, actualDate);
+            _log.add(entry);
+            dumpDatabase();
+        }
     }
     
     // Clear the log
     public void clearLog() {
-        log.clear();
-        updateLog();
+        _log.clear();
+        dumpDatabase();
     }
     
     // print the whole log
     public String printLog() {
         String logPrint = "";
-        for (LogEntry entry : log) {
+        for (LogEntry entry : _log) {
             logPrint = logPrint + "\n" + entry.getEntry(); 
         }
         return logPrint;
-    }
-    
-    public void setPath(String path) {
-        this.path = path;
-    }
-    
-    public void setLog(List<LogEntry> log) {
-        this.log = log;
-    }
-    
-    public String getPath() {
-        return path;
-    }
-    
-    public List<LogEntry> getLog() {
-        return log;
     }
 }

@@ -4,29 +4,21 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import main_package.builders.LogEntryBuilder;
+import main_package.builders.CandidateBuilder;
 
 public class TestLogEntry {
    
-
-    @Test
-    public void getDate() {
-        LogEntry logEntry = new LogEntryBuilder().withDate("01/09/1939 00:00:00").build();
-        
-        String formattedDate = logEntry.getDate();
-        
-        assertEquals(formattedDate, "01/09/1939 00:00:00");
-    }
+    CandidateBuilder _candidateBuilder = new CandidateBuilder();
     
     @Test
     public void getEntry() {
-        LogEntry logEntry = new LogEntryBuilder()
-            .withDate("01/09/1939 00:00:00")
-            .withAction(Action.ADDED)
-            .withSpeaker("Bob Semple").build();
+        String date = "01/09/1939 00:00:00";
+        Candidate speaker = _candidateBuilder.build();
+        LogEntry logEntry = new LogEntry(speaker.printCandidate(),date);
+        
         
         String entry = logEntry.getEntry();
-        
-        assertEquals(entry, "Bob Semple ADDED in date 01/09/1939 00:00:00");
+
+        assertEquals(entry, "Bob Semple absent in date 01/09/1939 00:00:00");
     }
 }

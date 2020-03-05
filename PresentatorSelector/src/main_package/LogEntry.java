@@ -8,14 +8,12 @@ import java.util.Date;
 
 public class LogEntry {
     private String speaker;
-    private Action action;
     private Date date;
     private final DateFormat dateFormat;
 
-    public LogEntry(String speaker, Action action, String date) {
+    public LogEntry(String speaker, String date) {
         super();
         this.speaker = speaker;
-        this.action = action;
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
             this.date = dateFormat.parse(date);
@@ -25,10 +23,9 @@ public class LogEntry {
         
     }
     
-    public LogEntry(String speaker, Action action, Date date) {
+    public LogEntry(String speaker, Date date) {
         super();
         this.speaker = speaker;
-        this.action = action;
         this.date = date;
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");     
     }
@@ -39,14 +36,6 @@ public class LogEntry {
     
     public void setSpeaker(String speaker) {
         this.speaker = speaker;
-    }
-
-    public Action getAction() {
-        return action;
-    }
-    
-    public void setAction(Action action) {
-        this.action = action;
     }
 
     public String getDate() {
@@ -62,7 +51,7 @@ public class LogEntry {
     }
 
     public String getEntry() {
-        String entry = speaker + " " + this.action.name() + " in date " + this.dateFormat.format(this.date);
+        String entry = speaker + " absent in date " + this.dateFormat.format(this.date);
         return entry;
     }
 

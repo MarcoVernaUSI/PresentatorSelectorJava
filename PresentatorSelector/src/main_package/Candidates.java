@@ -3,36 +3,54 @@ package main_package;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Candidates {
-    private final List<Candidate> candidates;
-    private final Log log;
-    private final DatabaseInterface db;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
-    public Candidates(List<Candidate> candidates, Log log, DatabaseInterface db) {
-        super();
-        this.candidates = candidates;
-        this.log = log;
-        this.db = db;
+public class Candidates implements dbInterface{
+    private final JsonDatabase _db;
+    private final List<Candidate> _candidates = new ArrayList<>();
+//    private final Log log;
+
+    public Candidates(JsonDatabase db) {
+        _db = db;
+        loadDatabase(_db);
     }
-     
+    
+    @Override
+    public void loadDatabase (JsonDatabase db){
+        for (JSONObject obj :  db.load()) {
+            _candidates.add(new Candidate((String) obj.get("fname"), (String) obj.get("surname")));   
+        }  
+    }
+    
+    @Override
+    public void dumpDatabase(){
+        JSONArray objectsList = new JSONArray();
+        for (Candidate candidate : _candidates) {
+            JSONObject obj = new JSONObject();
+            obj.put("name",candidate.getFname());
+            obj.put("surname",candidate.getSurname());
+            objectsList.add(obj);
+        }
+        _db.update(objectsList);
+    }
+    
     // add speaker to the list
     public void addSpeaker(String fname, String surname) {
         Candidate speaker = new Candidate(fname, surname);
-        candidates.add(speaker);
-        Action action = Action.ADDED;
-        log.saveEntry(speaker, action);
-        db.updateDatabase(this.candidates);
+        _candidates.add(speaker);
+        dumpDatabase();
     }
     
     // return a speaker
     public Candidate getSpeaker(int i) {
-        return candidates.get(i);
+        return _candidates.get(i);
     }
     
     // return random speaker
     public Candidate getRandomSpeaker() {
         // Create a temporary list without the absent
-        List<Candidate> tmpList = new ArrayList<>(candidates);
+        List<Candidate> tmpList = new ArrayList<>(_candidates);
         for (int i = tmpList.size()-1; i >= 0; i--) {
             if (tmpList.get(i).isAbsent()) {
                 tmpList.remove(i);
@@ -44,24 +62,23 @@ public class Candidates {
     
     // remove a speaker from the list
     public void removeSpeakers(String speaker) {
-        Action action = Action.REMOVED;
         int idx = 0;
-        for (Candidate candidate : candidates) {
+        for (Candidate candidate : _candidates) {
             if (candidate.printCandidate().equals(speaker)) {
-                log.saveEntry(candidate, action);
-                candidates.remove(idx);
+                _candidates.remove(idx);
                 break;
             }
             idx++;     
         }
-        db.updateDatabase(candidates);
+        dumpDatabase();
     }
 
     // set a given speaker absent
     public void setAbsent(String speaker) {
-        for (Candidate candidate : candidates) {
+        for (Candidate candidate : _candidates) {
             if (candidate.printCandidate().equals(speaker)) {
                 candidate.setAbsent(!candidate.isAbsent());
+                //log.saveEntry(speaker,candidate.isAbsent());    (Salvare sul LOG)
                 break;
             }
         }
@@ -70,7 +87,7 @@ public class Candidates {
     // check if a given speaker is absent
     public boolean checkAbsent(String speaker) {
         boolean _default = false;
-        for (Candidate candidate : candidates) {
+        for (Candidate candidate : _candidates) {
             if (candidate.printCandidate().equals(speaker)){ 
                 _default = candidate.isAbsent();
                 }
@@ -79,8 +96,11 @@ public class Candidates {
     }
     
     public List<Candidate> getCandidates() {
-        return candidates;
+        return _candidates;
     }
+
+    
+
 
 }
 

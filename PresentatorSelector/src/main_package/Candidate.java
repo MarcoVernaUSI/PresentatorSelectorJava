@@ -1,41 +1,41 @@
 package main_package;
 
 public class Candidate {
-    private final String fname;
-    private String surname;
-    private boolean absent = false;
+    private String _fname;
+    private String _surname;
+    private boolean _absent = false;
     
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public Candidate(String fname, String surname) {
-        this.fname = fname;
-        this.surname = surname;
+        _fname = fname;
+        _surname = surname;
     }
     
     public boolean isAbsent() {
-        return absent;
+        return _absent;
     }
 
     public void setAbsent(boolean absent) {
-        this.absent = absent;
+        _absent = absent;
     }
 
     public String getFname() {
-        return fname;
+        return _fname;
     }
     
     public void setFname(String surname) {
-        this.surname = surname;
+        _fname = surname;
     }
    
     public String getSurname() {
-        return surname;
+        return _surname;
+    }
+    
+    public void setSurname(String surname) {
+        _surname = surname;
     }
     
     // Candidate to string method
     public String printCandidate(){
-        return (fname + " " + surname);
+        return (_fname + " " + _surname);
     }
 }

@@ -45,9 +45,9 @@ public class TestDatabaseInterface {
     // READ FILE TEST
     @Test
     public void loadDatabase() {
-        DatabaseInterface dbi = new DatabaseInterfaceBuilder().build();
+        Database dbi = new DatabaseInterfaceBuilder().build();
         
-        List<Candidate> candidatesList=dbi.loadDatabase();
+        List<Candidate> candidatesList=dbi.load();
         
         // DOMANDA QUI USO print candidate, viene testato?
         assertEquals(candidatesList.get(0).printCandidate(), "Bob Semple");
@@ -62,11 +62,11 @@ public class TestDatabaseInterface {
         List<Candidate> candidateList = new ArrayList<>();
         candidateList.add(entry1);
         candidateList.add(entry2);
-        DatabaseInterface dbi = new DatabaseInterfaceBuilder().build();
+        Database dbi = new DatabaseInterfaceBuilder().build();
         
         // Per testare il write per forza devo testate anche il read
-        dbi.updateDatabase(candidateList);
-        List<Candidate> savedList=dbi.loadDatabase();
+        dbi.update(candidateList);
+        List<Candidate> savedList=dbi.load();
         
         assertEquals(savedList.get(0).printCandidate(), "Neville Chamberlain");
         assertEquals(savedList.get(1).printCandidate(), "Winston Churchill");  

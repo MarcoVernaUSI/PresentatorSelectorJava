@@ -1,14 +1,14 @@
 package main_package.builders;
 
-import main_package.DatabaseInterface;
+import main_package.Database;
 
 public class DatabaseInterfaceBuilder {
     private static final String path = "test/candidates_test.json";
 
-    private final DatabaseInterface _dbi;
+    private final Database _dbi;
     
     public DatabaseInterfaceBuilder() {
-        _dbi = new DatabaseInterface(path);
+        _dbi = new Database(path);
     }
     
     public DatabaseInterfaceBuilder withPath(String path){
@@ -16,7 +16,7 @@ public class DatabaseInterfaceBuilder {
         return this;
     }
     
-    public DatabaseInterface build() {
+    public Database build() {
         return _dbi;
     }
     
