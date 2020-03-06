@@ -1,5 +1,7 @@
 package main_package;
 
+import java.util.List;
+
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -52,17 +54,33 @@ public class PresentatorMain {
             _log = new Log(_log_db);
         }
         
-        public void start() {
-            System.out.println(_candidates.getRandomSpeaker().printCandidate());
-            System.out.println(_log.printLog());
+        public String select() {
+            return _candidates.getRandomSpeaker().printCandidate();
         }
         
-        public Candidates getCandidates() {
-            return _candidates;
+        public void remove(String speaker){
+            _candidates.removeSpeakers(speaker);  
+        }
+        
+        public void add(String fname, String surname){
+            _candidates.addSpeaker(fname, surname);
+        }
+        
+        public List<String> getSpeakers() {
+            return _candidates.printCandidates();
         }
 
-        public Log getLog() {
-            return _log;
+        public String printLog() {
+            return _log.printLog();
+        }
+        
+        public void setAbsent(String speaker) {
+            _candidates.setAbsent(speaker);
+            _log.saveEntry(speaker,_candidates.checkAbsent(speaker));
+        }
+
+        public boolean checkAbsent(String speaker) {
+            return _candidates.checkAbsent(speaker);
         }
 
         

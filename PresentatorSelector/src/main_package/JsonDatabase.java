@@ -12,31 +12,31 @@ import org.json.simple.parser.JSONParser;
 // Class for interact with a json database
 public class JsonDatabase {
     private String _path;
+    private final List<JSONObject> _database;
+
     private final JSONParser _jsonParser = new JSONParser();
     
     public JsonDatabase(String path) {
-        this._path = path;
+        _path = path;
+        _database = new ArrayList<>();
     }
     
     // Load the database into the list
     public List<JSONObject> load() {       
-        List<JSONObject> database = new ArrayList<>();
         String currentPath = _path;
+        _database.clear();
 
         try (FileReader reader = new FileReader(currentPath))
         {
             //Read JSON file
             Object obj = _jsonParser.parse(reader);
-            
-            JSONArray objectsList = (JSONArray) obj;
-            for (Object object : objectsList) {
-                
-                database.add((JSONObject) object);
+            for (Object object : (JSONArray) obj) {
+                _database.add((JSONObject) object);
             }
         }catch (Exception e) {
             throw new RuntimeException(e);
         }  
-        return database;
+        return _database;
     }
   
     
@@ -51,12 +51,20 @@ public class JsonDatabase {
             e.printStackTrace();
         }
     }
-       
+    
     public String getPath() {
         return _path;
     }
 
     public void setPath(String path) {
         this._path = path;
+    }
+    
+    public List<JSONObject> getDatabase() {
+        return _database;
+    }
+
+    public void addToDatabase(JSONObject obj) {
+        _database.add(obj);
     }
 }

@@ -10,7 +10,7 @@ public class TestCandidate {
     
     @Test
     public void printCandidate() {
-        Candidate candidate= new CandidateBuilder().withName("Bob","Semple").build();
+        Candidate candidate= new CandidateBuilder().build();
         
         String candidateName = candidate.printCandidate();
         
@@ -23,7 +23,7 @@ public class TestCandidate {
         
         boolean absentValue = candidate.isAbsent();
         
-        assertEquals(absentValue, false);
+        assertEquals(false, absentValue);
     }
     
     @Test
@@ -32,6 +32,6 @@ public class TestCandidate {
         
         boolean absentValue = candidate.isAbsent();
         
-        assertEquals(absentValue, true);
+        assertEquals(true, absentValue);
     }
 }

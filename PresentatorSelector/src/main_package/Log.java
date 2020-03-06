@@ -14,12 +14,12 @@ public class Log implements dbInterface{
 
     public Log(JsonDatabase db) {
         _db = db;
-        loadDatabase(_db);
+        loadDatabase();
     }
     
     @Override
-    public void loadDatabase (JsonDatabase db){
-        for (JSONObject obj :  db.load()) {
+    public void loadDatabase(){
+        for (JSONObject obj :  _db.load()) {
             _log.add(new LogEntry((String) obj.get("name"), (String) obj.get("date")));   
         }  
     }
@@ -59,5 +59,9 @@ public class Log implements dbInterface{
             logPrint = logPrint + "\n" + entry.getEntry(); 
         }
         return logPrint;
+    }
+    
+    public List<LogEntry> getEntries() {
+        return _log;
     }
 }

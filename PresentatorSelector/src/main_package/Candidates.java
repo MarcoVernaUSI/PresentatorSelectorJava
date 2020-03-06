@@ -9,16 +9,17 @@ import org.json.simple.JSONObject;
 public class Candidates implements dbInterface{
     private final JsonDatabase _db;
     private final List<Candidate> _candidates = new ArrayList<>();
-//    private final Log log;
+
+    
 
     public Candidates(JsonDatabase db) {
         _db = db;
-        loadDatabase(_db);
+        loadDatabase();
     }
     
     @Override
-    public void loadDatabase (JsonDatabase db){
-        for (JSONObject obj :  db.load()) {
+    public void loadDatabase(){
+        for (JSONObject obj :  _db.load()) {
             _candidates.add(new Candidate((String) obj.get("fname"), (String) obj.get("surname")));   
         }  
     }
@@ -28,7 +29,7 @@ public class Candidates implements dbInterface{
         JSONArray objectsList = new JSONArray();
         for (Candidate candidate : _candidates) {
             JSONObject obj = new JSONObject();
-            obj.put("name",candidate.getFname());
+            obj.put("fname",candidate.getFname());
             obj.put("surname",candidate.getSurname());
             objectsList.add(obj);
         }
@@ -54,8 +55,7 @@ public class Candidates implements dbInterface{
         for (int i = tmpList.size()-1; i >= 0; i--) {
             if (tmpList.get(i).isAbsent()) {
                 tmpList.remove(i);
-            }
-         }
+            }}
         int i = (int)(Math.random()*((tmpList.size()-1)+1));
         return tmpList.get(i);
     }
@@ -78,7 +78,6 @@ public class Candidates implements dbInterface{
         for (Candidate candidate : _candidates) {
             if (candidate.printCandidate().equals(speaker)) {
                 candidate.setAbsent(!candidate.isAbsent());
-                //log.saveEntry(speaker,candidate.isAbsent());    (Salvare sul LOG)
                 break;
             }
         }
@@ -90,18 +89,16 @@ public class Candidates implements dbInterface{
         for (Candidate candidate : _candidates) {
             if (candidate.printCandidate().equals(speaker)){ 
                 _default = candidate.isAbsent();
-                }
-        }
+                }}
         return _default;
     }
     
-    public List<Candidate> getCandidates() {
-        return _candidates;
+    public List<String> printCandidates() {
+        List<String>candidatesList = new ArrayList<>();
+        for (Candidate candidate : _candidates) {
+            candidatesList.add(candidate.printCandidate());
+        }
+        return candidatesList;
     }
 
-    
-
-
 }
-
-

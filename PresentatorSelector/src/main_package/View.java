@@ -35,8 +35,8 @@ import main_package.PresentatorMain.Selector;
 
 public class View extends JPanel
     implements ListSelectionListener {
-    private final Candidates candidates;
-    private final Log log;
+    private final Selector _selector;
+    
     private final JList<String> candidateList;
     private final DefaultListModel<String> candidateListModel;
     private final JTextField speakerName;
@@ -47,10 +47,10 @@ public class View extends JPanel
 
     public View(Selector selector) {
         super(new BorderLayout());
-    
-
-        this.log = selector.getLog();
-        this.candidates = selector.getCandidates();
+        
+        // Load the selector
+        _selector = selector;
+        
         candidateListModel = new DefaultListModel<>();
         updateList();
 
@@ -117,8 +117,8 @@ public class View extends JPanel
     // Consistency between view and model
     public void updateList() {
         candidateListModel.removeAllElements();
-        for (Candidate candidate : candidates.getCandidates()) {
-            candidateListModel.addElement(candidate.printCandidate());
+        for (String speaker : _selector.getSpeakers()) {
+            candidateListModel.addElement(speaker);
         }
         if (candidateListModel.getSize() == 0) {
                                                  
@@ -144,7 +144,7 @@ public class View extends JPanel
     class SelectListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            speakerName.setText(candidates.getRandomSpeaker().printCandidate());
+            speakerName.setText(_selector.select());
         }
     }
 
@@ -153,7 +153,7 @@ public class View extends JPanel
         public void actionPerformed(ActionEvent e) {
             // get selected index
             String speaker = candidateList.getSelectedValue();  
-            candidates.removeSpeakers(speaker);  
+            _selector.remove(speaker);  
             updateList();
         }
     }
@@ -161,7 +161,7 @@ public class View extends JPanel
     class logListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(log.printLog());
+            System.out.println(_selector.printLog());
         }
     }
 
@@ -185,7 +185,7 @@ public class View extends JPanel
                  setAbsent.addActionListener(new ActionListener() {
                      @Override
                     public void actionPerformed(ActionEvent e) {
-                         candidates.setAbsent(candidateList.getSelectedValue());
+                         _selector.setAbsent(candidateList.getSelectedValue());
                      }
                  });
                  menu.add(setAbsent);
@@ -201,7 +201,7 @@ public class View extends JPanel
         @Override
         public Component getListCellRendererComponent(JList paramlist, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             setText(value.toString());
-            if (candidates.checkAbsent(value.toString())) {
+            if (_selector.checkAbsent(value.toString())) {
                 setBackground(Color.RED);
             } else
                 setBackground(Color.white);
@@ -228,7 +228,7 @@ public class View extends JPanel
                 String fname = fnameField.getText();
                 String surname = surnameField.getText();
                 if ((fname.trim().length() > 0) & (surname.trim().length() > 0)) {
-                    candidates.addSpeaker(fname, surname);
+                    _selector.add(fname, surname);
                     updateList();
                 }
                 addButton.setEnabled(true);
