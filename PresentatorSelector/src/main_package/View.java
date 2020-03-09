@@ -49,10 +49,8 @@ public class View extends JPanel
         super(new BorderLayout());
         
         // Load the selector
-        _selector = selector;
-        
+        _selector = selector;   
         candidateListModel = new DefaultListModel<>();
-        updateList();
 
         // Create the list and put it in a scroll pane.
         candidateList = new JList<>(candidateListModel);
@@ -112,6 +110,8 @@ public class View extends JPanel
         add(listScrollPane, BorderLayout.PAGE_START);
         add(buttonPane, BorderLayout.CENTER);
         add(buttonPane2, BorderLayout.PAGE_END);
+        
+        updateList();
     }
 
     // Consistency between view and model
@@ -120,9 +120,11 @@ public class View extends JPanel
         for (String speaker : _selector.getSpeakers()) {
             candidateListModel.addElement(speaker);
         }
-        if (candidateListModel.getSize() == 0) {
-                                                 
+        if (candidateListModel.getSize() == 0) {  
             selectButton.setEnabled(false);
+        }
+        if (candidateListModel.getSize() > 0 & !selectButton.isEnabled()) {  
+            selectButton.setEnabled(true);
         }
     }
 
@@ -211,8 +213,6 @@ public class View extends JPanel
             return this;
         }
     }
-    
-    
 
     // Add Frame
     class AddFrame {
@@ -274,6 +274,10 @@ public class View extends JPanel
             f.getContentPane().add(innerPane);
         }
 
+    }
+    
+    public JList<String> getCandidateList() {
+        return candidateList;
     }
 
 }

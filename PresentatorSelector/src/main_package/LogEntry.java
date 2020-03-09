@@ -9,14 +9,13 @@ import java.util.Date;
 public class LogEntry {
     private String speaker;
     private Date date;
-    private final DateFormat dateFormat;
+    public final static DateFormat DateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public LogEntry(String speaker, String date) {
         super();
         this.speaker = speaker;
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
-            this.date = dateFormat.parse(date);
+            this.date = DateFormat.parse(date);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -27,7 +26,6 @@ public class LogEntry {
         super();
         this.speaker = speaker;
         this.date = date;
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");     
     }
     
     public String getSpeaker() {
@@ -39,19 +37,19 @@ public class LogEntry {
     }
 
     public String getDate() {
-        return this.dateFormat.format(this.date);
+        return DateFormat.format(this.date);
     }
     
     public void setDate(String date) {
         try {
-            this.date = dateFormat.parse(date);
+            this.date = DateFormat.parse(date);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
 
     public String getEntry() {
-        String entry = speaker + " absent in date " + this.dateFormat.format(this.date);
+        String entry = speaker + " absent in date " + DateFormat.format(this.date);
         return entry;
     }
 

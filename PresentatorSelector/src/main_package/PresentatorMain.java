@@ -42,6 +42,8 @@ public class PresentatorMain {
     public static class Selector{
         private final Candidates _candidates;        
         private final Log _log;
+  
+
         private final JsonDatabase _candidates_db;
         private final JsonDatabase _log_db;
         
@@ -49,13 +51,18 @@ public class PresentatorMain {
             super();
             _candidates_db = new JsonDatabase(candidatesPath);
             _log_db = new JsonDatabase(logPath);
-            
             _candidates = new Candidates(_candidates_db);
             _log = new Log(_log_db);
         }
         
         public String select() {
-            return _candidates.getRandomSpeaker().printCandidate();
+            Candidate speaker = _candidates.getRandomSpeaker();
+            if (speaker != null) {
+                return speaker.printCandidate();
+            } else {
+                return "No speaker avaiable!";
+            }
+            
         }
         
         public void remove(String speaker){
@@ -82,8 +89,9 @@ public class PresentatorMain {
         public boolean checkAbsent(String speaker) {
             return _candidates.checkAbsent(speaker);
         }
-
         
-        
+        public Log getLog() {
+            return _log;
+        }
     }
 }

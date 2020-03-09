@@ -56,8 +56,13 @@ public class Candidates implements dbInterface{
             if (tmpList.get(i).isAbsent()) {
                 tmpList.remove(i);
             }}
-        int i = (int)(Math.random()*((tmpList.size()-1)+1));
-        return tmpList.get(i);
+        int i = (int)(Math.random()*tmpList.size());
+        // if all absents
+        if (tmpList.size()!=0) {
+            return tmpList.get(i);
+        }else {
+            return null;
+        }
     }
     
     // remove a speaker from the list
