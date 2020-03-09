@@ -1,47 +1,57 @@
 package main_package;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;  
 
-public class Log implements dbInterface{
+public class Log implements DbInterface{
 
-    private final JsonDatabase _db;
-    private final List<LogEntry> _log = new ArrayList<>();
-
-    public Log(JsonDatabase db) {
-        _db = db;
-        loadDatabase();
+    public final static DateFormat DateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private final List<Entry<String,String>> _log;
+    private JsonDatabase _db;
+  
+    public Log() {
+        _log= new ArrayList<>();
     }
     
     @Override
-    public void loadDatabase(){
+    public Log loadDatabase(JsonDatabase db){
+        _db = db;
+        _log.clear();
         for (JSONObject obj :  _db.load()) {
-            _log.add(new LogEntry((String) obj.get("name"), (String) obj.get("date")));   
-        }  
+            _log.add(new java.util.AbstractMap.SimpleEntry<>
+            ((String) obj.get("name"),(String) obj.get("date")));   
+        }
+        return this;
     }
     
     @Override
     public void dumpDatabase(){
         JSONArray objectsList = new JSONArray();
-        for (LogEntry entry : _log) {
+        for (Entry<String,String> entry : _log) {
             JSONObject obj = new JSONObject();
-            obj.put("name",entry.getSpeaker());
-            obj.put("date",entry.getDate());
+            obj.put("name",entry.getKey());
+            obj.put("date",entry.getValue());
             objectsList.add(obj);
         }
         _db.update(objectsList);
+    }
+    
+    public void addEntry(String speaker, String date) {
+        _log.add(new java.util.AbstractMap.SimpleEntry<>(speaker,date));   
     }
     
     // Add an entry to the log
     public void saveEntry(String speaker, boolean absent) {
         if (absent){
             Date actualDate = new Date();
-            LogEntry entry = new LogEntry(speaker, actualDate);
-            _log.add(entry);
+            _log.add(new java.util.AbstractMap.SimpleEntry<>(speaker,DateFormat.format(actualDate)));
             dumpDatabase();
         }
     }
@@ -55,13 +65,18 @@ public class Log implements dbInterface{
     // print the whole log
     public String printLog() {
         String logPrint = "";
-        for (LogEntry entry : _log) {
-            logPrint = logPrint + "\n" + entry.getEntry(); 
+        for (Entry<String,String> entry : _log) {
+            logPrint = logPrint + "\n" + printEntry(entry); 
         }
         return logPrint;
     }
     
-    public List<LogEntry> getEntries() {
+    public String printEntry(Entry<String,String> entry) {
+        return entry.getKey() + " absent in date " + entry.getValue();
+        
+    }
+    
+    public List<Entry<String,String>> getEntries() {
         return _log;
     }
 }

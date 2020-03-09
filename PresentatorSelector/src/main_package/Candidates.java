@@ -6,23 +6,26 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Candidates implements dbInterface{
-    private final JsonDatabase _db;
-    private final List<Candidate> _candidates = new ArrayList<>();
-
+public class Candidates implements DbInterface{
     
 
-    public Candidates(JsonDatabase db) {
-        _db = db;
-        loadDatabase();
-    }
+    private final List<Candidate> _candidates;
+    private JsonDatabase _db;
+    
+    public Candidates() {
+        _candidates = new ArrayList<>();
+    }  
     
     @Override
-    public void loadDatabase(){
-        for (JSONObject obj :  _db.load()) {
+    public Candidates loadDatabase(JsonDatabase db){
+        _db = db;
+        _candidates.clear();
+        for (JSONObject obj :  db.load()) {
             _candidates.add(new Candidate((String) obj.get("fname"), (String) obj.get("surname")));   
-        }  
+        }
+        return this;
     }
+    
     
     @Override
     public void dumpDatabase(){
@@ -35,6 +38,7 @@ public class Candidates implements dbInterface{
         }
         _db.update(objectsList);
     }
+    
     
     // add speaker to the list
     public void addSpeaker(String fname, String surname) {

@@ -19,7 +19,7 @@ public class JsonDatabaseBuilder {
     
     public JsonDatabaseBuilder() {
         _db = new JsonDatabase(DefaultPath); 
-        }
+    }
     
     public JsonDatabaseBuilder withPath(String path) {
         _db.setPath(path);
@@ -27,17 +27,17 @@ public class JsonDatabaseBuilder {
     }
     
     public JsonDatabaseBuilder writeFile() {
-            try (FileWriter file = new FileWriter(_db.getPath())) {
-                
-                JSONArray tmpList = new JSONArray();
-                for (Object obj : _db.getDatabase()) {
-                    tmpList.add(obj);
-                }
-                file.write(tmpList.toJSONString());
-                file.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }     
+        try (FileWriter file = new FileWriter(_db.getPath())) {
+            
+            JSONArray tmpList = new JSONArray();
+            for (Object obj : _db.getDatabase()) {
+                tmpList.add(obj);
+            }
+            file.write(tmpList.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }     
         return this;
     }
     
@@ -50,11 +50,10 @@ public class JsonDatabaseBuilder {
         obj2.put("fname","George");
         obj2.put("surname","Pearce");
         
-        
         _db.addToDatabase(obj1);
         _db.addToDatabase(obj2);
         return this;
-        }
+    }
     
     public JsonDatabaseBuilder ofLogEntries() {
         JSONObject obj1 = new JSONObject();
@@ -68,22 +67,22 @@ public class JsonDatabaseBuilder {
         _db.addToDatabase(obj1);
         _db.addToDatabase(obj2);
         return this;
-        }
+    }
     
     public List<JSONObject> readDb() {
         List<JSONObject> readedDatabase = new ArrayList<>();
-        try (FileReader reader = new FileReader(_db.getPath()))
-        {
+        try (FileReader reader = new FileReader(_db.getPath())) {
             //Read JSON file
             Object obj = new JSONParser().parse(reader);
             JSONArray readedObject = (JSONArray) obj;
             for (Object object : readedObject) {
                 readedDatabase.add((JSONObject) object);
             }
+            
+            return readedDatabase;
         }catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return readedDatabase;
     }
     
     public JsonDatabase build() {

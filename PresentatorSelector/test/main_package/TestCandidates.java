@@ -14,12 +14,13 @@ import main_package.builders.JsonDatabaseBuilder;
 
 public class TestCandidates {
     public static final String Path = JsonDatabaseBuilder.DefaultPath;
-    
+    public static final Candidates Candidates = new Candidates();
     public JsonDatabaseBuilder _db;
     
     @Before
     public void SetUp(){
         _db = new JsonDatabaseBuilder().ofCandidates().writeFile();
+        Candidates.loadDatabase(_db.build());
     }
     
     
@@ -31,23 +32,19 @@ public class TestCandidates {
     
     @Test
     public void loadDatabase() {
-        Candidates candidates = new Candidates(_db.build());
         
-        candidates.loadDatabase();
-        
-        assertEquals("Bob", candidates.getSpeaker(0).getFname());
-        assertEquals("Semple", candidates.getSpeaker(0).getSurname());
-        assertEquals("George", candidates.getSpeaker(1).getFname());
-        assertEquals("Pearce", candidates.getSpeaker(1).getSurname());
+        assertEquals("Bob", Candidates.getSpeaker(0).getFname());
+        assertEquals("Semple", Candidates.getSpeaker(0).getSurname());
+        assertEquals("George", Candidates.getSpeaker(1).getFname());
+        assertEquals("Pearce", Candidates.getSpeaker(1).getSurname());
     }
 
     @Test
     public void dumpDatabase() {
-        Candidates candidates = new Candidates(_db.build());
-        candidates.addSpeaker("Neville", "Chamberlain");
-        candidates.addSpeaker("Winston", "Churchill");
+        Candidates.addSpeaker("Neville", "Chamberlain");
+        Candidates.addSpeaker("Winston", "Churchill");
         
-        candidates.dumpDatabase();
+        Candidates.dumpDatabase();
         
         
         List<JSONObject> readedDatabase = _db.readDb();
@@ -65,49 +62,39 @@ public class TestCandidates {
 
     @Test
     public void addSpeaker() {
-        Candidates candidates = new Candidates(_db.build());
+        Candidates.addSpeaker("Neville", "Chamberlain");
         
-        candidates.addSpeaker("Neville", "Chamberlain");
-        
-        assertEquals("Neville", candidates.getSpeaker(2).getFname());
-        assertEquals("Chamberlain", candidates.getSpeaker(2).getSurname());
-        assertEquals(3,candidates.printCandidates().size());
+        assertEquals("Neville", Candidates.getSpeaker(2).getFname());
+        assertEquals("Chamberlain", Candidates.getSpeaker(2).getSurname());
+        assertEquals(3,Candidates.printCandidates().size());
     }
     
     @Test
     public void removeSpeaker() {
-        Candidates candidates = new Candidates(_db.build());
+        Candidates.removeSpeakers("Bob Semple");
         
-        candidates.removeSpeakers("Bob Semple");
-        
-        assertEquals("George", candidates.getSpeaker(0).getFname());
-        assertEquals("Pearce", candidates.getSpeaker(0).getSurname());
-        assertEquals(1,candidates.printCandidates().size());
+        assertEquals("George", Candidates.getSpeaker(0).getFname());
+        assertEquals("Pearce", Candidates.getSpeaker(0).getSurname());
+        assertEquals(1,Candidates.printCandidates().size());
     }
 
     @Test
     public void setAbsent() {
-        Candidates candidates = new Candidates(_db.build());
+        Candidates.setAbsent("George Pearce");
         
-        candidates.setAbsent("George Pearce");
-        
-        assertEquals(true,candidates.getSpeaker(1).isAbsent());
+        assertEquals(true,Candidates.getSpeaker(1).isAbsent());
     }
 
     @Test
     public void checkAbsent() {
-        Candidates candidates = new Candidates(_db.build());
+        Candidates.checkAbsent("George Pearce");
         
-        candidates.checkAbsent("George Pearce");
-        
-        assertEquals(false, candidates.getSpeaker(1).isAbsent());
+        assertEquals(false, Candidates.getSpeaker(1).isAbsent());
     }
 
     @Test
     public void printCandidates() {
-        Candidates candidates = new Candidates(_db.build());
-        
-        List<String>candidatesList = candidates.printCandidates();
+        List<String>candidatesList = Candidates.printCandidates();
         
         assertEquals("Bob Semple", candidatesList.get(0));
         assertEquals("George Pearce", candidatesList.get(1));
@@ -115,9 +102,7 @@ public class TestCandidates {
     
     @Test
     public void getRandomSpeaker() {
-        Candidates candidates = new Candidates(_db.build());
-        
-        Candidate randomSpeaker = candidates.getRandomSpeaker();
+        Candidate randomSpeaker = Candidates.getRandomSpeaker();
         
         assertTrue((randomSpeaker.getFname().equals("Bob")) && (randomSpeaker.getSurname().equals("Semple")) 
             || (randomSpeaker.getFname().equals("George")) && (randomSpeaker.getSurname().equals("Pearce")));

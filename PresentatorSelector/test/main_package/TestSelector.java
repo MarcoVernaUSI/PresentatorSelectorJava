@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main_package.PresentatorMain.Selector;
 import main_package.builders.JsonDatabaseBuilder;
 
 public class TestSelector {
@@ -127,6 +126,7 @@ public class TestSelector {
         
     }
     
+    // spezzo test
     @Test
     public void logAndAbsents() throws ParseException {
         Selector selector = new Selector(Path1,Path2);
@@ -147,12 +147,12 @@ public class TestSelector {
         
         String log3 = selector.printLog();
         
-        assertEquals("\nEdward Wood absent in date "+ LogEntry.DateFormat.format(date1)+
-            "\nBob Semple absent in date "+ LogEntry.DateFormat.format(date2),log1);
+        assertEquals("\nEdward Wood absent in date "+ Log.DateFormat.format(date1)+
+            "\nBob Semple absent in date "+ Log.DateFormat.format(date2),log1);
         assertEquals(log1,log2);
-        assertEquals("\nEdward Wood absent in date "+ LogEntry.DateFormat.format(date1)+
-            "\nBob Semple absent in date "+ LogEntry.DateFormat.format(date2)+ 
-            "\nNeville Chamberlain absent in date "+LogEntry.DateFormat.format(date3),log3);
+        assertEquals("\nEdward Wood absent in date "+ Log.DateFormat.format(date1)+
+            "\nBob Semple absent in date "+ Log.DateFormat.format(date2)+ 
+            "\nNeville Chamberlain absent in date "+Log.DateFormat.format(date3),log3);
         
     }
     
@@ -160,6 +160,7 @@ public class TestSelector {
     public void correctSelectionWithAbsents() {
         Selector selector = new Selector(Path1,Path2);
         
+        // spezzo test
         selector.add("Edward", "Wood");
         selector.add("Winston", "Churchill");
         selector.add("Neville", "Chamberlain");
@@ -173,6 +174,8 @@ public class TestSelector {
         selector.setAbsent("Edward Wood");
         String random3 = selector.select();
         
+        
+        // Usa assertContains
         assertTrue((random1.equals("Edward Wood")) 
             || (random1.equals("Winston Churchill"))
             || (random1.equals("Neville Chamberlain"))          

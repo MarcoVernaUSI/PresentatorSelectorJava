@@ -31,8 +31,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import main_package.PresentatorMain.Selector;
-
 public class View extends JPanel
     implements ListSelectionListener {
     private final Selector _selector;
