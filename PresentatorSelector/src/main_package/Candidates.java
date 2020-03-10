@@ -53,15 +53,15 @@ public class Candidates {
     // return random speaker
     public Candidate getRandomSpeaker() {
         // Create a temporary list without the absent
-        List<Candidate> tmpList = new ArrayList<>(_candidates);
-        for (int i = tmpList.size()-1; i >= 0; i--) {
-            if (tmpList.get(i).isAbsent()) {
-                tmpList.remove(i);
+        List<Candidate> listWithoutAbsents = new ArrayList<>(_candidates);
+        for (int i = listWithoutAbsents.size()-1; i >= 0; i--) {
+            if (listWithoutAbsents.get(i).isAbsent()) {
+                listWithoutAbsents.remove(i);
             }}
-        int i = (int)(Math.random()*tmpList.size());
+        int i = (int)(Math.random()*listWithoutAbsents.size());
         // if all absents
-        if (tmpList.size()!=0) {
-            return tmpList.get(i);
+        if (listWithoutAbsents.size()!=0) {
+            return listWithoutAbsents.get(i);
         }else {
             return null;
         }
