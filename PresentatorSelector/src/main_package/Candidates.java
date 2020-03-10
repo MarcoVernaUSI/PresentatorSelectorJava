@@ -6,7 +6,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Candidates implements DbInterface{
+public class Candidates {
     
 
     private final List<Candidate> _candidates;
@@ -15,8 +15,7 @@ public class Candidates implements DbInterface{
     public Candidates() {
         _candidates = new ArrayList<>();
     }  
-    
-    @Override
+
     public Candidates loadDatabase(JsonDatabase db){
         _db = db;
         _candidates.clear();
@@ -26,8 +25,7 @@ public class Candidates implements DbInterface{
         return this;
     }
     
-    
-    @Override
+
     public void dumpDatabase(){
         JSONArray objectsList = new JSONArray();
         for (Candidate candidate : _candidates) {

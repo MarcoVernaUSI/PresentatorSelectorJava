@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;  
 
-public class Log implements DbInterface{
+public class Log{
 
     public final static DateFormat DateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private final List<Entry<String,String>> _log;
@@ -19,8 +19,7 @@ public class Log implements DbInterface{
     public Log() {
         _log= new ArrayList<>();
     }
-    
-    @Override
+
     public Log loadDatabase(JsonDatabase db){
         _db = db;
         _log.clear();
@@ -31,7 +30,6 @@ public class Log implements DbInterface{
         return this;
     }
     
-    @Override
     public void dumpDatabase(){
         JSONArray objectsList = new JSONArray();
         for (Entry<String,String> entry : _log) {
