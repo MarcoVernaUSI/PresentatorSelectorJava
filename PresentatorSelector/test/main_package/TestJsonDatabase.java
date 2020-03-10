@@ -14,7 +14,7 @@ import org.junit.Test;
 import main_package.builders.FakeJsonDatabase;
 
 
-public class TestJsonDatabase {
+public class TestJsonDb {
     public static final String Path = FakeJsonDatabase.DefaultPath;
     public FakeJsonDatabase _db;
     

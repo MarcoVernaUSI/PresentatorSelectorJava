@@ -3,98 +3,98 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main_package.builders.FakeJsonDatabase;
-
 public class TestCandidates {
-    public static final String Path = FakeJsonDatabase.DefaultPath;
-    public static final Candidates Candidates = new Candidates();
-    public FakeJsonDatabase _db;
+    public static final String DefaultPath = "test/database_test.json";
+    public Candidates _candidates;
     
     @Before
     public void SetUp(){
-        _db = new FakeJsonDatabase().ofCandidates().writeFile();
-        Candidates.loadDatabase(_db.build());
+        //Create the file with Bob Semple inside
+        JSONObject candidate = new JSONObject();
+        candidate.put("fname","Bob");
+        candidate.put("surname","Semple");
+        JSONArray objectsList = new JSONArray();
+        objectsList.add(candidate);
+        try (FileWriter file = new FileWriter(DefaultPath)) {
+            file.write(objectsList.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        _candidates = new Candidates(DefaultPath);
     }
-    
     
     @After
     public void rollback(){
-        File jsonFile = new File(Path);
-        jsonFile.delete();
+        File file = new File(DefaultPath);
+        file.delete();
     }
     
     @Test
-    public void loadDatabase() {
+    public void UpdateAndLoadDatabase() {
+        _candidates.getDatabase().clear(); //svuoto la lista, se non sarà vuota è perchè la ricarica
         
-        assertEquals("Bob", Candidates.getSpeaker(0).getFname());
-        assertEquals("Semple", Candidates.getSpeaker(0).getSurname());
-        assertEquals("George", Candidates.getSpeaker(1).getFname());
-        assertEquals("Pearce", Candidates.getSpeaker(1).getSurname());
+        _candidates.load();
+        
+        assertEquals("Bob", _candidates.getSpeaker(0).getFname());
+        assertEquals("Semple", _candidates.getSpeaker(0).getSurname());
     }
 
-    @Test
-    public void dumpDatabase() {
-        Candidates.addSpeaker("Neville", "Chamberlain");
-        Candidates.addSpeaker("Winston", "Churchill");
-        
-        Candidates.dumpDatabase();
-        
-        List<JSONObject> readedDatabase = _db.readDb();
-        
-        assertEquals("Bob", readedDatabase.get(0).get("fname"));
-        assertEquals("Semple", readedDatabase.get(0).get("surname"));
-        assertEquals("George", readedDatabase.get(1).get("fname"));
-        assertEquals("Pearce", readedDatabase.get(1).get("surname"));  
-    
-        assertEquals("Neville", readedDatabase.get(2).get("fname"));
-        assertEquals("Chamberlain", readedDatabase.get(2).get("surname"));
-        assertEquals("Winston", readedDatabase.get(3).get("fname"));
-        assertEquals("Churchill", readedDatabase.get(3).get("surname"));  
-    }
 
     @Test
-    public void addSpeaker() {
-        Candidates.addSpeaker("Neville", "Chamberlain");
+    public void addMultipleSpeaker() {
         
-        assertEquals("Neville", Candidates.getSpeaker(2).getFname());
-        assertEquals("Chamberlain", Candidates.getSpeaker(2).getSurname());
-        assertEquals(3,Candidates.printCandidates().size());
+        _candidates.addSpeaker("George", "Pearce");
+        _candidates.addSpeaker("Winston", "Churchill");
+        
+        assertEquals("Bob Semple", _candidates.getSpeaker(0).printCandidate());
+        assertEquals("George Pearce", _candidates.getSpeaker(1).printCandidate());
+        assertEquals("Winston Churchill", _candidates.getSpeaker(2).printCandidate());
+        assertEquals(3, _candidates.getDatabase().size());
+        
     }
     
     @Test
     public void removeSpeaker() {
-        Candidates.removeSpeakers("Bob Semple");
+        _candidates.addSpeaker("George", "Pearce");
         
-        assertEquals("George", Candidates.getSpeaker(0).getFname());
-        assertEquals("Pearce", Candidates.getSpeaker(0).getSurname());
-        assertEquals(1,Candidates.printCandidates().size());
+        
+        _candidates.removeSpeakers("Bob Semple");
+        
+        assertEquals("George Pearce", _candidates.getSpeaker(0).printCandidate());
+        assertEquals(1, _candidates.getDatabase().size());
     }
 
     @Test
     public void setAbsent() {
-        Candidates.setAbsent("George Pearce");
         
-        assertEquals(true,Candidates.getSpeaker(1).isAbsent());
+        _candidates.setAbsent("Bob Semple");
+        
+        assertEquals(true,_candidates.getSpeaker(0).isAbsent());
     }
 
     @Test
     public void checkAbsent() {
-        Candidates.checkAbsent("George Pearce");
         
-        assertEquals(false, Candidates.getSpeaker(1).isAbsent());
+        assertEquals(false, _candidates.getSpeaker(0).isAbsent());
     }
 
     @Test
     public void printCandidates() {
-        List<String>candidatesList = Candidates.printCandidates();
+        _candidates.addSpeaker("George", "Pearce");
+        
+        List<String>candidatesList = _candidates.printCandidates();
         
         assertEquals("Bob Semple", candidatesList.get(0));
         assertEquals("George Pearce", candidatesList.get(1));
@@ -102,7 +102,9 @@ public class TestCandidates {
     
     @Test
     public void getRandomSpeaker() {
-        Candidate randomSpeaker = Candidates.getRandomSpeaker();
+        _candidates.addSpeaker("George", "Pearce");
+        
+        Candidate randomSpeaker = _candidates.getRandomSpeaker();
         
         assertTrue(new ArrayList<String>()
         {{add("Bob Semple");add("George Pearce");}}

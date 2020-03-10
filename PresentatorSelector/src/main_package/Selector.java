@@ -7,8 +7,8 @@ public class Selector{
     private final Log _log;
     
     public Selector(String candidatesPath, String logPath) {
-        _candidates = new Candidates().loadDatabase(new JsonDatabase(candidatesPath));
-        _log = new Log().loadDatabase(new JsonDatabase(logPath));
+        _candidates = new Candidates(candidatesPath);
+        _log = new Log(logPath);
     }
     
     public String select() {

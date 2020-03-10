@@ -10,39 +10,45 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 // Class for interact with a json database
-public class JsonDatabase {
-    private String _path;
-    private final List<JSONObject> _database;
-
+public abstract class JsonDb<T> {
+    private final String _path;
+    protected final List<T> _database;
     private final JSONParser _jsonParser = new JSONParser();
     
-    public JsonDatabase(String path) {
+    public JsonDb(String path) {
         _path = path;
         _database = new ArrayList<>();
+        load();
     }
     
+    public List<T> getDatabase() {
+        return _database;
+    }
+
     // Load the database into the list
-    public List<JSONObject> load() {       
+    public List<T> load() {       
         String currentPath = _path;
         _database.clear();
-
         try (FileReader reader = new FileReader(currentPath))
         {
             //Read JSON file
             Object obj = _jsonParser.parse(reader);
-            for (Object object : (JSONArray) obj) {
-                _database.add((JSONObject) object);
+            for (Object object : (JSONArray) obj) { 
+                _database.add(readObject((JSONObject) object));
             }
         }catch (Exception e) {
             throw new RuntimeException(e);
         }  
         return _database;
     }
-  
     
  // Dump the list to the database
-    public void update(JSONArray objectsList) {
-        
+    public void update() {
+        JSONArray objectsList = new JSONArray();
+        for (T genericObj : _database) {
+            JSONObject obj = writeObject(genericObj);
+            objectsList.add(obj);
+        }
         //Write JSON file
         try (FileWriter file = new FileWriter(_path)) {
             file.write(objectsList.toJSONString());
@@ -52,19 +58,7 @@ public class JsonDatabase {
         }
     }
     
-    public String getPath() {
-        return _path;
-    }
-
-    public void setPath(String path) {
-        this._path = path;
-    }
+    abstract public T readObject(JSONObject obj);
     
-    public List<JSONObject> getDatabase() {
-        return _database;
-    }
-
-    public void addToDatabase(JSONObject obj) {
-        _database.add(obj);
-    }
+    abstract public JSONObject writeObject(T obj);
 }
