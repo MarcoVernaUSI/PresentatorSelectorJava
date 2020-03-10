@@ -11,16 +11,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main_package.builders.JsonDatabaseBuilder;
+import main_package.builders.FakeJsonDatabase;
 
 
 public class TestJsonDatabase {
-    public static final String Path = JsonDatabaseBuilder.DefaultPath;
-    public JsonDatabaseBuilder _db;
+    public static final String Path = FakeJsonDatabase.DefaultPath;
+    public FakeJsonDatabase _db;
     
     @Before
     public void setUp() {
-        _db = new JsonDatabaseBuilder().ofCandidates().writeFile();
+        _db = new FakeJsonDatabase().ofCandidates().writeFile();
     }
     
     // Cancello file

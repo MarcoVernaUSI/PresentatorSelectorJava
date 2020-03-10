@@ -5,19 +5,19 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import main_package.builders.JsonDatabaseBuilder;
+import main_package.builders.FakeJsonDatabase;
 
 public class TestView {
     public static final String Path1 = "test/candidates_test.json";
     public static final String Path2 = "test/log_test.json";
     
-    public JsonDatabaseBuilder _dbCandidates;
-    public JsonDatabaseBuilder _dbLog;
+    public FakeJsonDatabase _dbCandidates;
+    public FakeJsonDatabase _dbLog;
     
     @Before
     public void SetUp(){
-        _dbCandidates = new JsonDatabaseBuilder().ofCandidates().withPath(Path1).writeFile();
-        _dbLog = new JsonDatabaseBuilder().ofLogEntries().withPath(Path2).writeFile();
+        _dbCandidates = new FakeJsonDatabase().ofCandidates().withPath(Path1).writeFile();
+        _dbLog = new FakeJsonDatabase().ofLogEntries().withPath(Path2).writeFile();
     }
     
     @Test

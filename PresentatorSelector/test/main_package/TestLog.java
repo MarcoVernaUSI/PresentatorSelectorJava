@@ -10,17 +10,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main_package.builders.JsonDatabaseBuilder;
+import main_package.builders.FakeJsonDatabase;
 
 public class TestLog {
-    public static final String Path = JsonDatabaseBuilder.DefaultPath;
+    public static final String Path = FakeJsonDatabase.DefaultPath;
     public static final Log Log = new Log();
-    public JsonDatabaseBuilder _db;
+    public FakeJsonDatabase _db;
     
     
     @Before
     public void setUp() {
-        _db = new JsonDatabaseBuilder().ofLogEntries().writeFile();
+        _db = new FakeJsonDatabase().ofLogEntries().writeFile();
         Log.loadDatabase(_db.build());
     }
     

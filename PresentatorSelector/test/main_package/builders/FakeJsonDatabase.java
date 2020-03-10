@@ -12,21 +12,20 @@ import org.json.simple.parser.JSONParser;
 
 import main_package.JsonDatabase;
 
-public class JsonDatabaseBuilder {
+public class FakeJsonDatabase {
     public static final String DefaultPath = "test/database_test.json";
-  
     public final JsonDatabase _db;
     
-    public JsonDatabaseBuilder() {
+    public FakeJsonDatabase() {
         _db = new JsonDatabase(DefaultPath); 
     }
     
-    public JsonDatabaseBuilder withPath(String path) {
+    public FakeJsonDatabase withPath(String path) {
         _db.setPath(path);
         return this;
     }
     
-    public JsonDatabaseBuilder writeFile() {
+    public FakeJsonDatabase writeFile() {
         try (FileWriter file = new FileWriter(_db.getPath())) {
             
             JSONArray tmpList = new JSONArray();
@@ -41,7 +40,7 @@ public class JsonDatabaseBuilder {
         return this;
     }
     
-    public JsonDatabaseBuilder ofCandidates() {
+    public FakeJsonDatabase ofCandidates() {
         JSONObject obj1 = new JSONObject();
         obj1.put("fname","Bob");
         obj1.put("surname","Semple");
@@ -55,7 +54,7 @@ public class JsonDatabaseBuilder {
         return this;
     }
     
-    public JsonDatabaseBuilder ofLogEntries() {
+    public FakeJsonDatabase ofLogEntries() {
         JSONObject obj1 = new JSONObject();
         obj1.put("name","Bob Semple");
         obj1.put("date","01/09/1939 00:00:00");

@@ -3,7 +3,7 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,19 +11,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main_package.builders.JsonDatabaseBuilder;
+import main_package.builders.FakeJsonDatabase;
 
 public class TestSelector {
     public static final String Path1 = "test/candidates_test.json";
     public static final String Path2 = "test/log_test.json";
     
-    public JsonDatabaseBuilder _db_candidates;
-    public JsonDatabaseBuilder _db_log;
+    public FakeJsonDatabase _db_candidates;
+    public FakeJsonDatabase _db_log;
     
     @Before
     public void SetUp(){
-        _db_candidates = new JsonDatabaseBuilder().ofCandidates().withPath(Path1).writeFile();
-        _db_log = new JsonDatabaseBuilder().ofLogEntries().withPath(Path2).writeFile();
+        _db_candidates = new FakeJsonDatabase().ofCandidates().withPath(Path1).writeFile();
+        _db_log = new FakeJsonDatabase().ofLogEntries().withPath(Path2).writeFile();
     }
     
     // Cancello file
@@ -108,7 +108,6 @@ public class TestSelector {
         assertTrue(value);
     }
     
-    
     ///////////////////
     @Test
     public void loadAndRemove() {
@@ -116,78 +115,98 @@ public class TestSelector {
         
         selector.add("Edward", "Wood");
         selector.add("Winston", "Churchill");
-        selector.add("Neville", "Chamberlain");
         selector.remove("Edward Wood");
         
         assertEquals("Bob Semple", selector.getSpeakers().get(0));
         assertEquals("George Pearce",selector.getSpeakers().get(1));
-        assertEquals("Winston Churchill", selector.getSpeakers().get(2));
-        assertEquals("Neville Chamberlain", selector.getSpeakers().get(3));
-        
+        assertEquals("Winston Churchill", selector.getSpeakers().get(2));   
     }
     
-    // spezzo test
     @Test
-    public void logAndAbsents() throws ParseException {
+    public void saveLogEntry() {
+        Selector selector = new Selector(Path1,Path2);
+        selector.getLog().clearLog();
+        
+        selector.setAbsent("Bob Semple");
+        Date date = new Date();
+        String log = selector.printLog();
+        
+        assertEquals("\nBob Semple absent in date "+ Log.DateFormat.format(date),log);    
+    }
+    
+    @Test
+    public void saveMultipleEntries() {
+        Selector selector = new Selector(Path1,Path2);
+        selector.getLog().clearLog();
+        
+        selector.setAbsent("Bob Semple");
+        Date date1 = new Date();
+        selector.setAbsent("George Pearce");
+        Date date2 = new Date();
+        String log = selector.printLog();
+        
+        assertEquals("\nBob Semple absent in date "+ Log.DateFormat.format(date1)+
+            "\nGeorge Pearce absent in date "+ Log.DateFormat.format(date2),log);   
+    }
+    
+    public void addAndSaveEntry() {
         Selector selector = new Selector(Path1,Path2);
         selector.getLog().clearLog();
         
         selector.add("Edward", "Wood");
-        selector.add("Winston", "Churchill");
-        selector.add("Neville", "Chamberlain");
         selector.setAbsent("Edward Wood");
-        Date date1 = new Date();
-        selector.setAbsent("Bob Semple");
-        Date date2 = new Date();
-        String log1 = selector.printLog();
-        selector.setAbsent("Edward Wood");
-        String log2 = selector.printLog();
-        selector.setAbsent("Neville Chamberlain");
-        Date date3 = new Date();
+        Date date = new Date();
+        String log = selector.printLog();
         
-        String log3 = selector.printLog();
-        
-        assertEquals("\nEdward Wood absent in date "+ Log.DateFormat.format(date1)+
-            "\nBob Semple absent in date "+ Log.DateFormat.format(date2),log1);
-        assertEquals(log1,log2);
-        assertEquals("\nEdward Wood absent in date "+ Log.DateFormat.format(date1)+
-            "\nBob Semple absent in date "+ Log.DateFormat.format(date2)+ 
-            "\nNeville Chamberlain absent in date "+Log.DateFormat.format(date3),log3);
-        
+        assertEquals("\nEdward Wood absent in date "+ Log.DateFormat.format(date),log);
     }
+    
+
+    public void notSaveEntryIfNotAbsent() {
+        Selector selector = new Selector(Path1,Path2);
+        selector.getLog().clearLog();
+        
+        selector.setAbsent("Bob Semple");
+        String log1 = selector.printLog();
+        selector.setAbsent("Bob Semple");
+        String log2 = selector.printLog();
+            
+        assertEquals(log1,log2);
+        }
+    
     
     @Test
     public void correctSelectionWithAbsents() {
         Selector selector = new Selector(Path1,Path2);
         
-        // spezzo test
+        selector.setAbsent("George Pearce");
+        String random = selector.select();
+        
+        assertEquals("Bob Semple",random);
+    }
+    
+    @Test
+    public void correctSelectionWithAbsentsAfterAdd() {
+        Selector selector = new Selector(Path1,Path2);
+        
+        selector.setAbsent("George Pearce");
         selector.add("Edward", "Wood");
-        selector.add("Winston", "Churchill");
-        selector.add("Neville", "Chamberlain");
-        selector.setAbsent("Bob Semple");
-        selector.setAbsent("George Pearce");
-        String random1 = selector.select();
-        selector.setAbsent("Winston Churchill");
-        selector.setAbsent("Neville Chamberlain");
-        selector.setAbsent("George Pearce");
-        String random2 = selector.select();
-        selector.setAbsent("Edward Wood");
-        String random3 = selector.select();
+        String random = selector.select();
         
+        assertTrue(new ArrayList<String>()
+        {{add("Bob Semple");add("Edward Wood");}}.contains(random));
+        }
+
+    @Test
+    public void correctSelectionWithAbsentsAfterAddAndRemove() {
+        Selector selector = new Selector(Path1,Path2);
         
-        // Usa assertContains
-        assertTrue((random1.equals("Edward Wood")) 
-            || (random1.equals("Winston Churchill"))
-            || (random1.equals("Neville Chamberlain"))          
-            );
-        assertTrue((random2.equals("Edward Wood")) 
-            || (random2.equals("George Pearce"))
-            );
-        assertTrue((random1.equals("Edward Wood")) 
-            || (random1.equals("Winston Churchill"))
-            || (random1.equals("Neville Chamberlain"))          
-            );
-        assertTrue(random3.equals("George Pearce"));
+        selector.setAbsent("George Pearce");
+        selector.add("Edward", "Wood");
+        selector.remove("Bob Semple");
+        String random = selector.select();
+        
+        assertEquals("Edward Wood",random);
     }
     
     @Test

@@ -3,6 +3,7 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -10,16 +11,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main_package.builders.JsonDatabaseBuilder;
+import main_package.builders.FakeJsonDatabase;
 
 public class TestCandidates {
-    public static final String Path = JsonDatabaseBuilder.DefaultPath;
+    public static final String Path = FakeJsonDatabase.DefaultPath;
     public static final Candidates Candidates = new Candidates();
-    public JsonDatabaseBuilder _db;
+    public FakeJsonDatabase _db;
     
     @Before
     public void SetUp(){
-        _db = new JsonDatabaseBuilder().ofCandidates().writeFile();
+        _db = new FakeJsonDatabase().ofCandidates().writeFile();
         Candidates.loadDatabase(_db.build());
     }
     
@@ -45,7 +46,6 @@ public class TestCandidates {
         Candidates.addSpeaker("Winston", "Churchill");
         
         Candidates.dumpDatabase();
-        
         
         List<JSONObject> readedDatabase = _db.readDb();
         
@@ -104,7 +104,8 @@ public class TestCandidates {
     public void getRandomSpeaker() {
         Candidate randomSpeaker = Candidates.getRandomSpeaker();
         
-        assertTrue((randomSpeaker.getFname().equals("Bob")) && (randomSpeaker.getSurname().equals("Semple")) 
-            || (randomSpeaker.getFname().equals("George")) && (randomSpeaker.getSurname().equals("Pearce")));
-    }
+        assertTrue(new ArrayList<String>()
+        {{add("Bob Semple");add("George Pearce");}}
+        .contains(randomSpeaker.getFname()+" "+randomSpeaker.getSurname()));
+        }
 }
