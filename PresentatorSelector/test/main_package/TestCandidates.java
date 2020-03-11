@@ -43,12 +43,24 @@ public class TestCandidates {
     
     @Test
     public void UpdateAndLoadDatabase() {
-        _candidates.getDatabase().clear(); //svuoto la lista, se non sarà vuota è perchè la ricarica
-        
+        //scrivo su file        
+        JSONObject candidate = new JSONObject();
+        candidate.put("fname","George");
+        candidate.put("surname","Pearce");
+        JSONArray objectsList = new JSONArray();
+        objectsList.add(candidate);
+        try (FileWriter file = new FileWriter(DefaultPath)) {
+            file.write(objectsList.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         _candidates.load();
         
-        assertEquals("Bob", _candidates.getSpeaker(0).getFname());
-        assertEquals("Semple", _candidates.getSpeaker(0).getSurname());
+        assertEquals("George", _candidates.getSpeaker(0).getFname());
+        assertEquals("Pearce", _candidates.getSpeaker(0).getSurname());
+
     }
 
 
@@ -61,7 +73,7 @@ public class TestCandidates {
         assertEquals("Bob Semple", _candidates.getSpeaker(0).printCandidate());
         assertEquals("George Pearce", _candidates.getSpeaker(1).printCandidate());
         assertEquals("Winston Churchill", _candidates.getSpeaker(2).printCandidate());
-        assertEquals(3, _candidates.getDatabase().size());
+        assertEquals(3, _candidates.printCandidates().size());
         
     }
     
@@ -72,7 +84,7 @@ public class TestCandidates {
         _candidates.removeSpeakers("Bob Semple");
         
         assertEquals("George Pearce", _candidates.getSpeaker(0).printCandidate());
-        assertEquals(1, _candidates.getDatabase().size());
+        assertEquals(1, _candidates.printCandidates().size());
     }
 
     @Test

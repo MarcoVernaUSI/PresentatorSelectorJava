@@ -41,11 +41,21 @@ public class TestLog {
     
     @Test
     public void UpdateAndLoadDatabase() {
-        _log.getDatabase().clear(); //svuoto la lista, se non sarà vuota è perchè la ricarica
-        
+      //scrivo su file        
+        JSONObject entry = new JSONObject();
+        entry.put("entry","George Pearce absent in date 01/09/1942 00:00:00");
+        JSONArray objectsList = new JSONArray();
+        objectsList.add(entry);
+        try (FileWriter file = new FileWriter(DefaultPath)) {
+            file.write(objectsList.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         _log.load();
         
-        assertEquals("Bob Semple absent in date 01/09/1939 00:00:00", _log.getDatabase().get(0));
+        assertEquals("George Pearce absent in date 01/09/1942 00:00:00", _log.getEntry(0));
+   
     }
     
     @Test
@@ -56,10 +66,10 @@ public class TestLog {
         _log.saveEntry("Winston Churchill", true);
         Date actualDate2= new Date();
         
-        assertEquals("Bob Semple absent in date 01/09/1939 00:00:00", _log.getDatabase().get(0));
-        assertEquals("George Pearce absent in date " + Log.DateFormat.format(actualDate1), _log.getDatabase().get(1));
-        assertEquals("Winston Churchill absent in date "+Log.DateFormat.format(actualDate2), _log.getDatabase().get(2));
-        assertEquals(3, _log.getDatabase().size());
+        assertEquals("Bob Semple absent in date 01/09/1939 00:00:00", _log.getEntry(0));
+        assertEquals("George Pearce absent in date " + Log.DateFormat.format(actualDate1), _log.getEntry(1));
+        assertEquals("Winston Churchill absent in date "+Log.DateFormat.format(actualDate2), _log.getEntry(2));
+        assertEquals(3, _log.countEntries());
         
     }
     
@@ -69,8 +79,8 @@ public class TestLog {
         _log.saveEntry("George Pearce", true);
         Date actualDate= new Date();
         
-        assertEquals("George Pearce absent in date " + Log.DateFormat.format(actualDate), _log.getDatabase().get(1));
-        assertEquals(2, _log.getDatabase().size());
+        assertEquals("George Pearce absent in date " + Log.DateFormat.format(actualDate), _log.getEntry(1));
+        assertEquals(2, _log.countEntries());
     }
     
 
@@ -81,7 +91,7 @@ public class TestLog {
         _log.saveEntry("George Pearce", false);
         
         assertEquals(before, _log.printLog());
-        assertEquals(1, _log.getDatabase().size());
+        assertEquals(1, _log.countEntries());
     }
     
     @Test
@@ -89,7 +99,7 @@ public class TestLog {
         
         _log.clearLog();
         
-        assertEquals(0,_log.getDatabase().size());
+        assertEquals(0,_log.countEntries());
     }
     
     @Test

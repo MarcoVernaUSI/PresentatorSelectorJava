@@ -11,7 +11,6 @@ import org.json.simple.parser.JSONParser;
 // Class for interact with a json database
 public abstract class JsonDb<T> {
     private final List<T> _database;
-    
     private final String _path;
     private final JSONParser _jsonParser = new JSONParser();
     
@@ -19,10 +18,6 @@ public abstract class JsonDb<T> {
         _path = path;
         _database = database;
         load();
-    }
-    
-    public List<T> getDatabase() {
-        return _database;
     }
 
     // Load the database into the list
@@ -58,7 +53,7 @@ public abstract class JsonDb<T> {
         }
     }
     
-    abstract public T readObject(JSONObject obj);
+    abstract protected T readObject(JSONObject obj);
     
-    abstract public JSONObject writeObject(T obj);
+    abstract protected JSONObject writeObject(T obj);
 }

@@ -17,14 +17,14 @@ public class Log extends JsonDb<String>{
     }
     
     @Override
-    public JSONObject writeObject(String entry) {
+    protected JSONObject writeObject(String entry) {
         JSONObject obj = new JSONObject();
         obj.put("entry",entry);
         return obj;
     }
     
     @Override
-    public String readObject(JSONObject obj) {
+    protected String readObject(JSONObject obj) {
         return (String) obj.get("entry");
     }
     //////////////////////////
@@ -54,8 +54,16 @@ public class Log extends JsonDb<String>{
         return logPrint;
     }
     
-    public String printEntry(String speaker, String date) {
+    private String printEntry(String speaker, String date) {
         return speaker + " absent in date " + date;
         
+    }
+    
+    public int countEntries(){
+        return _database.size();
+    }
+    
+    public String getEntry(int i){
+        return _database.get(i);
     }
 }

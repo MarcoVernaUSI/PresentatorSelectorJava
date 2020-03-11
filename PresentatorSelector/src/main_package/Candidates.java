@@ -13,7 +13,7 @@ public class Candidates extends JsonDb<Candidate>{
     }
     
     @Override
-    public JSONObject writeObject(Candidate candidate) {
+    protected JSONObject writeObject(Candidate candidate) {
         JSONObject obj = new JSONObject();
         obj.put("fname",candidate.getFname());
         obj.put("surname",candidate.getSurname());
@@ -21,7 +21,7 @@ public class Candidates extends JsonDb<Candidate>{
     }
     
     @Override
-    public Candidate readObject(JSONObject obj) {
+    protected Candidate readObject(JSONObject obj) {
         return new Candidate((String) obj.get("fname"), (String) obj.get("surname"));
     }    
     ////////////////////////////
