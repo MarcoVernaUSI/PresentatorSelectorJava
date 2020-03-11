@@ -3,52 +3,39 @@ package main_package;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.List;  
 
-import org.json.simple.JSONObject;  
-
-public class Log extends JsonDb<String>{
-    private final List<String> _database;
+public class Log {
     public final static DateFormat DateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    
+    private final List<String> _log;
+    private final JsonDb<String> _db;
 
+    
     public Log(String path) {
-        super(path);
-        _database = load();
+        _db = new JsonDb<>(path,new EntryParser());
+        _log = _db.load();
     }
-    
-    @Override
-    protected JSONObject writeObject(String entry) {
-        JSONObject obj = new JSONObject();
-        obj.put("entry",entry);
-        return obj;
-    }
-    
-    @Override
-    protected String readObject(JSONObject obj) {
-        return (String) obj.get("entry");
-    }
-    //////////////////////////
-    
     
     // Add an entry to the log
     public void saveEntry(String speaker, boolean absent) {
         if (absent){
             Date actualDate = new Date();
-            _database.add(printEntry(speaker,DateFormat.format(actualDate)));
-            update(_database);
+            _log.add(printEntry(speaker,DateFormat.format(actualDate)));
+            _db.update(_log);
         }
     }
     
     // Clear the log
     public void clearLog() {
-        _database.clear();
-        update(_database);
+        _log.clear();
+        _db.update(_log);
     }
     
     // print the whole log
     public String printLog() {
         String logPrint = "";
-        for (String entry : _database) {
+        for (String entry : _log) {
             logPrint = logPrint + "\n" + entry; 
         }
         return logPrint;
@@ -60,10 +47,10 @@ public class Log extends JsonDb<String>{
     }
     
     public int countEntries(){
-        return _database.size();
+        return _log.size();
     }
     
     public String getEntry(int i){
-        return _database.get(i);
+        return _log.get(i);
     }
 }

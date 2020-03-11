@@ -10,12 +10,15 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 // Class for interact with a json database
-public abstract class JsonDb<T> {
+public class JsonDb<T> {
     private final String _path;
     private final JSONParser _jsonParser = new JSONParser();
     
-    public JsonDb(String path) {
+    private final JsonObjectParser<T> _jParser;  
+    
+    public JsonDb(String path, JsonObjectParser<T> jParser) {
         _path = path;
+        _jParser = jParser;
     }
 
     // Load the database into the list
@@ -27,7 +30,7 @@ public abstract class JsonDb<T> {
             //Read JSON file
             Object obj = _jsonParser.parse(reader);
             for (Object object : (JSONArray) obj) { 
-                database.add(readObject((JSONObject) object));
+                database.add(_jParser.readObject((JSONObject) object));
             }
         }catch (Exception e) {
             throw new RuntimeException(e);
@@ -39,7 +42,7 @@ public abstract class JsonDb<T> {
     public void update(List<T> objects) {
         JSONArray objectsList = new JSONArray();
         for (T genericObj : objects) {
-            JSONObject obj = writeObject(genericObj);
+            JSONObject obj = _jParser.writeObject(genericObj);
             objectsList.add(obj);
         }
         //Write JSON file
@@ -50,8 +53,5 @@ public abstract class JsonDb<T> {
             e.printStackTrace();
         }
     }
-    
-    abstract protected T readObject(JSONObject obj);
-    
-    abstract protected JSONObject writeObject(T obj);
+
 }
