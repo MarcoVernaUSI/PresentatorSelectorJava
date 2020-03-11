@@ -69,7 +69,6 @@ public class TestCandidates {
     public void removeSpeaker() {
         _candidates.addSpeaker("George", "Pearce");
         
-        
         _candidates.removeSpeakers("Bob Semple");
         
         assertEquals("George Pearce", _candidates.getSpeaker(0).printCandidate());

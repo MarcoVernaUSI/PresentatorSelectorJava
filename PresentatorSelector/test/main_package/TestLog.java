@@ -19,7 +19,7 @@ public class TestLog {
     
     @Before
     public void SetUp(){
-        //Create the file with Bob Semple inside
+        //Create the file with a Bob Semple entry inside
         JSONObject entry = new JSONObject();
         entry.put("entry","Bob Semple absent in date 01/09/1939 00:00:00");
         JSONArray objectsList = new JSONArray();

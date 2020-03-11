@@ -4,22 +4,20 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import main_package.builders.CandidateBuilder;
-
 public class TestCandidate {
     
     @Test
     public void printCandidate() {
-        Candidate candidate= new CandidateBuilder().build();
+        Candidate candidate= new Candidate("Bob", "Semple");
         
         String candidateName = candidate.printCandidate();
         
-        assertEquals(candidateName, "Bob Semple");
+        assertEquals("Bob Semple", candidateName);
     }
     
     @Test
     public void absentDefaultValue() {
-        Candidate candidate= new CandidateBuilder().build();
+        Candidate candidate= new Candidate("Bob", "Semple");
         
         boolean absentValue = candidate.isAbsent();
         
@@ -28,7 +26,8 @@ public class TestCandidate {
     
     @Test
     public void isAbsent() {
-        Candidate candidate= new CandidateBuilder().withAbsent(true).build();
+        Candidate candidate= new Candidate("Bob", "Semple");
+        candidate.setAbsent(true);
         
         boolean absentValue = candidate.isAbsent();
         

@@ -3,27 +3,52 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import main_package.builders.FakeJsonDatabase;
 
 public class TestSelector {
     public static final String Path1 = "test/candidates_test.json";
     public static final String Path2 = "test/log_test.json";
     
-    public FakeJsonDatabase _db_candidates;
-    public FakeJsonDatabase _db_log;
+    public Selector _selector;
     
     @Before
     public void SetUp(){
-        _db_candidates = new FakeJsonDatabase().ofCandidates().withPath(Path1).writeFile();
-        _db_log = new FakeJsonDatabase().ofLogEntries().withPath(Path2).writeFile();
+        //Create the two database files with Bob Semple
+        JSONObject entry = new JSONObject();
+        JSONObject candidate = new JSONObject();
+        entry.put("entry","Bob Semple absent in date 01/09/1939 00:00:00");
+        candidate.put("fname","Bob");
+        candidate.put("surname","Semple");
+        
+        JSONArray objectsList1 = new JSONArray();
+        JSONArray objectsList2 = new JSONArray();
+        objectsList1.add(candidate);
+        objectsList2.add(entry);
+        
+        
+        try (FileWriter file1 = new FileWriter(Path1);
+            FileWriter file2 = new FileWriter(Path2)) {
+            
+            file1.write(objectsList1.toJSONString());
+            file1.flush();
+            
+            file2.write(objectsList2.toJSONString());
+            file2.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        _selector = new Selector(Path1,Path2);
     }
     
     // Cancello file
@@ -39,20 +64,31 @@ public class TestSelector {
     @Test
     public void select() {
         
-        Selector selector = new Selector(Path1,Path2);
+        String speaker = _selector.select();
         
-        String speaker = selector.select();
+        assertEquals("Bob Semple", speaker);
+    }
+    
+    @Test
+    public void multipleSelect() {
+        _selector.add("George", "Pearce");
+        
+        String speaker = _selector.select();
         
         assertTrue((speaker.equals("Bob Semple")) 
             || (speaker.equals("George Pearce")));
     }
     
+    
+ //////////////////////////////////////////////   
+    
+
+    
     @Test
     public void getSpeakers() {
-        Selector selector = new Selector(Path1,Path2);
+        _selector.add("George", "Pearce");
         
-        List<String> speakerList = selector.getSpeakers();
-        System.out.println(speakerList);
+        List<String> speakerList = _selector.getSpeakers();
         
         assertEquals(2, speakerList.size());
         assertEquals("Bob Semple", speakerList.get(0));
@@ -61,49 +97,42 @@ public class TestSelector {
     
     @Test
     public void remove(){
-        Selector selector = new Selector(Path1,Path2);
+        _selector.add("George", "Pearce");
         
-        selector.remove("Bob Semple");
+        _selector.remove("Bob Semple");
         
-       assertEquals(1, selector.getSpeakers().size());
-       assertEquals("George Pearce", selector.getSpeakers().get(0));
+        assertEquals(1, _selector.getSpeakers().size());
+        assertEquals("George Pearce", _selector.getSpeakers().get(0));
     }
     
     @Test
     public void add(){
-        Selector selector = new Selector(Path1,Path2);
         
-        selector.add("Winston" , "Churchill");
+        _selector.add("George", "Pearce");
         
-        assertEquals(3, selector.getSpeakers().size());
-        assertEquals("Winston Churchill", selector.getSpeakers().get(2));
+        assertEquals(2, _selector.getSpeakers().size());
+        assertEquals("George Pearce", _selector.getSpeakers().get(1));
     }
     
     @Test
     public void printLog() {
-        Selector selector = new Selector(Path1,Path2);
+        String logPrint = _selector.printLog();
         
-        String logPrint = selector.printLog();
-        
-        assertEquals("\nBob Semple absent in date 01/09/1939 00:00:00\nGeorge Pearce absent in date 01/11/1942 00:00:00",logPrint);
+        assertEquals("\nBob Semple absent in date 01/09/1939 00:00:00",logPrint);
     }
     
     @Test
     public void setAbsent() {
-        Selector selector = new Selector(Path1,Path2);
+        _selector.setAbsent("Bob Semple");
         
-        selector.setAbsent("Bob Semple");
-        
-        assertTrue(selector.checkAbsent("Bob Semple"));
-    
+        assertTrue(_selector.checkAbsent("Bob Semple"));
     }
 
     @Test
     public void checkAbsent() {
-        Selector selector = new Selector(Path1,Path2);
-        selector.setAbsent("Bob Semple");
+        _selector.setAbsent("Bob Semple");
         
-        boolean value = selector.checkAbsent("Bob Semple");
+        boolean value = _selector.checkAbsent("Bob Semple");
 
         assertTrue(value);
     }
@@ -111,65 +140,60 @@ public class TestSelector {
     ///////////////////
     @Test
     public void loadAndRemove() {
-        Selector selector = new Selector(Path1,Path2);
         
-        selector.add("Edward", "Wood");
-        selector.add("Winston", "Churchill");
-        selector.remove("Edward Wood");
+        _selector.add("Edward", "Wood");
+        _selector.add("Winston", "Churchill");
+        _selector.remove("Edward Wood");
         
-        assertEquals("Bob Semple", selector.getSpeakers().get(0));
-        assertEquals("George Pearce",selector.getSpeakers().get(1));
-        assertEquals("Winston Churchill", selector.getSpeakers().get(2));   
+        assertEquals("Bob Semple", _selector.getSpeakers().get(0));
+        assertEquals("Winston Churchill", _selector.getSpeakers().get(1));   
     }
     
     @Test
     public void saveLogEntry() {
-        Selector selector = new Selector(Path1,Path2);
-        selector.getLog().clearLog();
+        _selector.getLog().clearLog();
         
-        selector.setAbsent("Bob Semple");
+        _selector.setAbsent("Bob Semple");
         Date date = new Date();
-        String log = selector.printLog();
+        String log = _selector.printLog();
         
         assertEquals("\nBob Semple absent in date "+ Log.DateFormat.format(date),log);    
     }
     
     @Test
     public void saveMultipleEntries() {
-        Selector selector = new Selector(Path1,Path2);
-        selector.getLog().clearLog();
+        _selector.getLog().clearLog();
+        _selector.add("George", "Pearce");
         
-        selector.setAbsent("Bob Semple");
+        _selector.setAbsent("Bob Semple");
         Date date1 = new Date();
-        selector.setAbsent("George Pearce");
+        _selector.setAbsent("George Pearce");
         Date date2 = new Date();
-        String log = selector.printLog();
+        String log = _selector.printLog();
         
         assertEquals("\nBob Semple absent in date "+ Log.DateFormat.format(date1)+
             "\nGeorge Pearce absent in date "+ Log.DateFormat.format(date2),log);   
     }
     
     public void addAndSaveEntry() {
-        Selector selector = new Selector(Path1,Path2);
-        selector.getLog().clearLog();
+        _selector.getLog().clearLog();
         
-        selector.add("Edward", "Wood");
-        selector.setAbsent("Edward Wood");
+        _selector.add("Edward", "Wood");
+        _selector.setAbsent("Edward Wood");
         Date date = new Date();
-        String log = selector.printLog();
+        String log = _selector.printLog();
         
         assertEquals("\nEdward Wood absent in date "+ Log.DateFormat.format(date),log);
     }
     
 
     public void notSaveEntryIfNotAbsent() {
-        Selector selector = new Selector(Path1,Path2);
-        selector.getLog().clearLog();
+        _selector.getLog().clearLog();
         
-        selector.setAbsent("Bob Semple");
-        String log1 = selector.printLog();
-        selector.setAbsent("Bob Semple");
-        String log2 = selector.printLog();
+        _selector.setAbsent("Bob Semple");
+        String log1 = _selector.printLog();
+        _selector.setAbsent("Bob Semple");
+        String log2 = _selector.printLog();
             
         assertEquals(log1,log2);
         }
@@ -177,21 +201,21 @@ public class TestSelector {
     
     @Test
     public void correctSelectionWithAbsents() {
-        Selector selector = new Selector(Path1,Path2);
+        _selector.add("George", "Pearce");
         
-        selector.setAbsent("George Pearce");
-        String random = selector.select();
+        _selector.setAbsent("George Pearce");
+        String random = _selector.select();
         
         assertEquals("Bob Semple",random);
     }
     
     @Test
     public void correctSelectionWithAbsentsAfterAdd() {
-        Selector selector = new Selector(Path1,Path2);
+        _selector.add("George", "Pearce");
         
-        selector.setAbsent("George Pearce");
-        selector.add("Edward", "Wood");
-        String random = selector.select();
+        _selector.setAbsent("George Pearce");
+        _selector.add("Edward", "Wood");
+        String random = _selector.select();
         
         assertTrue(new ArrayList<String>()
         {{add("Bob Semple");add("Edward Wood");}}.contains(random));
@@ -199,23 +223,21 @@ public class TestSelector {
 
     @Test
     public void correctSelectionWithAbsentsAfterAddAndRemove() {
-        Selector selector = new Selector(Path1,Path2);
+        _selector.add("George", "Pearce");
         
-        selector.setAbsent("George Pearce");
-        selector.add("Edward", "Wood");
-        selector.remove("Bob Semple");
-        String random = selector.select();
+        _selector.setAbsent("George Pearce");
+        _selector.add("Edward", "Wood");
+        _selector.remove("Bob Semple");
+        String random = _selector.select();
         
         assertEquals("Edward Wood",random);
     }
     
     @Test
     public void SelectionAllAbsents() {
-        Selector selector = new Selector(Path1,Path2);
         
-        selector.setAbsent("Bob Semple");
-        selector.setAbsent("George Pearce");
-        String random1 = selector.select();
+        _selector.setAbsent("Bob Semple");
+        String random1 = _selector.select();
       
         assertEquals("No speaker avaiable!", random1);
     }
