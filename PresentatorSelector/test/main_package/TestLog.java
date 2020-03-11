@@ -40,25 +40,6 @@ public class TestLog {
     }
     
     @Test
-    public void UpdateAndLoadDatabase() {
-      //scrivo su file        
-        JSONObject entry = new JSONObject();
-        entry.put("entry","George Pearce absent in date 01/09/1942 00:00:00");
-        JSONArray objectsList = new JSONArray();
-        objectsList.add(entry);
-        try (FileWriter file = new FileWriter(DefaultPath)) {
-            file.write(objectsList.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        _log.load();
-        
-        assertEquals("George Pearce absent in date 01/09/1942 00:00:00", _log.getEntry(0));
-   
-    }
-    
-    @Test
     public void addMultipleEntries() {
         
         _log.saveEntry("George Pearce", true);

@@ -6,10 +6,11 @@ import java.util.List;
 import org.json.simple.JSONObject;
 
 public class Candidates extends JsonDb<Candidate>{
-    private static List<Candidate> _database= new ArrayList<>();
+    private final List<Candidate> _database;
 
     public Candidates(String path) {
-        super(path, _database);
+        super(path);
+        _database = load();
     }
     
     @Override
@@ -31,7 +32,7 @@ public class Candidates extends JsonDb<Candidate>{
     public void addSpeaker(String fname, String surname) {
         Candidate speaker = new Candidate(fname, surname);
         _database.add(speaker);
-        update();
+        update(_database);
     }
     
     // return a speaker
@@ -66,7 +67,7 @@ public class Candidates extends JsonDb<Candidate>{
             }
             idx++;     
         }
-        update();
+        update(_database);
     }
 
     // set a given speaker absent

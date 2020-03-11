@@ -2,18 +2,18 @@ package main_package;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONObject;  
 
 public class Log extends JsonDb<String>{
-    private static List<String> _database= new ArrayList<>();
+    private final List<String> _database;
     public final static DateFormat DateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public Log(String path) {
-        super(path, _database);
+        super(path);
+        _database = load();
     }
     
     @Override
@@ -35,14 +35,14 @@ public class Log extends JsonDb<String>{
         if (absent){
             Date actualDate = new Date();
             _database.add(printEntry(speaker,DateFormat.format(actualDate)));
-            update();
+            update(_database);
         }
     }
     
     // Clear the log
     public void clearLog() {
         _database.clear();
-        update();
+        update(_database);
     }
     
     // print the whole log

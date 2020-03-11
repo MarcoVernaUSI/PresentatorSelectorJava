@@ -2,6 +2,7 @@ package main_package;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -10,37 +11,34 @@ import org.json.simple.parser.JSONParser;
 
 // Class for interact with a json database
 public abstract class JsonDb<T> {
-    private final List<T> _database;
     private final String _path;
     private final JSONParser _jsonParser = new JSONParser();
     
-    public JsonDb(String path, List<T> database) {
+    public JsonDb(String path) {
         _path = path;
-        _database = database;
-        load();
     }
 
     // Load the database into the list
     public List<T> load() {       
         String currentPath = _path;
-        _database.clear();
+        List<T> database = new ArrayList<>();
         try (FileReader reader = new FileReader(currentPath))
         {
             //Read JSON file
             Object obj = _jsonParser.parse(reader);
             for (Object object : (JSONArray) obj) { 
-                _database.add(readObject((JSONObject) object));
+                database.add(readObject((JSONObject) object));
             }
         }catch (Exception e) {
             throw new RuntimeException(e);
         }  
-        return _database;
+        return database;
     }
     
  // Dump the list to the database
-    public void update() {
+    public void update(List<T> objects) {
         JSONArray objectsList = new JSONArray();
-        for (T genericObj : _database) {
+        for (T genericObj : objects) {
             JSONObject obj = writeObject(genericObj);
             objectsList.add(obj);
         }

@@ -40,29 +40,6 @@ public class TestCandidates {
         File file = new File(DefaultPath);
         file.delete();
     }
-    
-    @Test
-    public void UpdateAndLoadDatabase() {
-        //scrivo su file        
-        JSONObject candidate = new JSONObject();
-        candidate.put("fname","George");
-        candidate.put("surname","Pearce");
-        JSONArray objectsList = new JSONArray();
-        objectsList.add(candidate);
-        try (FileWriter file = new FileWriter(DefaultPath)) {
-            file.write(objectsList.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        _candidates.load();
-        
-        assertEquals("George", _candidates.getSpeaker(0).getFname());
-        assertEquals("Pearce", _candidates.getSpeaker(0).getSurname());
-
-    }
-
 
     @Test
     public void addMultipleSpeaker() {
