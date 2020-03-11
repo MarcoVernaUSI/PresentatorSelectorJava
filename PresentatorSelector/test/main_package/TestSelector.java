@@ -80,10 +80,6 @@ public class TestSelector {
     }
     
     
- //////////////////////////////////////////////   
-    
-
-    
     @Test
     public void getSpeakers() {
         _selector.add("George", "Pearce");
@@ -151,7 +147,7 @@ public class TestSelector {
     
     @Test
     public void saveLogEntry() {
-        _selector.getLog().clearLog();
+        _selector.clearLog();
         
         _selector.setAbsent("Bob Semple");
         Date date = new Date();
@@ -162,7 +158,7 @@ public class TestSelector {
     
     @Test
     public void saveMultipleEntries() {
-        _selector.getLog().clearLog();
+        _selector.clearLog();
         _selector.add("George", "Pearce");
         
         _selector.setAbsent("Bob Semple");
@@ -176,7 +172,7 @@ public class TestSelector {
     }
     
     public void addAndSaveEntry() {
-        _selector.getLog().clearLog();
+        _selector.clearLog();
         
         _selector.add("Edward", "Wood");
         _selector.setAbsent("Edward Wood");
@@ -188,7 +184,7 @@ public class TestSelector {
     
 
     public void notSaveEntryIfNotAbsent() {
-        _selector.getLog().clearLog();
+        _selector.clearLog();
         
         _selector.setAbsent("Bob Semple");
         String log1 = _selector.printLog();

@@ -15,16 +15,18 @@ public class Log extends JsonDb<String>{
     }
     
     @Override
-    public String readObject(JSONObject obj) {
-        return (String) obj.get("entry");
-    }
-
-    @Override
     public JSONObject writeObject(String entry) {
         JSONObject obj = new JSONObject();
         obj.put("entry",entry);
         return obj;
     }
+    
+    @Override
+    public String readObject(JSONObject obj) {
+        return (String) obj.get("entry");
+    }
+    //////////////////////////
+    
     
     // Add an entry to the log
     public void saveEntry(String speaker, boolean absent) {

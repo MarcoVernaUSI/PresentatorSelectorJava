@@ -45,7 +45,7 @@ public class Selector{
         return _candidates.checkAbsent(speaker);
     }
     
-    public Log getLog() {
-        return _log;
+    public  void clearLog() {
+        _log.clearLog();
     }
 }

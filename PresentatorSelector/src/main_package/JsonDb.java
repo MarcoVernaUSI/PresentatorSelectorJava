@@ -11,8 +11,9 @@ import org.json.simple.parser.JSONParser;
 
 // Class for interact with a json database
 public abstract class JsonDb<T> {
-    private final String _path;
     protected final List<T> _database;
+    
+    private final String _path;
     private final JSONParser _jsonParser = new JSONParser();
     
     public JsonDb(String path) {

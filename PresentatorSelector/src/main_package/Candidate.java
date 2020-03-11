@@ -1,8 +1,8 @@
 package main_package;
 
 public class Candidate {
-    private String _fname;
-    private String _surname;
+    private final String _fname;
+    private final String _surname;
     private boolean _absent = false;
     
     public Candidate(String fname, String surname) {
@@ -21,17 +21,9 @@ public class Candidate {
     public String getFname() {
         return _fname;
     }
-    
-    public void setFname(String surname) {
-        _fname = surname;
-    }
    
     public String getSurname() {
         return _surname;
-    }
-    
-    public void setSurname(String surname) {
-        _surname = surname;
     }
     
     // Candidate to string method
