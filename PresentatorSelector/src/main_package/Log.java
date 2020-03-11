@@ -2,16 +2,18 @@ package main_package;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.json.simple.JSONObject;  
 
 public class Log extends JsonDb<String>{
-
+    private static List<String> _database= new ArrayList<>();
     public final static DateFormat DateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public Log(String path) {
-        super(path);
+        super(path, _database);
     }
     
     @Override

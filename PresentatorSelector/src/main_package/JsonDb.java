@@ -2,7 +2,6 @@ package main_package;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -11,14 +10,14 @@ import org.json.simple.parser.JSONParser;
 
 // Class for interact with a json database
 public abstract class JsonDb<T> {
-    protected final List<T> _database;
+    private final List<T> _database;
     
     private final String _path;
     private final JSONParser _jsonParser = new JSONParser();
     
-    public JsonDb(String path) {
+    public JsonDb(String path, List<T> database) {
         _path = path;
-        _database = new ArrayList<>();
+        _database = database;
         load();
     }
     

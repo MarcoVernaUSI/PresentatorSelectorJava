@@ -6,9 +6,10 @@ import java.util.List;
 import org.json.simple.JSONObject;
 
 public class Candidates extends JsonDb<Candidate>{
+    private static List<Candidate> _database= new ArrayList<>();
 
     public Candidates(String path) {
-        super(path);
+        super(path, _database);
     }
     
     @Override
