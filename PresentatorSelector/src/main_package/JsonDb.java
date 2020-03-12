@@ -1,7 +1,6 @@
 package main_package;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import org.json.simple.parser.JSONParser;
 public class JsonDb<T> {
     private final String _path;
     private final JSONParser _jsonParser = new JSONParser();
-    
     private final JsonObjectParser<T> _jParser;  
     
     public JsonDb(String path, JsonObjectParser<T> jParser) {
@@ -49,8 +47,8 @@ public class JsonDb<T> {
         try (FileWriter file = new FileWriter(_path)) {
             file.write(objectsList.toJSONString());
             file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
