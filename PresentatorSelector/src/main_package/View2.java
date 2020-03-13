@@ -31,30 +31,36 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class View extends JPanel
+public class View2 extends JPanel
     implements ListSelectionListener {
     private final Selector _selector;
-    private final ListManager _candidateList;
     
-   
+    private final JList<String> candidateList;
+    private final DefaultListModel<String> candidateListModel;
     private final JTextField speakerName;
     private final JButton removeButton;
     private final JButton selectButton;
     private final JButton addButton;
     private final JButton logButton;
 
-    public View(Selector selector) {
+    public View2(Selector selector) {
         super(new BorderLayout());
         
-        // Load the selector                                                
-        _selector = selector; 
+        // Load the selector
+        _selector = selector;   
+        candidateListModel = new DefaultListModel<>();
+
+        // Create the list and put it in a scroll pane.
+        candidateList = new JList<>(candidateListModel);
+        candidateList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        candidateList.setSelectedIndex(0);
+        candidateList.addListSelectionListener(this);
+        candidateList.setVisibleRowCount(10);
+        candidateList.setCellRenderer(new MyListCellRenderer());
+        JScrollPane listScrollPane = new JScrollPane(candidateList);
         
-        //Create the candidate List
-        _candidateList = new ListManager(this);
-        
-        // Create panel
-        JScrollPane listScrollPane = new JScrollPane(_candidateList.getList());
-        
+        // add mouse listener for absents
+        candidateList.addMouseListener(new AbsentListener());
         
         // Create the select speaker button
         selectButton = new JButton("Select random speaker");
@@ -103,16 +109,28 @@ public class View extends JPanel
         add(buttonPane, BorderLayout.CENTER);
         add(buttonPane2, BorderLayout.PAGE_END);
         
-        _candidateList.updateList();
+        updateList();
     }
 
-    
+    // Consistency between view and model
+    public void updateList() {
+        candidateListModel.removeAllElements();
+        for (String speaker : _selector.getSpeakers()) {
+            candidateListModel.addElement(speaker);
+        }
+        if (candidateListModel.getSize() == 0) {  
+            selectButton.setEnabled(false);
+        }
+        if (candidateListModel.getSize() > 0 & !selectButton.isEnabled()) {  
+            selectButton.setEnabled(true);
+        }
+    }
 
     // This method is required by ListSelectionListener.
     @Override
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting() == false) {
-            if (_candidateList.getList().getSelectedIndex() == -1) {
+            if (candidateList.getSelectedIndex() == -1) {
                 // No selection, disable remove button.
                 removeButton.setEnabled(false);
             } else {
@@ -134,9 +152,9 @@ public class View extends JPanel
         @Override
         public void actionPerformed(ActionEvent e) {
             // get selected index
-            String speaker = _candidateList.getList().getSelectedValue();  
+            String speaker = candidateList.getSelectedValue();  
             _selector.remove(speaker);  
-            _candidateList.updateList();
+            updateList();
         }
     }
 
@@ -150,81 +168,30 @@ public class View extends JPanel
     class AddListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            new AddFrame(_candidateList);
+            new AddFrame();
             addButton.setEnabled(false);
         }
     }
     
-    
-    
-    
-    
-    
-    
-
-    
-    public class ListManager {
-        private final JList<String> candidateList;
-        private final DefaultListModel<String> candidateListModel;
+    class AbsentListener extends MouseAdapter {
         
-        public ListManager (View view) {
-                        
-        
-            candidateListModel = new DefaultListModel<>();
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if ( SwingUtilities.isRightMouseButton(e) ) {      
+                candidateList.setSelectedIndex(candidateList.locationToIndex(e.getPoint()));
 
-            // Create the list and put it in a scroll pane.
-            candidateList = new JList<>(candidateListModel);
-            candidateList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            candidateList.setSelectedIndex(0);
-            candidateList.addListSelectionListener(view);
-            candidateList.setVisibleRowCount(10);
-            candidateList.setCellRenderer(new MyListCellRenderer());
-            
-            // add mouse listener for absents
-            candidateList.addMouseListener(new AbsentListener());
-        
-            
-        }
-
-        // Consistency between view and model
-        public void updateList() {
-            candidateListModel.removeAllElements();
-            for (String speaker : _selector.getSpeakers()) {
-                candidateListModel.addElement(speaker);
-            }
-            if (candidateListModel.getSize() == 0) {  
-                selectButton.setEnabled(false);
-            }
-            if (candidateListModel.getSize() > 0 & !selectButton.isEnabled()) {  
-                selectButton.setEnabled(true);
-            }
-        }
-            
-        public JList<String> getList() {
-            return candidateList;
-        }
-        
-        class AbsentListener extends MouseAdapter {
-            
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if ( SwingUtilities.isRightMouseButton(e) ) {      
-                    candidateList.setSelectedIndex(candidateList.locationToIndex(e.getPoint()));
-
-                     JPopupMenu menu = new JPopupMenu();
-                     JMenuItem setAbsent = new JMenuItem("toggle absent or not");
-                     setAbsent.addActionListener(new ActionListener() {
-                         @Override
-                        public void actionPerformed(ActionEvent e) {
-                             _selector.setAbsent(candidateList.getSelectedValue());
-                         }
-                     });
-                     menu.add(setAbsent);
-                     menu.show(candidateList, e.getPoint().x, e.getPoint().y);            
-                 }
+                 JPopupMenu menu = new JPopupMenu();
+                 JMenuItem setAbsent = new JMenuItem("toggle absent or not");
+                 setAbsent.addActionListener(new ActionListener() {
+                     @Override
+                    public void actionPerformed(ActionEvent e) {
+                         _selector.setAbsent(candidateList.getSelectedValue());
+                     }
+                 });
+                 menu.add(setAbsent);
+                 menu.show(candidateList, e.getPoint().x, e.getPoint().y);            
              }
-        }
-
+         }
     }
     
     class MyListCellRenderer extends JLabel implements ListCellRenderer {
@@ -244,14 +211,6 @@ public class View extends JPanel
             return this;
         }
     }
-    
-
-    
-    
-    
-    
-    
-    
 
     // Add Frame
     class AddFrame {
@@ -259,7 +218,6 @@ public class View extends JPanel
         private final JButton innerAddButton;
         private final JTextField fnameField;
         private final JTextField surnameField;
-        private final ListManager _candidatesList;
 
         class innerAddListener implements ActionListener {
             @Override
@@ -269,7 +227,7 @@ public class View extends JPanel
                 String surname = surnameField.getText();
                 if ((fname.trim().length() > 0) & (surname.trim().length() > 0)) {
                     _selector.add(fname, surname);
-                    _candidatesList.updateList();
+                    updateList();
                 }
                 addButton.setEnabled(true);
                 f.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -284,13 +242,12 @@ public class View extends JPanel
             }
         }
 
-        public AddFrame(ListManager candidatesList) {
+        public AddFrame() {
             f.setTitle("Add candidate");
             f.setBounds(20, 20, 300, 150);
             f.setResizable(false);
             f.setVisible(true);
             f.addWindowListener(new closeListener());
-            _candidatesList = candidatesList;
 
             // Create the add speaker button
             this.innerAddButton = new JButton("Add speaker");
@@ -316,7 +273,9 @@ public class View extends JPanel
         }
 
     }
+    
+    public JList<String> getCandidateList() {
+        return candidateList;
+    }
 
 }
-    
-    
