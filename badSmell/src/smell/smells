@@ -1,0 +1,35 @@
+
+
+
+-----------------------
+SMELL: Message chains
+Vector lineItems = order.getLineItemList().getLineItems();
+in class order
+
+
+remove order parameter
+
+remove method
+
+because not used no more
+-----------------------------------
+
+SMELL: duplicated code, long method
+Total is calculated three time, we have also alreadz the method to calculate it but is never used
+
+ 
+-------------------------
+DUplicated code and feature envz
+
+itemList anche in LineItem class, lo rimuovo insieme a getter and setter.
+Tolgo anche i setter non usati perche nel costruttore
+
+
+--------------------
+Remove useless temporary variables Replace temp with Query
+
+--------------------
+Lazy class LineItemList. Classe che non fa nulla, srver solo a prendere la list, sotituisco direttamnte con u vettor ein order
+
+inappropriate intimacy, calsse order legge tutti i campi privati di item list per scrivere l'ordine, sposto metodo in LineItem
+extract class database mapper, large class
