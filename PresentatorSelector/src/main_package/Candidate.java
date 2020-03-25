@@ -2,14 +2,15 @@ package main_package;
 
 public class Candidate {
     private final String _name;
-    private final String _fname;
-    private final String _surname;
     private boolean _absent = false;
     
+    // Old Constructor rimuovere dopo refactoring
     public Candidate(String fname, String surname) {
-        _fname = fname;
-        _surname = surname;
         _name = fname+" "+surname;
+    }
+    
+    public Candidate(String name) {
+        _name = name;
     }
     
     public boolean isAbsent() {
@@ -18,14 +19,6 @@ public class Candidate {
 
     public void setAbsent(boolean absent) {
         _absent = absent;
-    }
-
-    public String getFname() {
-        return _fname;
-    }
-   
-    public String getSurname() {
-        return _surname;
     }
     
     // Candidate to string method

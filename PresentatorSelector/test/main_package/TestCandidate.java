@@ -8,7 +8,7 @@ public class TestCandidate {
     
     @Test
     public void printCandidate() {
-        Candidate candidate= new Candidate("Bob", "Semple");
+        Candidate candidate= new Candidate("Bob Semple");
         
         String candidateName = candidate.printCandidate();
         
@@ -17,7 +17,7 @@ public class TestCandidate {
     
     @Test
     public void absentDefaultValue() {
-        Candidate candidate= new Candidate("Bob", "Semple");
+        Candidate candidate= new Candidate("Bob Semple");
         
         boolean absentValue = candidate.isAbsent();
         
@@ -26,7 +26,7 @@ public class TestCandidate {
     
     @Test
     public void isAbsent() {
-        Candidate candidate= new Candidate("Bob", "Semple");
+        Candidate candidate= new Candidate("Bob Semple");
         candidate.setAbsent(true);
         
         boolean absentValue = candidate.isAbsent();

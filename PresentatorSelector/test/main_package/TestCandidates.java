@@ -3,13 +3,9 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,17 +17,7 @@ public class TestCandidates {
     @Before
     public void SetUp(){
         //Create the file with Bob Semple inside
-        JSONObject candidate = new JSONObject();
-        candidate.put("fname","Bob");
-        candidate.put("surname","Semple");
-        JSONArray objectsList = new JSONArray();
-        objectsList.add(candidate);
-        try (FileWriter file = new FileWriter(DefaultPath)) {
-            file.write(objectsList.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new TestDatabaseBuilder(DefaultPath).createDb("name","Bob Semple"); 
         _candidates = new Candidates(DefaultPath);
     }
     
@@ -96,6 +82,6 @@ public class TestCandidates {
         
         assertTrue(new ArrayList<String>()
         {{add("Bob Semple");add("George Pearce");}}
-        .contains(randomSpeaker.getFname()+" "+randomSpeaker.getSurname()));
+        .contains(randomSpeaker.printCandidate()));
         }
 }

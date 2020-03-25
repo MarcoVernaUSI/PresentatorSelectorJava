@@ -3,12 +3,8 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Date;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,16 +16,7 @@ public class TestLog {
     @Before
     public void SetUp(){
         //Create the file with a Bob Semple entry inside
-        JSONObject entry = new JSONObject();
-        entry.put("entry","Bob Semple absent in date 01/09/1939 00:00:00");
-        JSONArray objectsList = new JSONArray();
-        objectsList.add(entry);
-        try (FileWriter file = new FileWriter(DefaultPath)) {
-            file.write(objectsList.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new TestDatabaseBuilder(DefaultPath).createDb("entry","Bob Semple absent in date 01/09/1939 00:00:00");
         _log = new Log(DefaultPath);
     }
     

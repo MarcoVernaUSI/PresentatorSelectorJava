@@ -3,11 +3,7 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,31 +14,9 @@ public class TestView {
     
     @Before
     public void SetUp(){
-        //Create the two database files with Bob Semple
-        
-        JSONObject entry = new JSONObject();
-        JSONObject candidate = new JSONObject();
-        entry.put("entry","Bob Semple absent in date 01/09/1939 00:00:00");
-        candidate.put("fname","Bob");
-        candidate.put("surname","Semple");
-          
-        JSONArray objectsList1 = new JSONArray();
-        JSONArray objectsList2 = new JSONArray();
-        objectsList1.add(candidate);
-        objectsList2.add(entry);
-          
-          
-        try (FileWriter file1 = new FileWriter(Path1);
-            FileWriter file2 = new FileWriter(Path2)) {
-              
-            file1.write(objectsList1.toJSONString());
-            file1.flush();
-              
-            file2.write(objectsList2.toJSONString());
-            file2.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //Create the two database files with Bob Semple  
+        new TestDatabaseBuilder(Path1).createDb("name","Bob Semple");
+        new TestDatabaseBuilder(Path2).createDb("entry","Bob Semple absent in date 01/09/1939 00:00:00");
     }
     
  // Cancello file
