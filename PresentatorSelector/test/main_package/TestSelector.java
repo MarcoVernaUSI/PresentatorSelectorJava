@@ -19,8 +19,8 @@ public class TestSelector {
     @Before
     public void SetUp(){
         //Create the two database files with Bob Semple
-        new TestDatabaseBuilder(Path1).createDb("name","Bob Semple");
-        new TestDatabaseBuilder(Path2).createDb("entry","Bob Semple absent in date 01/09/1939 00:00:00");
+        new TestDatabase(Path1).add("name","Bob Semple");
+        new TestDatabase(Path2).add("entry","Bob Semple absent in date 01/09/1939 00:00:00");
         _selector = new Selector(Path1,Path2);
     }
     
@@ -44,7 +44,7 @@ public class TestSelector {
     
     @Test
     public void multipleSelect() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         String speaker = _selector.select();
         
@@ -55,7 +55,7 @@ public class TestSelector {
     
     @Test
     public void getSpeakers() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         List<String> speakerList = _selector.getSpeakers();
         
@@ -66,7 +66,7 @@ public class TestSelector {
     
     @Test
     public void remove(){
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.remove("Bob Semple");
         
@@ -77,10 +77,19 @@ public class TestSelector {
     @Test
     public void add(){
         
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         assertEquals(2, _selector.getSpeakers().size());
         assertEquals("George Pearce", _selector.getSpeakers().get(1));
+    }
+    
+    @Test
+    public void addEqual(){
+        
+        _selector.add("Bob Semple");
+        
+        assertEquals(1, _selector.getSpeakers().size());
+        assertEquals("Bob Semple", _selector.getSpeakers().get(0));
     }
     
     @Test
@@ -110,8 +119,8 @@ public class TestSelector {
     @Test
     public void loadAndRemove() {
         
-        _selector.add("Edward", "Wood");
-        _selector.add("Winston", "Churchill");
+        _selector.add("Edward Wood");
+        _selector.add("Winston Churchill");
         _selector.remove("Edward Wood");
         
         assertEquals("Bob Semple", _selector.getSpeakers().get(0));
@@ -132,7 +141,7 @@ public class TestSelector {
     @Test
     public void saveMultipleEntries() {
         _selector.clearLog();
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.setAbsent("Bob Semple");
         Date date1 = new Date();
@@ -147,7 +156,7 @@ public class TestSelector {
     public void addAndSaveEntry() {
         _selector.clearLog();
         
-        _selector.add("Edward", "Wood");
+        _selector.add("Edward Wood");
         _selector.setAbsent("Edward Wood");
         Date date = new Date();
         String log = _selector.printLog();
@@ -170,7 +179,7 @@ public class TestSelector {
     
     @Test
     public void correctSelectionWithAbsents() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.setAbsent("George Pearce");
         String random = _selector.select();
@@ -180,10 +189,10 @@ public class TestSelector {
     
     @Test
     public void correctSelectionWithAbsentsAfterAdd() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.setAbsent("George Pearce");
-        _selector.add("Edward", "Wood");
+        _selector.add("Edward Wood");
         String random = _selector.select();
         
         assertTrue(new ArrayList<String>()
@@ -192,10 +201,10 @@ public class TestSelector {
 
     @Test
     public void correctSelectionWithAbsentsAfterAddAndRemove() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.setAbsent("George Pearce");
-        _selector.add("Edward", "Wood");
+        _selector.add("Edward Wood");
         _selector.remove("Bob Semple");
         String random = _selector.select();
         

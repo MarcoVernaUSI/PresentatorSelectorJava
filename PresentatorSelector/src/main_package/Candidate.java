@@ -4,11 +4,6 @@ public class Candidate {
     private final String _name;
     private boolean _absent = false;
     
-    // Old Constructor rimuovere dopo refactoring
-    public Candidate(String fname, String surname) {
-        _name = fname+" "+surname;
-    }
-    
     public Candidate(String name) {
         _name = name;
     }

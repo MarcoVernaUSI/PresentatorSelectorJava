@@ -16,7 +16,7 @@ public class TestLog {
     @Before
     public void SetUp(){
         //Create the file with a Bob Semple entry inside
-        new TestDatabaseBuilder(DefaultPath).createDb("entry","Bob Semple absent in date 01/09/1939 00:00:00");
+        new TestDatabase(DefaultPath).add("entry","Bob Semple absent in date 01/09/1939 00:00:00");
         _log = new Log(DefaultPath);
     }
     

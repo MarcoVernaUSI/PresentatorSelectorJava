@@ -15,8 +15,8 @@ public class TestView {
     @Before
     public void SetUp(){
         //Create the two database files with Bob Semple  
-        new TestDatabaseBuilder(Path1).createDb("name","Bob Semple");
-        new TestDatabaseBuilder(Path2).createDb("entry","Bob Semple absent in date 01/09/1939 00:00:00");
+        new TestDatabase(Path1).add("name","Bob Semple");
+        new TestDatabase(Path2).add("entry","Bob Semple absent in date 01/09/1939 00:00:00");
     }
     
  // Cancello file
@@ -44,7 +44,7 @@ public class TestView {
         Selector selector = new Selector(Path1,Path2);
         View view = new View(selector);
         
-        selector.add("George", "Pearce");
+        selector.add("George Pearce");
         view.updateList();
         
         assertEquals("Bob Semple", view.getCandidateList().getModel().getElementAt(0));
@@ -69,8 +69,8 @@ public class TestView {
         Selector selector = new Selector(Path1,Path2);
         View view = new View(selector);
         
-        selector.add("George", "Pearce");
-        selector.add("Winston", "Churchill");
+        selector.add("George Pearce");
+        selector.add("Winston Churchill");
         selector.remove("Bob Semple");
         view.updateList();
         

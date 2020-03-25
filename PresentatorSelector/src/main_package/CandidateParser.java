@@ -12,7 +12,7 @@ public class CandidateParser implements JsonObjectParser<Candidate>{
     @Override
     public JSONObject writeObject(Candidate  candidate){
         JSONObject obj = new JSONObject();
-        obj.put("fname",candidate.printCandidate());
+        obj.put("name",candidate.printCandidate());
         return obj;
     }
 

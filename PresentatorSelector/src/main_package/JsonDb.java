@@ -14,20 +14,19 @@ public class JsonDb<T> {
     private final JSONParser _jsonParser = new JSONParser();
     private final JsonObjectParser<T> _jParser;  
     
+    
     public JsonDb(String path, JsonObjectParser<T> jParser) {
         _path = path;
         _jParser = jParser;
     }
 
+    
     // Load the database into the list
     public List<T> load() {       
-        String currentPath = _path;
         List<T> database = new ArrayList<>();
-        try (FileReader reader = new FileReader(currentPath))
-        {
+        try (FileReader reader = new FileReader(_path)){
             //Read JSON file
-            Object obj = _jsonParser.parse(reader);
-            for (Object object : (JSONArray) obj) { 
+            for (Object object : (JSONArray) _jsonParser.parse(reader)) { 
                 database.add(_jParser.readObject((JSONObject) object));
             }
         }catch (Exception e) {
@@ -36,12 +35,12 @@ public class JsonDb<T> {
         return database;
     }
     
- // Dump the list to the database
+    
+    // Dump the list to the database
     public void update(List<T> objects) {
         JSONArray objectsList = new JSONArray();
         for (T genericObj : objects) {
-            JSONObject obj = _jParser.writeObject(genericObj);
-            objectsList.add(obj);
+            objectsList.add(_jParser.writeObject(genericObj));
         }
         //Write JSON file
         try (FileWriter file = new FileWriter(_path)) {
@@ -51,5 +50,4 @@ public class JsonDb<T> {
             throw new RuntimeException(e);
         }
     }
-
 }

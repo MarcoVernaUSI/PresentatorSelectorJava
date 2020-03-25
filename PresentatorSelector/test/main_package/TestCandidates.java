@@ -17,7 +17,7 @@ public class TestCandidates {
     @Before
     public void SetUp(){
         //Create the file with Bob Semple inside
-        new TestDatabaseBuilder(DefaultPath).createDb("name","Bob Semple"); 
+        new TestDatabase(DefaultPath).add("name","Bob Semple");
         _candidates = new Candidates(DefaultPath);
     }
     
@@ -30,8 +30,8 @@ public class TestCandidates {
     @Test
     public void addMultipleSpeaker() {
         
-        _candidates.addSpeaker("George", "Pearce");
-        _candidates.addSpeaker("Winston", "Churchill");
+        _candidates.addSpeaker("George Pearce");
+        _candidates.addSpeaker("Winston Churchill");
         
         assertEquals("Bob Semple", _candidates.getSpeaker(0).printCandidate());
         assertEquals("George Pearce", _candidates.getSpeaker(1).printCandidate());
@@ -42,9 +42,9 @@ public class TestCandidates {
     
     @Test
     public void removeSpeaker() {
-        _candidates.addSpeaker("George", "Pearce");
+        _candidates.addSpeaker("George Pearce");
         
-        _candidates.removeSpeakers("Bob Semple");
+        _candidates.removeSpeaker("Bob Semple");
         
         assertEquals("George Pearce", _candidates.getSpeaker(0).printCandidate());
         assertEquals(1, _candidates.printCandidates().size());
@@ -66,7 +66,7 @@ public class TestCandidates {
 
     @Test
     public void printCandidates() {
-        _candidates.addSpeaker("George", "Pearce");
+        _candidates.addSpeaker("George Pearce");
         
         List<String>candidatesList = _candidates.printCandidates();
         
@@ -76,7 +76,7 @@ public class TestCandidates {
     
     @Test
     public void getRandomSpeaker() {
-        _candidates.addSpeaker("George", "Pearce");
+        _candidates.addSpeaker("George Pearce");
         
         Candidate randomSpeaker = _candidates.getRandomSpeaker();
         

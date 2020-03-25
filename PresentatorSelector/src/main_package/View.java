@@ -272,13 +272,12 @@ public class View extends JPanel implements ListSelectionListener {
     private class AddFrame {
         private final JFrame _frame = new JFrame("Add");
         private final JButton innerAddButton;
-        private final JTextField fnameField;
-        private final JTextField surnameField;
+        private final JTextField nameField;
         private final ListController _candidatesList;
         
         public AddFrame(ListController candidatesList) {
             _frame.setTitle("Add candidate");
-            _frame.setBounds(20, 20, 300, 150);
+            _frame.setBounds(20, 20, 300, 105);
             _frame.setResizable(false);
             _frame.setVisible(true);
             _frame.addWindowListener(new closeListener());
@@ -288,9 +287,8 @@ public class View extends JPanel implements ListSelectionListener {
             this.innerAddButton = new JButton("Add speaker");
             innerAddButton.addActionListener(new innerAddListener());
 
-            this.fnameField = new JTextField(20);
-            this.surnameField = new JTextField(20);
-
+            this.nameField = new JTextField(20);
+            
             _frame.getContentPane().add(createInnerPanel());
         }
         
@@ -300,9 +298,7 @@ public class View extends JPanel implements ListSelectionListener {
             innerPane.setLayout(new BoxLayout(innerPane,
                 BoxLayout.Y_AXIS));
             innerPane.add(new JLabel("Name:"));
-            innerPane.add(this.fnameField);
-            innerPane.add(new JLabel("Surname:"));
-            innerPane.add(this.surnameField);
+            innerPane.add(this.nameField);
             innerPane.add(this.innerAddButton);
             innerPane.add(Box.createHorizontalStrut(5));
             innerPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -313,10 +309,9 @@ public class View extends JPanel implements ListSelectionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // get input in boxes
-                String fname = fnameField.getText();
-                String surname = surnameField.getText();
-                if ((fname.trim().length() > 0) & (surname.trim().length() > 0)) {
-                    _selector.add(fname, surname);
+                String name = nameField.getText();
+                if (name.trim().length() > 0) {
+                    _selector.add(name);
                     _candidatesList.updateList();
                 }
                 _buttons.abilitateAddButton(true);
