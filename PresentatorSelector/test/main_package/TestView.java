@@ -33,9 +33,9 @@ public class TestView {
         Selector selector = new Selector(Path1,Path2);
         View view = new View(selector);
         
-        view.updateList();
+        view.updateView();
         
-        assertEquals("Bob Semple", view.getCandidateList().getModel().getElementAt(0));
+        assertEquals("Bob Semple", view.getCandidateList().getElementAt(0));
         
     }
     
@@ -45,10 +45,10 @@ public class TestView {
         View view = new View(selector);
         
         selector.add("George Pearce");
-        view.updateList();
+        view.updateView();
         
-        assertEquals("Bob Semple", view.getCandidateList().getModel().getElementAt(0));
-        assertEquals("George Pearce", view.getCandidateList().getModel().getElementAt(1));
+        assertEquals("Bob Semple", view.getCandidateList().getElementAt(0));
+        assertEquals("George Pearce", view.getCandidateList().getElementAt(1));
         
     }
     
@@ -58,9 +58,9 @@ public class TestView {
         View view = new View(selector);
         
         selector.remove("Bob Semple");
-        view.updateList();
+        view.updateView();
         
-        assertEquals(0, view.getCandidateList().getModel().getSize());
+        assertEquals(0, view.getCandidateList().getNumberOfSpeakers());
     }
     
     
@@ -72,11 +72,11 @@ public class TestView {
         selector.add("George Pearce");
         selector.add("Winston Churchill");
         selector.remove("Bob Semple");
-        view.updateList();
+        view.updateView();
         
 
-        assertEquals("George Pearce", view.getCandidateList().getModel().getElementAt(0));
-        assertEquals("Winston Churchill", view.getCandidateList().getModel().getElementAt(1));
+        assertEquals("George Pearce", view.getCandidateList().getElementAt(0));
+        assertEquals("Winston Churchill", view.getCandidateList().getElementAt(1));
     }
 }
 
