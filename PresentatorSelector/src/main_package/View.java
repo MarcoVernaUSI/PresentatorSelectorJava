@@ -19,16 +19,20 @@ public class View extends JPanel implements ListSelectionListener {
         _buttons = new ViewButtons(this);
         _candidateList = new ViewList(this);
         
-        // View layout
+        buildLayout();
+        updateView();
+    }
+
+    
+    private void buildLayout() {
         JLabel description = new JLabel("right click for toggle/untoggle absent status");
         add(description,BorderLayout.AFTER_LINE_ENDS);
         add(_candidateList.createPanel(), BorderLayout.PAGE_START);
         add(_buttons.createUpperPanel(), BorderLayout.CENTER);
         add(_buttons.createBottomPanel(), BorderLayout.PAGE_END);
-        
-        updateView();
     }
 
+    
     // This method is required by ListSelectionListener.
     @Override
     public void valueChanged(ListSelectionEvent e) {
@@ -37,23 +41,26 @@ public class View extends JPanel implements ListSelectionListener {
         }
     }
     
+    
     public void updateView() {
         _candidateList.updateList();
         _buttons.updateButtons();
     }
     
+    
     public ViewList getCandidateList() {
         return _candidateList;
     }
+    
     
     public Selector getSelector() {
         return _selector;
     }
     
+    
     public ViewButtons getButtons() {
         return _buttons;
     }
-
 }
     
     

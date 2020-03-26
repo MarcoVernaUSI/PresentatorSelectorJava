@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 public class ViewButtons {
     private final View _view;
     
-    private final JTextField speakerName;
+    private final JTextField speakerNameBox;
     private final JButton removeButton;
     private final JButton selectButton;
     private final JButton addButton;
@@ -30,11 +30,12 @@ public class ViewButtons {
         logButton = createButton("Print Log",new LogListener());
         
         // Create the extracted speaker box
-        speakerName = new JTextField(20);
-        speakerName.setEditable(false);
+        speakerNameBox = new JTextField(20);
+        speakerNameBox.setEditable(false);
     }
     
-    private JButton createButton(String text, ActionListener listener) {
+    
+    public JButton createButton(String text, ActionListener listener) {
         JButton button = new JButton(text);
         button.addActionListener(listener);
         return button;
@@ -43,31 +44,29 @@ public class ViewButtons {
     
     public JPanel createUpperPanel() {
      // Create a panel that uses BoxLayout.
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane,
+        JPanel upperPane = new JPanel();
+        upperPane.setLayout(new BoxLayout(upperPane,
             BoxLayout.LINE_AXIS));
-        buttonPane.add(removeButton);
-        buttonPane.add(new JSeparator(SwingConstants.VERTICAL));
-        buttonPane.add(Box.createHorizontalStrut(5));
-        buttonPane.add(addButton);
-        buttonPane.add(logButton);
-        buttonPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        return buttonPane;
+        upperPane.add(removeButton);
+        upperPane.add(new JSeparator(SwingConstants.VERTICAL));
+        upperPane.add(Box.createHorizontalStrut(5));
+        upperPane.add(addButton);
+        upperPane.add(logButton);
+        upperPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        return upperPane;
     }
+    
     
     public JPanel createBottomPanel() {
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane,
+        JPanel bottomPane = new JPanel();
+        bottomPane.setLayout(new BoxLayout(bottomPane,
             BoxLayout.LINE_AXIS));
-        buttonPane.add(selectButton);
-        buttonPane.add(speakerName);
-        buttonPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        return buttonPane;
+        bottomPane.add(selectButton);
+        bottomPane.add(speakerNameBox);
+        bottomPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        return bottomPane;
     }
     
-    public void abilitateAddButton(boolean flag) {
-        addButton.setEnabled(flag);    
-    }
     
     public void updateButtons() {
         if (_view.getCandidateList().getNumberOfSpeakers() == 0) {  
@@ -90,10 +89,11 @@ public class ViewButtons {
     class SelectListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            speakerName.setText(_view.getSelector().select());
+            speakerNameBox.setText(_view.getSelector().select());
         }
     }
 
+    
     class RemoveListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -104,6 +104,7 @@ public class ViewButtons {
         }
     }
 
+    
     class LogListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -111,10 +112,11 @@ public class ViewButtons {
         }
     }
 
+    
     class AddListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            new ViewAddFrame(_view);
+            new ViewAddFrame(_view, addButton);
             addButton.setEnabled(false);
         }
     }

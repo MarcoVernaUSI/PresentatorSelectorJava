@@ -19,70 +19,74 @@ import javax.swing.SwingUtilities;
 
 // List Panel
 public class ViewList {
-    private final JList<String> candidateList;
-    private final DefaultListModel<String> candidateListModel;
+    private final JList<String> _candidateList;
+    private final DefaultListModel<String> _candidateListModel;
     private final Selector _selector;
     
     public ViewList (View view) {
-        candidateListModel = new DefaultListModel<>();
+        _candidateListModel = new DefaultListModel<>();
         _selector = view.getSelector();
         
-        // Create the list and put it in a scroll pane.
-        candidateList = new JList<>(candidateListModel);
-        candidateList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        candidateList.setSelectedIndex(0);
-        candidateList.addListSelectionListener(view);
-        candidateList.setVisibleRowCount(10);
-        candidateList.setCellRenderer(new MyListCellRenderer());
+        _candidateList = createScrollPaneList(_candidateListModel, new MyListCellRenderer());
         
-        // add mouse listener for absents
-        candidateList.addMouseListener(new AbsentListener());
+        _candidateList.addListSelectionListener(view);
+        _candidateList.addMouseListener(new AbsentListener());
+    }
+
+
+    private JList<String> createScrollPaneList(DefaultListModel<String> listModel, ListCellRenderer<String> cellRenderer) {
+        JList<String> list = new JList<>(listModel);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setSelectedIndex(0);
+        list.setVisibleRowCount(10);
+        list.setCellRenderer(cellRenderer);
+        return list;
     }
 
 
     public void updateList() {
-        candidateListModel.removeAllElements();
+        _candidateListModel.removeAllElements();
         for (String speaker : _selector.getSpeakers()) {
-            candidateListModel.addElement(speaker);
+            _candidateListModel.addElement(speaker);
         }
     }
     
     public int getNumberOfSpeakers() {
-        return candidateListModel.getSize();
+        return _candidateListModel.getSize();
     }
     
     public JScrollPane createPanel() {
-        return new JScrollPane(candidateList);
+        return new JScrollPane(_candidateList);
     }
     
     public String getSelectedValue() {
-        return candidateList.getSelectedValue();
+        return _candidateList.getSelectedValue();
     }
     
     public int getSelectedIndex() {
-        return candidateList.getSelectedIndex();
+        return _candidateList.getSelectedIndex();
     }
     
     public String getElementAt(int index) {
-        return candidateListModel.getElementAt(index);
+        return _candidateListModel.getElementAt(index);
     }    
     
     class AbsentListener extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
             if ( SwingUtilities.isRightMouseButton(e) ) {      
-                candidateList.setSelectedIndex(candidateList.locationToIndex(e.getPoint()));
+                _candidateList.setSelectedIndex(_candidateList.locationToIndex(e.getPoint()));
 
                  JPopupMenu menu = new JPopupMenu();
                  JMenuItem setAbsent = new JMenuItem("toggle absent or not");
                  setAbsent.addActionListener(new ActionListener() {
                      @Override
                     public void actionPerformed(ActionEvent e) {
-                         _selector.setAbsent(candidateList.getSelectedValue());
+                         _selector.setAbsent(_candidateList.getSelectedValue());
                      }
                  });
                  menu.add(setAbsent);
-                 menu.show(candidateList, e.getPoint().x, e.getPoint().y);            
+                 menu.show(_candidateList, e.getPoint().x, e.getPoint().y);            
              }
          }
     }
