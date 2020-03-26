@@ -1,11 +1,9 @@
-package OriginalMethods;
+package originalMethods;
 
-public class PreserveWholeObjectOriginal {
+public class PreserveWholeObjectRefactored {
     class Room{
         boolean withinPlan(HeatingPlan plan) {
-            int low = daysTempRange().getLow();
-            int high = daysTempRange().getHigh();
-            return plan.withinRange(low, high);
+            return plan.withinRange(daysTempRange());
         }
         
         public TempRange daysTempRange() {
@@ -15,8 +13,8 @@ public class PreserveWholeObjectOriginal {
     }
     
     class HeatingPlan{
-        boolean withinRange (int low, int high) {
-            return (low >= _range.getLow() && high <= _range.getHigh());
+        boolean withinRange (TempRange roomRange) {
+            return (_range.includes(roomRange));
         }
         private TempRange _range;
     }
@@ -25,6 +23,11 @@ public class PreserveWholeObjectOriginal {
     class TempRange{
         private int _low;
         private int _high;
+        
+        boolean includes (TempRange arg) {
+            return arg.getLow() >= this.getLow() && arg.getHigh() <=
+            this.getHigh();
+        }
         
         public int getHigh() {
             return _high;

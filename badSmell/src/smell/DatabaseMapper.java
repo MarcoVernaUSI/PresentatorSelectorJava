@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class databaseMapper {
+public class DatabaseMapper {
 
     /** This method saves the order to the database */
     public void saveOrder()  throws SQLException

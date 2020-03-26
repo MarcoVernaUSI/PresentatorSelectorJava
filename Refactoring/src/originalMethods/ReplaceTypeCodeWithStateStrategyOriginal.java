@@ -1,4 +1,4 @@
-package OriginalMethods;
+package originalMethods;
 
 public class ReplaceTypeCodeWithStateStrategyOriginal {
 
