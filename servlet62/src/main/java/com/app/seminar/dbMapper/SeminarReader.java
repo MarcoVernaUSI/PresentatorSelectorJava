@@ -1,5 +1,6 @@
 package com.app.seminar.dbMapper;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,14 +26,15 @@ public class SeminarReader implements DbReader<Seminar>{
     }
 
     @Override
-    public PreparedStatement write(PreparedStatement ps, Seminar seminar) {
+    public PreparedStatement write(Connection connection, Seminar seminar) {
+        PreparedStatement ps;
         try {
-            ps.setObject(1, seminar.getNumber());
-            ps.setObject(2, seminar.getName());
-            ps.setObject(3, seminar.getDescription());
-            ps.setObject(4, seminar.getLocation());
-            ps.setObject(5, seminar.getTotalSeats());
-            ps.setObject(6, seminar.getStartDate());
+            ps = connection.prepareStatement("insert into Seminar (name, description, location, totalSeats, start) values (?,?,?,?,?)"); 
+            ps.setObject(1, seminar.getName());
+            ps.setObject(2, seminar.getDescription());
+            ps.setObject(3, seminar.getLocation());
+            ps.setObject(4, seminar.getTotalSeats());
+            ps.setObject(5, seminar.getStartDate());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -19,8 +19,6 @@ public class CourseListController implements Controller{
     @Override
     public boolean handles(String route) {
         return Pattern.matches("^(/course|/)$", route);
-        //return Pattern.matches("/course", route);
-        
     }
 
     @Override
@@ -28,11 +26,14 @@ public class CourseListController implements Controller{
         context.response().setContentType("text/html");
         context.response().setCharacterEncoding("UTF-8");
     
-        Iterable<Seminar> seminars = new DbMapper<Seminar>(context.connection(), new SeminarReader()).findAll();
+        Iterable<Seminar> seminars = new DbMapper<Seminar>(context.connection(), new SeminarReader(), "Seminar").findAll();
         //Iterable<String> header = asList(NAME, LOCATION, TOTAL_SEATS, START, "action");
         Iterable<String> header = asList(NAME, LOCATION, TOTAL_SEATS, START, "csv", "html");
         
         context.response().getWriter().write(new Layout("Seminars", new SeminarList(seminars, header)).build().render());
+    
     }
+    
+
 
 }

@@ -21,13 +21,13 @@ public class Layout{
 		          meta(attr("charset -> utf-8")),
 		          meta(attr("http-equiv -> X-UA-Compatible","content -> IE=edge")),
 		          meta(attr("name -> viewport","content -> width=device-width, initial-scale=1")),
-		          title(_title)
-	//	          text("<!-- Bootstrap core CSS -->"),
-	//	          link(attr("href -> css/bootstrap.min.css","rel -> stylesheet"))
+		          title(_title),
+		          text("<!-- Bootstrap core CSS -->"),
+		          link(attr("href -> css/bootstrap.min.css","rel -> stylesheet"))
 		        ),
 		        body(
 		            div(attr("class -> container"),
-		                  div(attr("class -> page-header","id -> banner"),
+		                  div(attr("class -> page-header","id -> banner"),     
 		                    _bodyContent.getHeader(),
 		                    _bodyContent.getBody()
 		                  )

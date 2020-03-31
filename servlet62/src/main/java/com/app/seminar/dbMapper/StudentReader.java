@@ -1,5 +1,6 @@
 package com.app.seminar.dbMapper;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,11 +23,12 @@ public class StudentReader implements DbReader<Student>{
     }
 
     @Override
-    public PreparedStatement write(PreparedStatement ps, Student student) {
+    public PreparedStatement write(Connection connection, Student student) {
+        PreparedStatement ps;
         try {
-            ps.setObject(1, student.getId());
-            ps.setObject(2, student.getName());
-            ps.setObject(3, student.getSurname());
+            ps = connection.prepareStatement("insert into student (firstName, lastName ) values (?,?)");
+            ps.setObject(1, student.getName());
+            ps.setObject(2, student.getSurname());
             } catch (SQLException e) {
             throw new RuntimeException(e);
         }

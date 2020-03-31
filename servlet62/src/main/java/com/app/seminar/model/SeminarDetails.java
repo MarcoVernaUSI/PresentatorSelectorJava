@@ -15,7 +15,7 @@ public abstract class SeminarDetails {
     protected abstract String getFooter();
     
     public String print() {
-        return getHeader()+getBody()+getFooter();  
+        return getBody();  
     }
 
     protected Seminar getSeminar() {
