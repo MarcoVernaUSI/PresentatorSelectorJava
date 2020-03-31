@@ -27,7 +27,7 @@ public class HtmlCourseController implements Controller{
         
         final Seminar seminar = new DbMapper<Seminar>(context.connection(), new SeminarReader()).findById(courseId);
         
-        context.response().getWriter().write(new Layout("Html details", new SeminarDescription(seminar)).build().render());
+         context.response().getWriter().write(new Layout("Html details", new SeminarDescription(seminar)).build().render());
     }
     
 }

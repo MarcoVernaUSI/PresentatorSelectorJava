@@ -13,7 +13,6 @@ public class ControllerFactory {
 
 	public List<Controller> create() {
 		return new ArrayList<Controller>(asList(
-		   // new MainController(),
 		    new CourseListController(),
 		    new HtmlCourseController()
 		    )

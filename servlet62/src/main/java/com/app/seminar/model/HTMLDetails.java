@@ -32,12 +32,6 @@ public class HTMLDetails extends SeminarDetails {
         return body;
     }
     
-        
-  
-    
-    
-    
-    
 
     @Override
     protected String getFooter() {

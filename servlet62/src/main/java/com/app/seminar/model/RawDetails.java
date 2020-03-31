@@ -9,7 +9,7 @@ public class RawDetails extends SeminarDetails {
 
     @Override
     protected String getHeader() {
-        return  getSeminar().getCourse().getNumber()+"; "+getSeminar().getCourse().getCourseName()+"; "+getSeminar().getStartDate()+"; "+getSeminar().getLocation()+"; "+getSeminar().getSeatLeft()+"\n";
+        return  getSeminar().getNumber()+"; "+getSeminar().getCourse().getCourseName()+"; "+getSeminar().getStartDate()+"; "+getSeminar().getLocation()+"; "+getSeminar().getSeatLeft()+"\n";
     }
 
     @Override

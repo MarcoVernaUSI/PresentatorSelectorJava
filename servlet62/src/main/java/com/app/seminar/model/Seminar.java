@@ -18,14 +18,16 @@ public class Seminar {
     private final List<Student> _enrollments;
     private final String _startDate;
     private SeminarDetails _description;
+    private final int _number;
 
-    public Seminar(String location, int totalSeats, Course course, String startDate) {
+    public Seminar(int number, String location, int totalSeats, Course course, String startDate) {
         _location = location;
         _totalSeats = totalSeats;
         _course = course;
         _startDate = startDate;
         _enrollments = new ArrayList<Student>();
         _description = new RawDetails(this);
+        _number = number;
     }
     
     public void setDetails(SeminarDetails type) {
@@ -63,6 +65,15 @@ public class Seminar {
 
     public String getStartDate() {
         return _startDate;
+    }
+    
+
+    public int getNumber() {
+        return _number;
+    }
+    
+    public int getTotalSeats() {
+        return _totalSeats;
     }
 }
 

@@ -50,4 +50,42 @@ public class DbMapper<T>  {
             throw new RuntimeException(e);
         }
     }
+    
+    
+    public void update(T entry){
+        try {
+            PreparedStatement ps = _connection.prepareStatement("update course set name = ?,description = ?,location = ?, totalSeats = ?,start = ? where id = ?");
+            _dbReader.write(ps, entry);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public void insert(T entry){
+        try {
+            PreparedStatement ps = _connection.prepareStatement("insert into Course (name, description, location, totalSeats, start) values (?,?,?,?,?)");
+            _dbReader.write(ps, entry);
+            ps.executeUpdate();
+            ps.close();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    //public void save(Course course){
+    //    if(course.getId() == null){
+    //        insert(course);
+    //    } else {
+    //        update(course);
+    //    }
+    //}
+    
+    public void save(T entry){
+            insert(entry);
+            //update(entry);
+        
+    }
 }
