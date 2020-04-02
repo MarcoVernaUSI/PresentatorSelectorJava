@@ -8,8 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.app.seminar.model.Seminar;
-import com.app.seminar.model.Student;
+import com.model.Seminar;
+import com.model.Student;
 
 public class StudentMapper implements DbMapper<Student>{
     
@@ -118,7 +118,7 @@ public class StudentMapper implements DbMapper<Student>{
             
             List<Integer> ids = new ArrayList<Integer>();
             while(rs.next()) {
-                ids.add(rs.getInt(1));
+                ids.add(rs.getInt(2));
             }
             ps.close();
             rs.close();

@@ -1,4 +1,4 @@
-package com.app.seminar.model;
+package com.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class Seminar {
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";
-    public static final String TOTAL_SEATS = "totalSeats";
+    public static final String SEATS_LEFT = "Seats left";
     public static final String START = "start";
     
     private final String _location;
@@ -19,20 +19,15 @@ public class Seminar {
     private final Course _course;
     private final List<Student> _enrollments;
     private final String _startDate;
-    private final int _number;
+    private final int _id;
 
-    public Seminar(int number, String location, int totalSeats, Course course, String startDate) {
+    public Seminar(int id, String location, int totalSeats, Course course, String startDate) {
+        _id = id;
         _location = location;
         _totalSeats = totalSeats;
         _course = course;
         _startDate = startDate;
         _enrollments = new ArrayList<Student>();
-        _number = number;
-    }
-    
-    
-    public Element[] getDetails(SeminarDescription type) {
-        return type.getDetails();     
     }
     
     public void addEnrollment(Student enrollment) {
@@ -68,11 +63,15 @@ public class Seminar {
     }
 
     public int getId() {
-        return _number;
+        return _id;
     }
     
     public int getTotalSeats() {
         return _totalSeats;
+    }
+
+    public Element[] getDetails() {
+        return null;
     }
 }
 

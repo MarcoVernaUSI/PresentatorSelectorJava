@@ -1,11 +1,11 @@
-package com.app.seminar.view;
+package com.view;
 import static com.github.manliogit.javatags.lang.HtmlHelper.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.app.seminar.model.Seminar;
 import com.github.manliogit.javatags.element.Element;
+import com.model.Seminar;
 
 public class SeminarList implements View {
     

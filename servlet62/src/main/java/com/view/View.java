@@ -1,4 +1,4 @@
-package com.app.seminar.view;
+package com.view;
 
 import com.github.manliogit.javatags.element.Element;
 

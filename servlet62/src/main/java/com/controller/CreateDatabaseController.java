@@ -1,4 +1,4 @@
-package com.app.seminar.controller;
+package com.controller;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,12 +6,11 @@ import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 import com.Context;
-import com.app.controller.Controller;
 import com.app.seminar.dbMapper.SeminarMapper;
 import com.app.seminar.dbMapper.StudentMapper;
-import com.app.seminar.model.Course;
-import com.app.seminar.model.Seminar;
-import com.app.seminar.model.Student;
+import com.model.Course;
+import com.model.Seminar;
+import com.model.Student;
 
 public class CreateDatabaseController implements Controller{
 

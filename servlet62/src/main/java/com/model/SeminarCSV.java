@@ -1,4 +1,4 @@
-package com.app.seminar.model;
+package com.model;
 
 import static com.github.manliogit.javatags.lang.HtmlHelper.*;
 
@@ -7,27 +7,19 @@ import java.util.List;
 
 import com.github.manliogit.javatags.element.Element;
 
-public class CSVDescription implements SeminarDescription{
-    private final Seminar _seminar;
+public class SeminarCSV extends Seminar{
+    
 
 
-    public CSVDescription(Seminar seminar) {
-        _seminar = seminar;
+    public SeminarCSV(int id, String location, int totalSeats, Course course, String startDate) {
+        super(id, location, totalSeats, course, startDate);
     }
 
-    protected String getBody2() {
-        String body ="";
-        // Body        
-        for (Student partecipant: _seminar.getStudentsList()) {
-            body+=("\""+partecipant.getName()+ "\";\""+partecipant.getSurname()+"\"\n");
-        }
-        return body;
-    }
 
     protected Element getHeader() {
         return div(attr("class -> row"),
             div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
-                h1(_seminar.getCourse().getCourseName())
+                h1(getCourse().getCourseName())
               )
          );
     }
@@ -35,7 +27,7 @@ public class CSVDescription implements SeminarDescription{
     
     private Element[] studentList() {
         List<Element> rows = new ArrayList<Element>();
-        for (Student student : _seminar.getStudentsList()) {
+        for (Student student : getStudentsList()) {
             rows.add(text("\""+student.getName()+ "\";\""+student.getSurname()+"\"\n"));
         }
         Element[] elements= rows.toArray(new Element[rows.size()]);
@@ -43,7 +35,7 @@ public class CSVDescription implements SeminarDescription{
     }
 
     protected Element getBody() {
-        return text("\""+_seminar.getId()+"\";\""+_seminar.getName()+"\";\""+_seminar.getStartDate()+"\";\""+_seminar.getLocation()+"\";\""+_seminar.getSeatLeft()+"\"\n");
+        return text("\""+getId()+"\";\""+getName()+"\";\""+getStartDate()+"\";\""+getLocation()+"\";\""+getSeatLeft()+"\"\n");
     }
     
     @Override

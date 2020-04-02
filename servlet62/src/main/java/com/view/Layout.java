@@ -1,4 +1,4 @@
-package com.app.seminar.view;
+package com.view;
 
 import static com.github.manliogit.javatags.lang.HtmlHelper.*;
 

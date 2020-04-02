@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.app.seminar.controller.CourseListController;
+import com.controller.SeminarListController;
 
 public class MainControllerTest {
 
 	@Test
 	public void handlesRoute() throws Exception {
-		assertTrue(new CourseListController().handles("/"));
+		assertTrue(new SeminarListController().handles("/"));
 	}
 }

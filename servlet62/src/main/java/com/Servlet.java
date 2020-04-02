@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import com.app.controller.Controller;
+import com.controller.Controller;
 
 public class Servlet extends HttpServlet {
 

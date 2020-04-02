@@ -8,9 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.app.seminar.model.Course;
-import com.app.seminar.model.Seminar;
-import com.app.seminar.model.Student;
+import com.model.Course;
+import com.model.Seminar;
+import com.model.Student;
 
 public class SeminarMapper implements DbMapper<Seminar>{
     

@@ -1,4 +1,4 @@
-package com.app.seminar.model;
+package com.model;
 
 public class Student {
     private final int _id;
@@ -10,7 +10,6 @@ public class Student {
         _name = name;
         _surname = surname;
     }
-
 
     public int getId() {
         return _id;

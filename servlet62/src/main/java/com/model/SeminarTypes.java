@@ -1,4 +1,4 @@
-package com.app.seminar.model;
+package com.model;
 
 public enum SeminarTypes {
     CSV,
