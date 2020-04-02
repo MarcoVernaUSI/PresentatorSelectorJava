@@ -20,7 +20,6 @@ public class DbMapper<T>  {
     
     public Iterable<T> findAll() {
         try {
-            // qui cambio nome tabella da corso a seminario
             PreparedStatement preparedStatement = _connection.prepareStatement("select * from "+_tableName);
             ResultSet rs = preparedStatement.executeQuery();
             List<T> entries = new ArrayList<T>();
@@ -29,6 +28,11 @@ public class DbMapper<T>  {
             }
             preparedStatement.close();
             rs.close();
+            
+            
+            // QUesto sbagliatissimo
+            _dbReader.addAll(entries);
+            
             return entries;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -47,6 +51,12 @@ public class DbMapper<T>  {
             }
             ps.close();
             rs.close();
+            
+            // QUesto sbagliatissimo
+            
+            _dbReader.addAll(entries);
+            
+            
             return entries.get(0);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -54,14 +64,8 @@ public class DbMapper<T>  {
     }
     
     public void insert(T entry){
-        try {
-            PreparedStatement ps = _dbReader.write(_connection, entry);
-            ps.executeUpdate();
-            ps.close();
-            
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            _dbReader.write(entry);
+      
     }
     
     public void save(T entry){
@@ -78,6 +82,20 @@ public class DbMapper<T>  {
                 "location VARCHAR(255) NOT NULL," + 
                 "totalSeats NUMERIC NOT NULL," + 
                 "start DATETIME NOT NULL)");
+            ps.executeUpdate();
+            ps.close();
+            
+            ps = _connection.prepareStatement("CREATE TABLE Student(" + 
+                "id INTEGER PRIMARY KEY," + 
+                "firstName VARCHAR(255) NOT NULL," + 
+                "lastName   VARCHAR(255))");
+            ps.executeUpdate();
+            ps.close();
+            
+            ps = _connection.prepareStatement("CREATE TABLE Enrollement(" + 
+                "id INTEGER PRIMARY KEY," + 
+                "studentId INTEGER NOT NULL," + 
+                "seminarId INTEGER NOT NULL)");
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {

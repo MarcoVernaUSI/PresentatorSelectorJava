@@ -52,13 +52,13 @@ public class CreateDatabaseController implements Controller{
     sem3.addEnrollment(s5);
     
     
-    //new DbMapper<Seminar>(context.connection(), new SeminarReader(), "Seminar").create();
+    //new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").create();
     
-    saveStudent(context, s1);
-    saveStudent(context, s2);
-    saveStudent(context, s3);
-    saveStudent(context, s4);
-    saveStudent(context, s5);
+    //saveStudent(context, s1);
+    //saveStudent(context, s2);
+    //saveStudent(context, s3);
+    //saveStudent(context, s4);
+    //saveStudent(context, s5);
     
 
     saveSeminar(context, sem1);
@@ -69,10 +69,10 @@ public class CreateDatabaseController implements Controller{
     
     
     public void saveStudent(Context context, Student student) {
-        new DbMapper<Student>(context.connection(), new StudentReader(), "Student").save(student);
+        new DbMapper<Student>(context.connection(), new StudentReader(context.connection()), "Student").save(student);
     }
 
     public void saveSeminar(Context context, Seminar seminar) {
-        new DbMapper<Seminar>(context.connection(), new SeminarReader(), "Seminar").save(seminar);
+        new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").save(seminar);
           }
 }

@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.app.controller.Controller;
 import com.app.seminar.controller.CourseListController;
-import com.app.seminar.controller.CreateDatabaseController;
 import com.app.seminar.controller.CsvCourseController;
 import com.app.seminar.controller.HtmlCourseController;
 
@@ -17,8 +16,8 @@ public class ControllerFactory {
 		return new ArrayList<Controller>(asList(
 		    new CourseListController(),
 		    new HtmlCourseController(),
-		    new CsvCourseController(),
-		    new CreateDatabaseController()
+		    new CsvCourseController()
+		    //new CreateDatabaseController()
 		    )
 		);
 	}

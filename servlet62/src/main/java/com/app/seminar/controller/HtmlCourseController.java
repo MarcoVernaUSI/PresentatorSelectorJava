@@ -7,8 +7,8 @@ import com.app.controller.Controller;
 import com.app.seminar.dbMapper.DbMapper;
 import com.app.seminar.dbMapper.SeminarReader;
 import com.app.seminar.model.Seminar;
-import com.app.seminar.view.Layout;
 import com.app.seminar.view.HTMLSeminar;
+import com.app.seminar.view.Layout;
 
 public class HtmlCourseController implements Controller{
     
@@ -24,8 +24,7 @@ public class HtmlCourseController implements Controller{
         
         String courseId = context.requestUri().replaceAll("\\D", "");
         
-        
-        final Seminar seminar = new DbMapper<Seminar>(context.connection(), new SeminarReader(), "Seminar").findById(courseId);
+        final Seminar seminar = new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").findById(courseId);
         
          context.response().getWriter().write(new Layout("Html details", new HTMLSeminar(seminar)).build().render());
     }

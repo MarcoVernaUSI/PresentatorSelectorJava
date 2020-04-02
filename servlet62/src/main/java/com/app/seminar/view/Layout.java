@@ -28,7 +28,6 @@ public class Layout{
 		        body(
 		            div(attr("class -> container"),
 		                  div(attr("class -> page-header","id -> banner"),     
-		                    _bodyContent.getHeader(),
 		                    _bodyContent.getBody()
 		                  )
 		                )

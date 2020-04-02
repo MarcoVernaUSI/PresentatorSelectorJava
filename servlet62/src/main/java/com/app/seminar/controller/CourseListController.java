@@ -26,7 +26,7 @@ public class CourseListController implements Controller{
         context.response().setContentType("text/html");
         context.response().setCharacterEncoding("UTF-8");
     
-        Iterable<Seminar> seminars = new DbMapper<Seminar>(context.connection(), new SeminarReader(), "Seminar").findAll();
+        Iterable<Seminar> seminars = new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").findAll();
         //Iterable<String> header = asList(NAME, LOCATION, TOTAL_SEATS, START, "action");
         Iterable<String> header = asList(NAME, LOCATION, TOTAL_SEATS, START, "csv", "html");
         

@@ -3,6 +3,8 @@ package com.app.seminar.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.manliogit.javatags.element.Element;
+
 public class Seminar {
     
     public static final String ID = "id";
@@ -17,7 +19,6 @@ public class Seminar {
     private final Course _course;
     private final List<Student> _enrollments;
     private final String _startDate;
-    private SeminarDetails _description;
     private final int _number;
 
     public Seminar(int number, String location, int totalSeats, Course course, String startDate) {
@@ -26,13 +27,11 @@ public class Seminar {
         _course = course;
         _startDate = startDate;
         _enrollments = new ArrayList<Student>();
-        _description = new RawDetails(this);
         _number = number;
     }
     
-    public void setDetails(SeminarDetails type) {
-        _description = type;
-        
+    public Element[] getDetails(SeminarDescription type) {
+        return type.getDetails();     
     }
     
     public void addEnrollment(Student enrollment) {
@@ -54,13 +53,13 @@ public class Seminar {
     public String getName() {
         return _course.getCourseName();
     }
-    
-    public String getDescription() {
-        return _description.print();
-    }
 
     public Course getCourse() {
         return _course;
+    }
+    
+    public String getDescription() {
+        return _course.getDescription();
     }
 
     public String getStartDate() {
@@ -68,7 +67,7 @@ public class Seminar {
     }
     
 
-    public int getNumber() {
+    public int getId() {
         return _number;
     }
     

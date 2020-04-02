@@ -17,8 +17,12 @@ public class SeminarList implements View {
         _header = header;
     }
 
-    private Element buildTable() {
-        return table(attr("class -> table table-striped"), tableHeader(), TableBody());
+    private Element buildTable() {        
+        return div(attr("class -> row"),
+            div(attr("class -> col-lg-8 col-md-8 col-sm-9"),
+                table(attr("class -> table table-striped"), tableHeader(), TableBody())
+            )
+          );
     }
     
     
@@ -45,8 +49,8 @@ public class SeminarList implements View {
             td(text(seminar.getLocation())),
             td(text((String.valueOf(seminar.getSeatLeft())))),
             td(text(seminar.getStartDate())),
-            td(a(attr("href -> /course/csv/" + seminar.getNumber()),"get")),
-            td(a(attr("href -> /course/html/" + seminar.getNumber()),"get"))
+            td(a(attr("href -> /course/csv/" + seminar.getId()),"get")),
+            td(a(attr("href -> /course/html/" + seminar.getId()),"get"))
         );
     }
 
@@ -58,17 +62,15 @@ public class SeminarList implements View {
                 p(attr("class -> lead"),
                   text("Select seminar")
                 )
-              )
-            );
+             )
+         );
     }
 
+
     @Override
-    public Element getBody() {
-        return div(attr("class -> row"),
-            div(attr("class -> col-lg-8 col-md-8 col-sm-9"),
-                buildTable()
-            )
-          );
+    public Element[] getBody() {
+        Element[] elements ={getHeader(),buildTable()};
+        return elements;
     }
 
 }

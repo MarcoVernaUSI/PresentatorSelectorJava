@@ -24,7 +24,7 @@ public class CsvCourseController implements Controller{
         String courseId = context.requestUri().replaceAll("\\D", "");
         
         
-        final Seminar seminar = new DbMapper<Seminar>(context.connection(), new SeminarReader(), "Seminar").findById(courseId);
+        final Seminar seminar = new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").findById(courseId);
         
          context.response().getWriter().write(new Layout("CSV details", new CSVSeminar(seminar)).build().render());
     }

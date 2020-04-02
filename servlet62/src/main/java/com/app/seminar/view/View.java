@@ -6,5 +6,5 @@ public interface View {
     
     Element getHeader();
     
-    Element getBody();
+    Element[] getBody();
 }
