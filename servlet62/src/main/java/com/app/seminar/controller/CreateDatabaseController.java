@@ -1,12 +1,14 @@
 package com.app.seminar.controller;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 import com.Context;
 import com.app.controller.Controller;
-import com.app.seminar.dbMapper.DbMapper;
-import com.app.seminar.dbMapper.SeminarReader;
-import com.app.seminar.dbMapper.StudentReader;
+import com.app.seminar.dbMapper.SeminarMapper;
+import com.app.seminar.dbMapper.StudentMapper;
 import com.app.seminar.model.Course;
 import com.app.seminar.model.Seminar;
 import com.app.seminar.model.Student;
@@ -52,7 +54,7 @@ public class CreateDatabaseController implements Controller{
     sem3.addEnrollment(s5);
     
     
-    //new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").create();
+    //create(context.connection());
     
     //saveStudent(context, s1);
     //saveStudent(context, s2);
@@ -68,11 +70,43 @@ public class CreateDatabaseController implements Controller{
     }
     
     
+    public void create(Connection connection) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("CREATE TABLE Seminar(" + 
+                "id INTEGER PRIMARY KEY," + 
+                "name VARCHAR(255) NOT NULL," + 
+                "description VARCHAR(255)," + 
+                "location VARCHAR(255) NOT NULL," + 
+                "totalSeats NUMERIC NOT NULL," + 
+                "start DATETIME NOT NULL)");
+            ps.executeUpdate();
+            ps.close();
+            
+            ps = connection.prepareStatement("CREATE TABLE Student(" + 
+                "id INTEGER PRIMARY KEY," + 
+                "firstName VARCHAR(255) NOT NULL," + 
+                "lastName   VARCHAR(255))");
+            ps.executeUpdate();
+            ps.close();
+            
+            ps = connection.prepareStatement("CREATE TABLE Enrollement(" + 
+                "id INTEGER PRIMARY KEY," + 
+                "studentId INTEGER NOT NULL," + 
+                "seminarId INTEGER NOT NULL)");
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        
+    }
+    
+    
     public void saveStudent(Context context, Student student) {
-        new DbMapper<Student>(context.connection(), new StudentReader(context.connection()), "Student").save(student);
+        new StudentMapper(context.connection()).insert(student);
     }
 
     public void saveSeminar(Context context, Seminar seminar) {
-        new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").save(seminar);
-          }
+        new SeminarMapper(context.connection()).insert(seminar);
+     }
 }

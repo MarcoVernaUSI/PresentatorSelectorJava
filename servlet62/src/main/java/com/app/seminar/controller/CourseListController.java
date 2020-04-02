@@ -7,8 +7,7 @@ import java.util.regex.Pattern;
 
 import com.Context;
 import com.app.controller.Controller;
-import com.app.seminar.dbMapper.DbMapper;
-import com.app.seminar.dbMapper.SeminarReader;
+import com.app.seminar.dbMapper.SeminarMapper;
 import com.app.seminar.model.Seminar;
 import com.app.seminar.view.Layout;
 import com.app.seminar.view.SeminarList;
@@ -26,8 +25,9 @@ public class CourseListController implements Controller{
         context.response().setContentType("text/html");
         context.response().setCharacterEncoding("UTF-8");
     
-        Iterable<Seminar> seminars = new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").findAll();
-        //Iterable<String> header = asList(NAME, LOCATION, TOTAL_SEATS, START, "action");
+        //Iterable<Seminar> seminars = new DbMapper<Seminar>(context.connection(), new SeminarReader(context.connection()), "Seminar").findAll();
+        Iterable<Seminar> seminars = new SeminarMapper(context.connection()).findAll();
+        
         Iterable<String> header = asList(NAME, LOCATION, TOTAL_SEATS, START, "csv", "html");
         
         context.response().getWriter().write(new Layout("Seminars", new SeminarList(seminars, header)).build().render());

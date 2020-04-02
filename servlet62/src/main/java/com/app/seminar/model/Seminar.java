@@ -30,6 +30,7 @@ public class Seminar {
         _number = number;
     }
     
+    
     public Element[] getDetails(SeminarDescription type) {
         return type.getDetails();     
     }
@@ -65,7 +66,6 @@ public class Seminar {
     public String getStartDate() {
         return _startDate;
     }
-    
 
     public int getId() {
         return _number;
