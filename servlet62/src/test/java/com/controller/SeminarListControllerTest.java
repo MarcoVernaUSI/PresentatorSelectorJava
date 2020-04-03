@@ -1,15 +1,14 @@
-package com.app.controller;
+package com.controller;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.controller.SeminarListController;
-
-public class MainControllerTest {
+public class SeminarListControllerTest {
 
 	@Test
 	public void handlesRoute() throws Exception {
 		assertTrue(new SeminarListController().handles("/"));
-	}
+	}	
+	
 }

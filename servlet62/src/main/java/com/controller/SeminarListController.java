@@ -25,11 +25,9 @@ public class SeminarListController implements Controller{
         context.response().setCharacterEncoding("UTF-8");
     
         Iterable<Seminar> seminars = new SeminarMapper(context.connection()).findAll();
-        
         Iterable<String> header = asList(NAME, LOCATION, SEATS_LEFT, START, "csv", "html");
         
         context.response().getWriter().write(new Layout("Seminars", new SeminarList(seminars, header)).build().render());
-    
     }
     
 

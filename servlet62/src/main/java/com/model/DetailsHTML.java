@@ -15,52 +15,72 @@ public class DetailsHTML implements Details{
         _seminar = seminar;
     }
     
-    private Element getHeader() {
+    
+    private Element buildTable() {        
         return div(attr("class -> row"),
-            div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
-                h1(_seminar.getCourse().getCourseName())
-              )
-            );}
+            div(attr("class -> col-lg-8 col-md-8 col-sm-9"),
+                table(attr("class -> table table-striped"), TableBody())
+            )
+        );
+    }
+    
+    private Element TableBody() {
+        List<Element> rows = new ArrayList<Element>();
+        rows.add(buildRow("Nome",_seminar.getName()));
+        rows.add(buildRow("Luogo",_seminar.getLocation()));
+        rows.add(buildRow("Data",_seminar.getStartDate()));
+        rows.add(buildRow("Posti totali",String.valueOf(_seminar.getSeatLeft())));
+        return tbody(rows);
+    }
+    
+    
+    private Element buildRow(String label,String value) {
+        return tr(
+            th(text(label)),
+            th(text(value))
+        );
+    }
     
     
     private Element[] studentList() {
         List<Element> rows = new ArrayList<Element>();
+        rows.add(div(attr("class -> row"),
+            div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
+            p(attr("class -> lead"),
+                h3("Studenti iscritti"))
+            ))
+        );
+        
         for (Student student : _seminar.getStudentsList()) {
-            rows.add(text("\""+student.getName()+ "\";\""+student.getSurname()+"\"\n"));
+            rows.add(div(attr("class -> row"),
+                div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
+                text(student.getName()+ " "+student.getSurname()))
+                )
+            );
         }
         Element[] elements= rows.toArray(new Element[rows.size()]);
         return elements;
     }
     
-    private Element getBody() {
+    
+    private Element getUnderDescription() {
         return div(attr("class -> row"),
-            div(attr("class -> col-lg-8 col-md-8 col-sm-9"),
+            div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
                 p(attr("class -> lead"),
-                    text(_seminar.getStartDate())
-                  ),
-                p(attr("class -> lead"),
-                    text(_seminar.getLocation())
-                  ),
-                p(attr("class -> lead"),
-                    text(String.valueOf(_seminar.getSeatLeft()))
-                  ),
-                p(attr("class -> lead"),
-                    text(_seminar.getDescription())
-                  ),
-                p(attr(),
-                text(String.valueOf(_seminar.getStudentsList().size()))
-                )
-            )
+                  h3("Descrizione corso")
+                ),
+                text(_seminar.getDescription())
+             )
           );
     }
-
+    
     @Override
-    public Element[] print() {
-        Element[] elements = new Element[studentList().length+2];
-        elements[0]=getHeader();
-        elements[1]=getBody();
-        for (int i = 2; i<studentList().length+2; i++) {
-            elements[i]=studentList()[i-2];
+    public List<Element> print() {
+        List<Element> elements = new ArrayList<Element>();
+        elements.add(buildTable());
+        elements.add(getUnderDescription());
+        for (Element element: studentList()) {
+            elements.add(element);
         }
         return elements;
     }

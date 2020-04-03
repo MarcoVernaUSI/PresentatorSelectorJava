@@ -44,7 +44,6 @@ public class SeminarList implements View {
     
     private Element buildRow(Seminar seminar) {
         return tr(
-            //th(attr("scope -> row"), a(attr("href -> /course/" + seminar.getCourse().getNumber()),text(seminar.getName()))),
             th(text(seminar.getName())),
             td(text(seminar.getLocation())),
             td(text((String.valueOf(seminar.getSeatLeft())))),

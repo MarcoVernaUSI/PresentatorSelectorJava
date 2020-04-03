@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.model.Course;
 import com.model.Seminar;
 import com.model.Student;
 
@@ -58,10 +57,9 @@ public class SeminarMapper implements DbMapper<Seminar>{
                     rs.getInt(1),
                     rs.getString(4),
                     rs.getInt(5),
-                    new Course(rs.getString(2), rs.getString(3)),
+                    rs.getString(2), 
+                    rs.getString(3),
                     rs.getString(6));
-                
-                
                 entries.add(new StudentMapper(_connection).addStudentsTo(seminar));          
             }       
      

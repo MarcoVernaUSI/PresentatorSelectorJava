@@ -16,17 +16,19 @@ public class Seminar {
     
     private final String _location;
     private final int _totalSeats;
-    private final Course _course;
+    private final String _courseName;
+    private final String _description;
     private final List<Student> _enrollments;
     private final String _startDate;
     private final int _id;
     private Details _details;
 
-    public Seminar(int id, String location, int totalSeats, Course course, String startDate) {
+    public Seminar(int id, String location, int totalSeats, String courseName, String courseDescription, String startDate) {
         _id = id;
         _location = location;
         _totalSeats = totalSeats;
-        _course = course;
+        _courseName = courseName;
+        _description = courseDescription;
         _startDate = startDate;
         _enrollments = new ArrayList<Student>();
     }
@@ -48,15 +50,11 @@ public class Seminar {
     }
 
     public String getName() {
-        return _course.getCourseName();
+        return _courseName;
     }
 
-    public Course getCourse() {
-        return _course;
-    }
-    
     public String getDescription() {
-        return _course.getDescription();
+        return _description;
     }
 
     public String getStartDate() {
@@ -71,7 +69,7 @@ public class Seminar {
         return _totalSeats;
     }
 
-    public Element[] getDetails() {
+    public List<Element> getDetails() {
         return _details.print();
     }
 

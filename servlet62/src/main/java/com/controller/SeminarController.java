@@ -26,13 +26,22 @@ public class SeminarController implements Controller{
         String seminarId = context.requestUri().replaceAll("\\D", "");
         Seminar seminar = new SeminarMapper(context.connection()).findById(seminarId);
         
-        
         if (context.requestUri().contains("/csv/")) {
-            seminar.setDetails(new DetailsCSV(seminar));
-         }
+            DetailsCSV csv = new DetailsCSV(seminar);
+            seminar.setDetails(csv);
+            
+            if (context.post()) {                
+                    csv.writeCsvToFile();
+            }
+           
+        
+        }
         if (context.requestUri().contains("/html/")) {
         seminar.setDetails(new DetailsHTML(seminar));
         }
+        
+        
+        
         
         context.response().getWriter().write(new Layout("Seminar details", new SeminarView(seminar)).build().render());
     }

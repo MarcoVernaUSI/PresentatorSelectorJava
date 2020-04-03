@@ -17,14 +17,18 @@ public class SeminarView implements View  {
     public Element getHeader() {
         return div(attr("class -> row"),
             div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
-                h1(_seminar.getCourse().getCourseName())
+                h1(_seminar.getName())
               )
          );
     }
    
     @Override
     public Element[] getBody() {
-        return _seminar.getDetails();
+        Element[] elements = new Element[_seminar.getDetails().size()+1];
+        elements[0]=getHeader();
+        for (int i = 1; i<_seminar.getDetails().size()+1; i++) {
+            elements[i]=_seminar.getDetails().get(i-1);
+        }
+        return elements;
     }
-
 }

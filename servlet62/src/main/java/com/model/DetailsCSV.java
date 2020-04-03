@@ -2,6 +2,8 @@ package com.model;
 
 import static com.github.manliogit.javatags.lang.HtmlHelper.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,37 +17,53 @@ public class DetailsCSV implements Details{
         _seminar = seminar;
     }
 
-
-    protected Element getHeader() {
-        return div(attr("class -> row"),
-            div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
-                h1(_seminar.getCourse().getCourseName())
-              )
-         );
-    }
-    
-    
-    private Element[] studentList() {
-        List<Element> rows = new ArrayList<Element>();
-        for (Student student : _seminar.getStudentsList()) {
-            rows.add(text("\""+student.getName()+ "\";\""+student.getSurname()+"\"\n"));
+    public void writeCsvToFile() {
+        FileWriter csvWriter;
+        try {
+            csvWriter = new FileWriter("src/main/savedCsv/"+_seminar.getName().replaceAll(" ", "")+".csv");
+            csvWriter.append(header());
+            for (Student student : _seminar.getStudentsList()) {
+                csvWriter.append(newRow(student));
+                }
+            csvWriter.flush();
+            csvWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        Element[] elements= rows.toArray(new Element[rows.size()]);
-        return elements;
     }
-
-    protected Element getBody() {
-        return text("\""+_seminar.getId()+"\";\""+_seminar.getName()+"\";\""+_seminar.getStartDate()+"\";\""+_seminar.getLocation()+"\";\""+_seminar.getSeatLeft()+"\"\n");
+     
+    private void  writeRows(List<Element> rows) {
+        rows.add(text(header()));
+        for (Student student : _seminar.getStudentsList()) {
+            rows.add(text(newRow(student)));
+        }
+    }
+    
+    private String newRow(Student student) {
+        return "\""+_seminar.getId()+"\";\""+_seminar.getName()+"\";\""+_seminar.getLocation()+"\";\""+_seminar.getStartDate()+"\";\""+_seminar.getTotalSeats()+"\";\""+_seminar.getDescription()+"\";\""+student.getId()+"\";\""+student.getName()+"\";\""+student.getSurname()+"\"\n";
+    }
+    
+    private String header() {
+        return "\"SeminarId\";\"CourseName\";\"Location\";\"StartDate\";\"TotalSeat\";\"CourseDescription\";\"StudentId\";\"StudentName\";\"StudentSurname\"\n";
     }
     
     @Override
-    public Element[] print() {
-        Element[] elements = new Element[studentList().length+2];
-        elements[0]=getHeader();
-        elements[1]=getBody();
-        for (int i = 2; i<studentList().length+2; i++) {
-            elements[i]=studentList()[i-2];
-        }
+    public List<Element> print() {
+        List<Element> elements = new ArrayList<Element>();
+        elements.add(div(attr("class -> row"),
+                div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
+                    p(attr("class -> lead"),
+                      h3("Prewiev")
+                    )                 )
+              ));
+        writeRows(elements);
+        
+        elements.add(
+            form(attr("id -> getCsvId", "name -> getCsv", "method -> post"),
+                div(attr( "id -> getCsvBtn"),
+                    input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Download CSV", "class -> btn btn-primary", "onclick -> callServlet();"))                                     )   
+                )
+            );
         return elements;
     }
 
