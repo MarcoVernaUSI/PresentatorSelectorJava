@@ -3,13 +3,9 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,17 +17,7 @@ public class TestCandidates {
     @Before
     public void SetUp(){
         //Create the file with Bob Semple inside
-        JSONObject candidate = new JSONObject();
-        candidate.put("fname","Bob");
-        candidate.put("surname","Semple");
-        JSONArray objectsList = new JSONArray();
-        objectsList.add(candidate);
-        try (FileWriter file = new FileWriter(DefaultPath)) {
-            file.write(objectsList.toJSONString());
-            file.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new TestDatabase(DefaultPath).add("name","Bob Semple");
         _candidates = new Candidates(DefaultPath);
     }
     
@@ -44,8 +30,8 @@ public class TestCandidates {
     @Test
     public void addMultipleSpeaker() {
         
-        _candidates.addSpeaker("George", "Pearce");
-        _candidates.addSpeaker("Winston", "Churchill");
+        _candidates.addSpeaker("George Pearce");
+        _candidates.addSpeaker("Winston Churchill");
         
         assertEquals("Bob Semple", _candidates.getSpeaker(0).printCandidate());
         assertEquals("George Pearce", _candidates.getSpeaker(1).printCandidate());
@@ -56,9 +42,9 @@ public class TestCandidates {
     
     @Test
     public void removeSpeaker() {
-        _candidates.addSpeaker("George", "Pearce");
+        _candidates.addSpeaker("George Pearce");
         
-        _candidates.removeSpeakers("Bob Semple");
+        _candidates.removeSpeaker("Bob Semple");
         
         assertEquals("George Pearce", _candidates.getSpeaker(0).printCandidate());
         assertEquals(1, _candidates.printCandidates().size());
@@ -80,7 +66,7 @@ public class TestCandidates {
 
     @Test
     public void printCandidates() {
-        _candidates.addSpeaker("George", "Pearce");
+        _candidates.addSpeaker("George Pearce");
         
         List<String>candidatesList = _candidates.printCandidates();
         
@@ -90,12 +76,12 @@ public class TestCandidates {
     
     @Test
     public void getRandomSpeaker() {
-        _candidates.addSpeaker("George", "Pearce");
+        _candidates.addSpeaker("George Pearce");
         
         Candidate randomSpeaker = _candidates.getRandomSpeaker();
         
         assertTrue(new ArrayList<String>()
         {{add("Bob Semple");add("George Pearce");}}
-        .contains(randomSpeaker.getFname()+" "+randomSpeaker.getSurname()));
+        .contains(randomSpeaker.printCandidate()));
         }
 }

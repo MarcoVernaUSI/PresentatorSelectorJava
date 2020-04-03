@@ -3,11 +3,7 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,31 +14,9 @@ public class TestView {
     
     @Before
     public void SetUp(){
-        //Create the two database files with Bob Semple
-        
-        JSONObject entry = new JSONObject();
-        JSONObject candidate = new JSONObject();
-        entry.put("entry","Bob Semple absent in date 01/09/1939 00:00:00");
-        candidate.put("fname","Bob");
-        candidate.put("surname","Semple");
-          
-        JSONArray objectsList1 = new JSONArray();
-        JSONArray objectsList2 = new JSONArray();
-        objectsList1.add(candidate);
-        objectsList2.add(entry);
-          
-          
-        try (FileWriter file1 = new FileWriter(Path1);
-            FileWriter file2 = new FileWriter(Path2)) {
-              
-            file1.write(objectsList1.toJSONString());
-            file1.flush();
-              
-            file2.write(objectsList2.toJSONString());
-            file2.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //Create the two database files with Bob Semple  
+        new TestDatabase(Path1).add("name","Bob Semple");
+        new TestDatabase(Path2).add("entry","Bob Semple absent in date 01/09/1939 00:00:00");
     }
     
  // Cancello file
@@ -59,9 +33,9 @@ public class TestView {
         Selector selector = new Selector(Path1,Path2);
         View view = new View(selector);
         
-        view.updateList();
+        view.updateView();
         
-        assertEquals("Bob Semple", view.getCandidateList().getModel().getElementAt(0));
+        assertEquals("Bob Semple", view.getCandidateList().getElementAt(0));
         
     }
     
@@ -70,11 +44,11 @@ public class TestView {
         Selector selector = new Selector(Path1,Path2);
         View view = new View(selector);
         
-        selector.add("George", "Pearce");
-        view.updateList();
+        selector.add("George Pearce");
+        view.updateView();
         
-        assertEquals("Bob Semple", view.getCandidateList().getModel().getElementAt(0));
-        assertEquals("George Pearce", view.getCandidateList().getModel().getElementAt(1));
+        assertEquals("Bob Semple", view.getCandidateList().getElementAt(0));
+        assertEquals("George Pearce", view.getCandidateList().getElementAt(1));
         
     }
     
@@ -84,9 +58,9 @@ public class TestView {
         View view = new View(selector);
         
         selector.remove("Bob Semple");
-        view.updateList();
+        view.updateView();
         
-        assertEquals(0, view.getCandidateList().getModel().getSize());
+        assertEquals(0, view.getCandidateList().getNumberOfSpeakers());
     }
     
     
@@ -95,14 +69,14 @@ public class TestView {
         Selector selector = new Selector(Path1,Path2);
         View view = new View(selector);
         
-        selector.add("George", "Pearce");
-        selector.add("Winston", "Churchill");
+        selector.add("George Pearce");
+        selector.add("Winston Churchill");
         selector.remove("Bob Semple");
-        view.updateList();
+        view.updateView();
         
 
-        assertEquals("George Pearce", view.getCandidateList().getModel().getElementAt(0));
-        assertEquals("Winston Churchill", view.getCandidateList().getModel().getElementAt(1));
+        assertEquals("George Pearce", view.getCandidateList().getElementAt(0));
+        assertEquals("Winston Churchill", view.getCandidateList().getElementAt(1));
     }
 }
 

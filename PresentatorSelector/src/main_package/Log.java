@@ -17,7 +17,7 @@ public class Log {
         _log = _db.load();
     }
     
-    // Add an entry to the log
+    
     public void saveEntry(String speaker, boolean absent) {
         if (absent){
             Date actualDate = new Date();
@@ -26,11 +26,12 @@ public class Log {
         }
     }
     
-    // Clear the log
+
     public void clearLog() {
         _log.clear();
         _db.update(_log);
     }
+    
     
     // print the whole log
     public String printLog() {
@@ -41,14 +42,16 @@ public class Log {
         return logPrint;
     }
     
+    
     private String printEntry(String speaker, String date) {
         return speaker + " absent in date " + date;
-        
     }
+    
     
     public int countEntries(){
         return _log.size();
     }
+    
     
     public String getEntry(int i){
         return _log.get(i);

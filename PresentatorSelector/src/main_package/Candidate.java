@@ -1,13 +1,11 @@
 package main_package;
 
 public class Candidate {
-    private final String _fname;
-    private final String _surname;
+    private final String _name;
     private boolean _absent = false;
     
-    public Candidate(String fname, String surname) {
-        _fname = fname;
-        _surname = surname;
+    public Candidate(String name) {
+        _name = name;
     }
     
     public boolean isAbsent() {
@@ -17,17 +15,9 @@ public class Candidate {
     public void setAbsent(boolean absent) {
         _absent = absent;
     }
-
-    public String getFname() {
-        return _fname;
-    }
-   
-    public String getSurname() {
-        return _surname;
-    }
     
     // Candidate to string method
     public String printCandidate(){
-        return (_fname + " " + _surname);
+        return (_name);
     }
 }

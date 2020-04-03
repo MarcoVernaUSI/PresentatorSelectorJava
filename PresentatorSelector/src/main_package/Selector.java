@@ -12,20 +12,21 @@ public class Selector{
     }
     
     public String select() {
-        Candidate speaker = _candidates.getRandomSpeaker();
-        if (speaker != null) {
-            return speaker.printCandidate();
-        } else {
+        if (_candidates.allAbsent()) {
             return "No speaker avaiable!";
+        } else {
+            return _candidates.getRandomSpeaker().printCandidate();
         }
     }
     
     public void remove(String speaker){
-        _candidates.removeSpeakers(speaker);  
+        _candidates.removeSpeaker(speaker);  
     }
     
-    public void add(String fname, String surname){
-        _candidates.addSpeaker(fname, surname);
+    public void add(String name){
+        if (!_candidates.printCandidates().contains(name)) {
+            _candidates.addSpeaker(name);   
+        }
     }
     
     public List<String> getSpeakers() {

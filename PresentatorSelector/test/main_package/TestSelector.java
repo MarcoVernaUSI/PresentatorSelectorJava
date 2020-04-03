@@ -3,14 +3,10 @@ package main_package;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,36 +14,13 @@ import org.junit.Test;
 public class TestSelector {
     public static final String Path1 = "test/candidates_test.json";
     public static final String Path2 = "test/log_test.json";
-    
     public Selector _selector;
     
     @Before
     public void SetUp(){
         //Create the two database files with Bob Semple
-        JSONObject entry = new JSONObject();
-        JSONObject candidate = new JSONObject();
-        entry.put("entry","Bob Semple absent in date 01/09/1939 00:00:00");
-        candidate.put("fname","Bob");
-        candidate.put("surname","Semple");
-        
-        JSONArray objectsList1 = new JSONArray();
-        JSONArray objectsList2 = new JSONArray();
-        objectsList1.add(candidate);
-        objectsList2.add(entry);
-        
-        
-        try (FileWriter file1 = new FileWriter(Path1);
-            FileWriter file2 = new FileWriter(Path2)) {
-            
-            file1.write(objectsList1.toJSONString());
-            file1.flush();
-            
-            file2.write(objectsList2.toJSONString());
-            file2.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
+        new TestDatabase(Path1).add("name","Bob Semple");
+        new TestDatabase(Path2).add("entry","Bob Semple absent in date 01/09/1939 00:00:00");
         _selector = new Selector(Path1,Path2);
     }
     
@@ -71,7 +44,7 @@ public class TestSelector {
     
     @Test
     public void multipleSelect() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         String speaker = _selector.select();
         
@@ -82,7 +55,7 @@ public class TestSelector {
     
     @Test
     public void getSpeakers() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         List<String> speakerList = _selector.getSpeakers();
         
@@ -93,7 +66,7 @@ public class TestSelector {
     
     @Test
     public void remove(){
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.remove("Bob Semple");
         
@@ -104,10 +77,19 @@ public class TestSelector {
     @Test
     public void add(){
         
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         assertEquals(2, _selector.getSpeakers().size());
         assertEquals("George Pearce", _selector.getSpeakers().get(1));
+    }
+    
+    @Test
+    public void addEqual(){
+        
+        _selector.add("Bob Semple");
+        
+        assertEquals(1, _selector.getSpeakers().size());
+        assertEquals("Bob Semple", _selector.getSpeakers().get(0));
     }
     
     @Test
@@ -137,8 +119,8 @@ public class TestSelector {
     @Test
     public void loadAndRemove() {
         
-        _selector.add("Edward", "Wood");
-        _selector.add("Winston", "Churchill");
+        _selector.add("Edward Wood");
+        _selector.add("Winston Churchill");
         _selector.remove("Edward Wood");
         
         assertEquals("Bob Semple", _selector.getSpeakers().get(0));
@@ -159,7 +141,7 @@ public class TestSelector {
     @Test
     public void saveMultipleEntries() {
         _selector.clearLog();
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.setAbsent("Bob Semple");
         Date date1 = new Date();
@@ -174,7 +156,7 @@ public class TestSelector {
     public void addAndSaveEntry() {
         _selector.clearLog();
         
-        _selector.add("Edward", "Wood");
+        _selector.add("Edward Wood");
         _selector.setAbsent("Edward Wood");
         Date date = new Date();
         String log = _selector.printLog();
@@ -197,7 +179,7 @@ public class TestSelector {
     
     @Test
     public void correctSelectionWithAbsents() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.setAbsent("George Pearce");
         String random = _selector.select();
@@ -207,10 +189,10 @@ public class TestSelector {
     
     @Test
     public void correctSelectionWithAbsentsAfterAdd() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.setAbsent("George Pearce");
-        _selector.add("Edward", "Wood");
+        _selector.add("Edward Wood");
         String random = _selector.select();
         
         assertTrue(new ArrayList<String>()
@@ -219,10 +201,10 @@ public class TestSelector {
 
     @Test
     public void correctSelectionWithAbsentsAfterAddAndRemove() {
-        _selector.add("George", "Pearce");
+        _selector.add("George Pearce");
         
         _selector.setAbsent("George Pearce");
-        _selector.add("Edward", "Wood");
+        _selector.add("Edward Wood");
         _selector.remove("Bob Semple");
         String random = _selector.select();
         
