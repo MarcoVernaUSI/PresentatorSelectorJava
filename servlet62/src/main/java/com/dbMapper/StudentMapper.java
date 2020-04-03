@@ -1,4 +1,4 @@
-package com.app.seminar.dbMapper;
+package com.dbMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

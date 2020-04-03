@@ -1,4 +1,4 @@
-package com.app.seminar.dbMapper;
+package com.dbMapper;
 
 public interface DbMapper<T> {
     Iterable<T> findAll();

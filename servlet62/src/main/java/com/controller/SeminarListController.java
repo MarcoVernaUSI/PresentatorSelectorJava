@@ -6,7 +6,7 @@ import static java.util.Arrays.*;
 import java.util.regex.Pattern;
 
 import com.Context;
-import com.app.seminar.dbMapper.SeminarMapper;
+import com.dbMapper.SeminarMapper;
 import com.model.Seminar;
 import com.view.Layout;
 import com.view.SeminarList;

@@ -3,8 +3,10 @@ package com.controller;
 import java.util.regex.Pattern;
 
 import com.Context;
-import com.app.seminar.dbMapper.SeminarMapper;
-import com.model.SeminarHTML;
+import com.dbMapper.SeminarMapper;
+import com.model.DetailsCSV;
+import com.model.DetailsHTML;
+import com.model.Seminar;
 import com.view.Layout;
 import com.view.SeminarView;
 
@@ -22,20 +24,17 @@ public class SeminarController implements Controller{
         context.response().setCharacterEncoding("UTF-8");
         
         String seminarId = context.requestUri().replaceAll("\\D", "");
+        Seminar seminar = new SeminarMapper(context.connection()).findById(seminarId);
         
         
-        //if (context.requestUri().contains("/csv/")) {
-         //   SeminarCSV seminar = (SeminarCSV) new SeminarMapper(context.connection()).findById(seminarId);
-         //   context.response().getWriter().write(new Layout("Html details", new SeminarView(seminar)).build().render());
-            
-        //}
-//if (context.requestUri().contains("/html/")) {
-        //else {
-            SeminarHTML seminar = (SeminarHTML) new SeminarMapper(context.connection()).findById(seminarId);
-            context.response().getWriter().write(new Layout("Html details", new SeminarView(seminar)).build().render());
-            
-        //}
+        if (context.requestUri().contains("/csv/")) {
+            seminar.setDetails(new DetailsCSV(seminar));
+         }
+        if (context.requestUri().contains("/html/")) {
+        seminar.setDetails(new DetailsHTML(seminar));
+        }
         
+        context.response().getWriter().write(new Layout("Seminar details", new SeminarView(seminar)).build().render());
     }
     
 }

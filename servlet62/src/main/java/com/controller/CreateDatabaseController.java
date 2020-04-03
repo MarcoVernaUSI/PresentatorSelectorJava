@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 import com.Context;
-import com.app.seminar.dbMapper.SeminarMapper;
-import com.app.seminar.dbMapper.StudentMapper;
+import com.dbMapper.SeminarMapper;
+import com.dbMapper.StudentMapper;
 import com.model.Course;
 import com.model.Seminar;
 import com.model.Student;

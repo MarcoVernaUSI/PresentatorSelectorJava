@@ -20,6 +20,7 @@ public class Seminar {
     private final List<Student> _enrollments;
     private final String _startDate;
     private final int _id;
+    private Details _details;
 
     public Seminar(int id, String location, int totalSeats, Course course, String startDate) {
         _id = id;
@@ -71,8 +72,15 @@ public class Seminar {
     }
 
     public Element[] getDetails() {
-        return null;
+        return _details.print();
     }
+
+    public void setDetails(Details details) {
+        _details = details;
+    }
+    
+    
+  
 }
 
 
