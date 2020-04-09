@@ -2,6 +2,7 @@ package com.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.github.manliogit.javatags.element.Element;
 
@@ -12,7 +13,8 @@ public class Seminar {
     public static final String DESCRIPTION = "description";
     public static final String LOCATION = "location";
     public static final String SEATS_LEFT = "Seats left";
-    public static final String START = "start";
+    public static final String TOTAL_SEATS = "totalSeats";
+    public static final String START = "start date";
     
     private final String _location;
     private final int _totalSeats;
@@ -31,6 +33,18 @@ public class Seminar {
         _description = courseDescription;
         _startDate = startDate;
         _enrollments = new ArrayList<Student>();
+    }
+    
+    public Seminar(Map<String, String> inputs){
+        this(
+            //Integer.parseInt(inputs.get(ID)),
+            -1,
+            inputs.get(LOCATION),
+            Integer.parseInt(inputs.get(TOTAL_SEATS)),
+            inputs.get(NAME),
+            inputs.get(DESCRIPTION),
+            inputs.get(START)
+            );
     }
     
     public void addEnrollment(Student enrollment) {
@@ -75,6 +89,16 @@ public class Seminar {
 
     public void setDetails(Details details) {
         _details = details;
+    }
+
+    public boolean valid() {
+        //return (!_location.equals("") 
+        //    && _totalSeats > 0 
+        //    && !_courseName.equals("") 
+        //    && !_description.equals("") 
+        //    && !_startDate.equals("")
+        //    );
+        return false;
     }
     
     

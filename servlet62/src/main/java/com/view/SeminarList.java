@@ -64,11 +64,18 @@ public class SeminarList implements View {
              )
          );
     }
+    
+    private Element getButtons() {
+        return form(attr("id -> addSeminar", "name -> addSeminar", "action -> /create"),
+            div(attr( "id -> addSeminarBtn"),
+                input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Add Seminar", "class -> btn btn-primary"))                                     )   
+            );
+    }
 
 
     @Override
     public Element[] getBody() {
-        Element[] elements ={getHeader(),buildTable()};
+        Element[] elements ={getHeader(),buildTable(), getButtons()};
         return elements;
     }
 

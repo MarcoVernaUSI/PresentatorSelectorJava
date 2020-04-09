@@ -33,18 +33,18 @@ public class DetailsCSV implements Details{
     }
      
     private void  writeRows(List<Element> rows) {
-        rows.add(text(header()));
+        rows.add(div(text(header())));
         for (Student student : _seminar.getStudentsList()) {
-            rows.add(text(newRow(student)));
+            rows.add(div(text(newRow(student))));
         }
     }
     
     private String newRow(Student student) {
-        return "\""+_seminar.getId()+"\";\""+_seminar.getName()+"\";\""+_seminar.getLocation()+"\";\""+_seminar.getStartDate()+"\";\""+_seminar.getTotalSeats()+"\";\""+_seminar.getDescription()+"\";\""+student.getId()+"\";\""+student.getName()+"\";\""+student.getSurname()+"\"\n";
+        return "\""+_seminar.getId()+"\";\""+_seminar.getName()+"\";\""+_seminar.getLocation()+"\";\""+_seminar.getStartDate()+"\";\""+_seminar.getTotalSeats()+"\";\""+_seminar.getDescription()+"\";\""+student.getId()+"\";\""+student.getName()+"\";\""+student.getSurname()+"\"";
     }
     
     private String header() {
-        return "\"SeminarId\";\"CourseName\";\"Location\";\"StartDate\";\"TotalSeat\";\"CourseDescription\";\"StudentId\";\"StudentName\";\"StudentSurname\"\n";
+        return "\"SeminarId\";\"CourseName\";\"Location\";\"StartDate\";\"TotalSeat\";\"CourseDescription\";\"StudentId\";\"StudentName\";\"StudentSurname\"";
     }
     
     @Override

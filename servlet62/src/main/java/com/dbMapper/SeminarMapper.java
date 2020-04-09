@@ -105,4 +105,19 @@ public class SeminarMapper implements DbMapper<Seminar>{
             throw new RuntimeException(e);
         }
     }
+
+
+    @Override
+    public void delete(String id) {
+        PreparedStatement ps;
+        try {
+            ps = _connection.prepareStatement("delete from "+TableName+" where id = ?");
+            ps.setObject(1, id);
+            ps.executeUpdate();
+            ps.close();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -31,7 +31,9 @@ public class Layout{
 		                  div(attr("class -> page-header","id -> banner"),     
 		                    _bodyContent.getBody()
 		                  )
-		                )
+		                ),
+		            script(attr("src -> /js/jquery.min.js")),
+		            script(attr("src -> /js/bootstrap.min.js"))      
 		            )
 	            );
 	  }

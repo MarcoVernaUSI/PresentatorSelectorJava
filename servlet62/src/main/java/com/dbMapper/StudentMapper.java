@@ -110,6 +110,22 @@ public class StudentMapper implements DbMapper<Student>{
     }
     
     
+
+    @Override
+    public void delete(String id) {
+        PreparedStatement ps;
+        try {
+            ps = _connection.prepareStatement("delete from "+TableName+" where id = ?");
+            ps.setObject(1, id);
+            ps.executeUpdate();
+            ps.close();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    
     public Seminar addStudentsTo(Seminar seminar) {
         try {
             PreparedStatement ps = _connection.prepareStatement("select * from Enrollement where seminarId = ?");
@@ -138,4 +154,6 @@ public class StudentMapper implements DbMapper<Student>{
         }
         return seminar;
     }
+    
+    
 }
