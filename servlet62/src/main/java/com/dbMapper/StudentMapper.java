@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.FakeResultSet;
 import com.model.Seminar;
 import com.model.Student;
 
@@ -49,9 +50,13 @@ public class StudentMapper implements DbMapper<Student>{
     }
     
     
+    @Override
     public List<Student> read(ResultSet rs) {
         List<Student> entries = new ArrayList<Student>();
         try {
+            if (rs instanceof FakeResultSet) {
+                return (List<Student>) rs.unwrap(Student.class);    
+            }
             while(rs.next()){
                 entries.add( new Student(
                     rs.getInt(1),
@@ -154,6 +159,5 @@ public class StudentMapper implements DbMapper<Student>{
         }
         return seminar;
     }
-    
     
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.controller.Controller;
 import com.controller.CreateSeminarController;
+import com.controller.DeleteController;
+import com.controller.NotFoundController;
 import com.controller.SeminarController;
 import com.controller.SeminarListController;
 
@@ -16,7 +18,9 @@ public class ControllerFactory {
 		return new ArrayList<Controller>(asList(
 		    new SeminarListController(),
 		    new SeminarController(),
-		    new CreateSeminarController()
+		    new CreateSeminarController(),
+		    new DeleteController(),
+		    new NotFoundController()
 		    )
 		);
 	}

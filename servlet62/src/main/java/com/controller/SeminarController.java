@@ -23,6 +23,10 @@ public class SeminarController implements Controller{
         context.response().setContentType("text/html");
         context.response().setCharacterEncoding("UTF-8");
         
+        context.response().getWriter().write(new Layout("Seminar details", buildPage(context)).build().render());
+    }
+
+    public SeminarView buildPage(Context context) {
         String seminarId = context.requestUri().replaceAll("\\D", "");
         Seminar seminar = new SeminarMapper(context.connection()).findById(seminarId);
         
@@ -33,17 +37,12 @@ public class SeminarController implements Controller{
             if (context.post()) {                
                     csv.writeCsvToFile();
             }
-           
-        
         }
         if (context.requestUri().contains("/html/")) {
         seminar.setDetails(new DetailsHTML(seminar));
         }
         
-        
-        
-        
-        context.response().getWriter().write(new Layout("Seminar details", new SeminarView(seminar)).build().render());
+        return new SeminarView(seminar);
     }
     
 }

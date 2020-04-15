@@ -24,7 +24,7 @@ public class Layout{
 		          title(_title),
 		          text("<!-- Bootstrap core CSS -->"),
 		          link(attr("href -> /css/bootstrap.min.css","rel -> stylesheet"))
-		          
+		         
 		        ),
 		        body(
 		            div(attr("class -> container"),
@@ -33,7 +33,12 @@ public class Layout{
 		                  )
 		                ),
 		            script(attr("src -> /js/jquery.min.js")),
-		            script(attr("src -> /js/bootstrap.min.js"))      
+		            script(attr("src -> /js/bootstrap.min.js")),
+		            
+		            
+		            script(attr("src -> //netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js")),
+		            script(attr("src -> //code.jquery.com/jquery-1.11.1.min.js"))
+
 		            )
 	            );
 	  }

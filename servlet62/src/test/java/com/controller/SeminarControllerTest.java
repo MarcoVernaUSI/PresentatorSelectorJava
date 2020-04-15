@@ -11,6 +11,6 @@ public class SeminarControllerTest {
         assertTrue(new SeminarController().handles("/course/html/9"));
         assertTrue(new SeminarController().handles("/course/csv/1"));
         assertTrue(new SeminarController().handles("/course/csv/9"));
-    }   
+    }
 
 }

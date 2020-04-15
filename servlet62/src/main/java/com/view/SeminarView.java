@@ -8,12 +8,13 @@ import com.model.Seminar;
 public class SeminarView implements View  {
  private final Seminar _seminar;
     
+    
+
     public SeminarView(Seminar seminar) {
         _seminar = seminar;
     }
 
     
-    @Override
     public Element getHeader() {
         return div(attr("class -> row"),
             div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
@@ -31,4 +32,10 @@ public class SeminarView implements View  {
         }
         return elements;
     }
+    
+    
+    public Seminar getContent() {
+        return _seminar;
+    }
+
 }

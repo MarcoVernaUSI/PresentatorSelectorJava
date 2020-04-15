@@ -23,11 +23,16 @@ public class SeminarListController implements Controller{
     public void execute(Context context) throws Exception {
         context.response().setContentType("text/html");
         context.response().setCharacterEncoding("UTF-8");
+      
+        context.response().getWriter().write(new Layout("Seminars",buildPage(context)).build().render());
+    }
     
+    
+    public static SeminarList buildPage(Context context) {
         Iterable<Seminar> seminars = new SeminarMapper(context.connection()).findAll();
-        Iterable<String> header = asList(NAME, LOCATION, SEATS_LEFT, START, "csv", "html");
+        Iterable<String> header = asList(NAME, LOCATION, SEATS_LEFT, START, "csv", "html", "Delete");     
         
-        context.response().getWriter().write(new Layout("Seminars", new SeminarList(seminars, header)).build().render());
+        return  new SeminarList(seminars, header);
     }
     
 

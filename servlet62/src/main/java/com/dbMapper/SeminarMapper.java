@@ -8,8 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.FakeResultSet;
 import com.model.Seminar;
 import com.model.Student;
+
 
 public class SeminarMapper implements DbMapper<Seminar>{
     
@@ -23,11 +25,9 @@ public class SeminarMapper implements DbMapper<Seminar>{
     
     @Override
     public Iterable<Seminar> findAll(){
+        
         try {
-            PreparedStatement ps = _connection.prepareStatement("select * from "+TableName);
-            ResultSet rs = ps.executeQuery();
-            return read(rs);
-            
+            return read(_connection.prepareStatement("select * from "+TableName).executeQuery());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -39,9 +39,7 @@ public class SeminarMapper implements DbMapper<Seminar>{
             PreparedStatement ps = _connection.prepareStatement("select * from "+TableName+" where id = ?");
             ps.setObject(1, id);
             
-            ResultSet rs = ps.executeQuery();
-           
-            return read(rs).get(0);
+            return read(ps.executeQuery()).get(0);
             
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -49,9 +47,14 @@ public class SeminarMapper implements DbMapper<Seminar>{
     }
 
     
+    @Override
     public List<Seminar> read(ResultSet rs) {
+        
         List<Seminar> entries = new ArrayList<Seminar>();            
         try {
+            if (rs instanceof FakeResultSet) {
+                return (List<Seminar>) rs.unwrap(Seminar.class);    
+            }
             while(rs.next()){
                 Seminar seminar = new Seminar(
                     rs.getInt(1),
@@ -80,9 +83,8 @@ public class SeminarMapper implements DbMapper<Seminar>{
             ps.setObject(4, seminar.getTotalSeats());
             ps.setObject(5, seminar.getStartDate());
             ps.executeUpdate();
-            
-            ResultSet rs = ps.getGeneratedKeys();
-            int seminarId = rs.getInt(1);
+
+            int seminarId = ps.getGeneratedKeys().getInt(1);
 
             ps.close();
             

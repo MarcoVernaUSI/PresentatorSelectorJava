@@ -1,30 +1,72 @@
 package com.controller;
 
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
+
+import com.Context;
+import com.DBop;
+import com.FakeDbConnection;
+import com.FakeHttpServletRequest;
+import com.FakeHttpServletResponse;
+import com.model.Seminar;
+import com.view.SeminarList;
 
 
 
 public class SeminarListControllerTest {
+    
+    
+    public final static String ROUTE_SEMINAR_LIST = "/";
 
 	@Test
 	public void handlesRoute() throws Exception {
-		assertTrue(new SeminarListController().handles("/"));
+		assertTrue(new SeminarListController().handles(ROUTE_SEMINAR_LIST));
+	}
+	
+	@Test
+	public void execute()  throws Exception  {
+	    FakeHttpServletRequest request = new FakeHttpServletRequest(ROUTE_SEMINAR_LIST);
+        FakeHttpServletResponse response = new FakeHttpServletResponse();
+        List<Seminar> data = new ArrayList<Seminar>() {{
+            add(new Seminar(1, "Lugano", 10, "Corso di esempio", "Esempio", "01/01/2020"));
+            add(new Seminar(2, "Mendrisio", 5, "Corso di esempio 2", "Esempio 2", "01/02/2020"));
+        }};
+        
+        SeminarListController controller = new SeminarListController();
+        Context context = new Context(request, response, new FakeDbConnection<Seminar>(data, DBop.FIND_ALL));
+        
+        controller.execute(context);
+
+        assertThat(response.message(), containsString("form"));
+
 	}
 	
 	@Test
     public void loadList() throws Exception {
-        //FakeHttpServletRequest request = new FakeHttpServletRequest("/");
-        //FakeHttpServletResponse response = new FakeHttpServletResponse();
+	    FakeHttpServletRequest request = new FakeHttpServletRequest(ROUTE_SEMINAR_LIST);
+        FakeHttpServletResponse response = new FakeHttpServletResponse();	    
 	    
-	    //create and insert two courses
+	    List<Seminar> data = new ArrayList<Seminar>() {{
+	        add(new Seminar(1, "Lugano", 10, "Corso di esempio", "Esempio", "01/01/2020"));
+	        add(new Seminar(2, "Mendrisio", 5, "Corso di esempio 2", "Esempio 2", "01/02/2020"));
+	    }};
 	    
-       // Iterable<Seminar> seminars = new SeminarMapper(context.connection()).findAll();
-
-        
-
-       // assertThat(response.statusCode(), is(HttpServletResponse.SC_OK));
-       // assertThat(response.message(), containsString("form"));
+	    SeminarListController controller = new SeminarListController();
+	    Context context = new Context(request, response, new FakeDbConnection<Seminar>(data, DBop.FIND_ALL));
+	       
+	    SeminarList result = controller.buildPage(context);
+	    List<Seminar> seminars = new ArrayList<Seminar>();
+        for (Seminar seminar : result.getContent()) {
+            seminars.add(seminar);
+        }
+	    
+        assertEquals(2,seminars.size());
+	    assertEquals("Corso di esempio",seminars.get(0).getName());
+	    assertEquals("Corso di esempio 2",seminars.get(1).getName());
     }
 }

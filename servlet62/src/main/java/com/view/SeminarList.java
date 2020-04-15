@@ -49,11 +49,11 @@ public class SeminarList implements View {
             td(text((String.valueOf(seminar.getSeatLeft())))),
             td(text(seminar.getStartDate())),
             td(a(attr("href -> /course/csv/" + seminar.getId()),"get")),
-            td(a(attr("href -> /course/html/" + seminar.getId()),"get"))
+            td(a(attr("href -> /course/html/" + seminar.getId()),"get")),
+            td(a(attr("href -> /course/delete/" + seminar.getId()),"delete"))
         );
     }
 
-    @Override
     public Element getHeader() {
         return div(attr("class -> row"),
             div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
@@ -66,7 +66,7 @@ public class SeminarList implements View {
     }
     
     private Element getButtons() {
-        return form(attr("id -> addSeminar", "name -> addSeminar", "action -> /create"),
+        return form(attr("id -> addSeminar", "name -> addSeminar", "action -> /course/create"),
             div(attr( "id -> addSeminarBtn"),
                 input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Add Seminar", "class -> btn btn-primary"))                                     )   
             );
@@ -77,6 +77,10 @@ public class SeminarList implements View {
     public Element[] getBody() {
         Element[] elements ={getHeader(),buildTable(), getButtons()};
         return elements;
+    }
+    
+    public Iterable<Seminar> getContent() {
+        return _seminars;
     }
 
 }

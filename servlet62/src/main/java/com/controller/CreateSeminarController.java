@@ -12,12 +12,13 @@ import com.model.Seminar;
 import com.view.Feedback;
 import com.view.FormView;
 import com.view.Layout;
+import com.view.View;
 
 public class CreateSeminarController implements Controller{
 
     @Override
     public boolean handles(String route) {
-        return Pattern.matches("^(/create|/)$", route);
+        return Pattern.matches("^(/course/create|/)$", route);
         
     }
 
@@ -25,30 +26,8 @@ public class CreateSeminarController implements Controller{
     public void execute(Context context) throws Exception {
         context.response().setContentType("text/html");
         context.response().setCharacterEncoding("UTF-8");
-        Feedback result = Feedback.DEFAULT;
         
-        Map<String,String> fields = new HashMap<String, String>(){
-            {
-                put(NAME, "text");
-                put(DESCRIPTION, "text");
-                put(LOCATION, "text");
-                put(TOTAL_SEATS, "number");
-                put(START, "date");
-            } 
-         };
-         
-         
-        if (context.post()) {
-           if (validate(context.requestMap())) {
-                new SeminarMapper(context.connection()).insert(new Seminar(context.requestMap()));
-                result = Feedback.SUCCESS;
-            } else {
-                result = Feedback.ERROR;
-            }
-        } 
-        
-        
-        context.response().getWriter().write(new Layout("Create Seminar", new FormView("/create", fields, result)).build().render());
+        context.response().getWriter().write(new Layout("Create Seminar", buildPage(context)).build().render());
 
         
         
@@ -66,6 +45,33 @@ public class CreateSeminarController implements Controller{
         }else {
             return false;
         }
+    }
+
+    
+    public View buildPage(Context context) {
+        Feedback result = Feedback.DEFAULT;
+        
+        Map<String,String> fields = new HashMap<String, String>(){
+            {
+                put(NAME, "text");
+                put(DESCRIPTION, "text");
+                put(LOCATION, "text");
+                put(TOTAL_SEATS, "number");
+                put(START, "date");
+            } 
+         };
+         
+         
+        if (context.post()) {
+           if (validate(context.requestMap())) {
+                new SeminarMapper(context.connection()).insert(new Seminar(context.requestMap()));
+                result = Feedback.SUCCESS;
+                return SeminarListController.buildPage(context);
+            } else {
+                result = Feedback.ERROR;
+            }
+        } 
+        return new FormView("/course/create", fields, result);
     }
 
 

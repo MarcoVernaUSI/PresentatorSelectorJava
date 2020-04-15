@@ -19,15 +19,7 @@ public class FormView implements View  {
        _fields = fields;
        _result = result;
     }
-    
-    @Override
-    public Element getHeader() {
-        return div(attr("class -> row"),
-            div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
-                h1("djxjx")
-              )
-         );
-    }
+  
    
     @Override
     public Element[] getBody() {
@@ -50,7 +42,7 @@ public class FormView implements View  {
     }
     
     private Element getButtons() {
-        return form(attr("id -> back", "name -> back", "action -> /"),
+        return form(attr("id -> back", "name -> back", "action -> /course"),
             div(attr( "id -> backBtn", "class-> col-sm-10"),
                 input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Back", "class -> btn btn-primary"))                                     )   
             );
