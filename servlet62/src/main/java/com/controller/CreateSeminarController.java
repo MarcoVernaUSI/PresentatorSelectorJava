@@ -2,13 +2,13 @@ package com.controller;
 
 import static com.model.Seminar.*;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.Context;
 import com.dbMapper.SeminarMapper;
 import com.model.Seminar;
+import com.model.SeminarValidation;
 import com.view.Feedback;
 import com.view.FormView;
 import com.view.Layout;
@@ -51,18 +51,12 @@ public class CreateSeminarController implements Controller{
     public View buildPage(Context context) {
         Feedback result = Feedback.DEFAULT;
         
-        Map<String,String> fields = new HashMap<String, String>(){
-            {
-                put(NAME, "text");
-                put(DESCRIPTION, "text");
-                put(LOCATION, "text");
-                put(TOTAL_SEATS, "number");
-                put(START, "date");
-            } 
-         };
-         
-         
+        Map<String,String> fields = Seminar.getFields();
+           
+        Map<String,String> errors = SeminarValidation.validate(context.requestMap());
+    
         if (context.post()) {
+            errors = SeminarValidation.validate(context.requestMap());
            if (validate(context.requestMap())) {
                 new SeminarMapper(context.connection()).insert(new Seminar(context.requestMap()));
                 result = Feedback.SUCCESS;
@@ -71,7 +65,7 @@ public class CreateSeminarController implements Controller{
                 result = Feedback.ERROR;
             }
         } 
-        return new FormView("/course/create", fields, result);
+        return new FormView("/course/create", fields, errors, result, context.requestMap());
     }
 
 

@@ -1,6 +1,7 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,19 +91,16 @@ public class Seminar {
     public void setDetails(Details details) {
         _details = details;
     }
-
-    public boolean valid() {
-        //return (!_location.equals("") 
-        //    && _totalSeats > 0 
-        //    && !_courseName.equals("") 
-        //    && !_description.equals("") 
-        //    && !_startDate.equals("")
-        //    );
-        return false;
-    }
     
-    
-  
+    public static Map<String,String> getFields(){
+        Map<String,String> fields = new HashMap<String, String>();
+        fields.put(NAME, "text");
+        fields.put(DESCRIPTION, "text");
+        fields.put(LOCATION, "text");
+        fields.put(TOTAL_SEATS, "number");
+        fields.put(START, "date");
+        return fields;
+    }    
 }
 
 
