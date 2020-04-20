@@ -14,7 +14,7 @@ import com.FakeDbConnection;
 import com.FakeHttpServletRequest;
 import com.FakeHttpServletResponse;
 import com.model.Seminar;
-import com.view.SeminarList;
+import com.view.SeminarListView;
 
 
 
@@ -59,7 +59,7 @@ public class SeminarListControllerTest {
 	    SeminarListController controller = new SeminarListController();
 	    Context context = new Context(request, response, new FakeDbConnection<Seminar>(data, DBop.FIND_ALL));
 	       
-	    SeminarList result = controller.buildPage(context);
+	    SeminarListView result = controller.buildPage(context);
 	    List<Seminar> seminars = new ArrayList<Seminar>();
         for (Seminar seminar : result.getContent()) {
             seminars.add(seminar);

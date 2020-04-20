@@ -9,7 +9,7 @@ import com.Context;
 import com.dbMapper.SeminarMapper;
 import com.model.Seminar;
 import com.view.Layout;
-import com.view.SeminarList;
+import com.view.SeminarListView;
 
 public class SeminarListController implements Controller{
     
@@ -27,14 +27,10 @@ public class SeminarListController implements Controller{
         context.response().getWriter().write(new Layout("Seminars",buildPage(context)).build().render());
     }
     
-    
-    public static SeminarList buildPage(Context context) {
+    public static SeminarListView buildPage(Context context) {
         Iterable<Seminar> seminars = new SeminarMapper(context.connection()).findAll();
         Iterable<String> header = asList(NAME, LOCATION, SEATS_LEFT, START, "csv", "html", "Delete");     
         
-        return  new SeminarList(seminars, header);
+        return  new SeminarListView(seminars, header);
     }
-    
-
-
 }

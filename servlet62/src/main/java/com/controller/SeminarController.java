@@ -33,13 +33,12 @@ public class SeminarController implements Controller{
         if (context.requestUri().contains("/csv/")) {
             DetailsCSV csv = new DetailsCSV(seminar);
             seminar.setDetails(csv);
-            
-            if (context.post()) {                
-                    csv.writeCsvToFile();
+            if (context.post()) {
+                csv.writeCsvToFile();
             }
         }
         if (context.requestUri().contains("/html/")) {
-        seminar.setDetails(new DetailsHTML(seminar));
+            seminar.setDetails(new DetailsHTML(seminar));
         }
         
         return new SeminarView(seminar);

@@ -7,12 +7,12 @@ import java.util.List;
 import com.github.manliogit.javatags.element.Element;
 import com.model.Seminar;
 
-public class SeminarList implements View {
+public class SeminarListView implements View {
     
     private final Iterable<Seminar> _seminars;
     private final Iterable<String> _header;
     
-    public SeminarList(Iterable<Seminar> seminars, Iterable<String> header) {
+    public SeminarListView(Iterable<Seminar> seminars, Iterable<String> header) {
         _seminars = seminars;
         _header = header;
     }

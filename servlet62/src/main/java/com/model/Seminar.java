@@ -32,8 +32,14 @@ public class Seminar {
         _totalSeats = totalSeats;
         _courseName = courseName;
         _description = courseDescription;
-        _startDate = startDate;
+        _startDate = formatDate(startDate);
         _enrollments = new ArrayList<Student>();
+    }
+    
+    private String formatDate(String date) {
+        date = date.replaceAll("\\D", ".");
+        String year = date.substring(0, date.length()-6);
+        return date.substring(date.length()-5)+"."+year;
     }
     
     public Seminar(Map<String, String> inputs){

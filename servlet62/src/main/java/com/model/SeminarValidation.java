@@ -8,7 +8,15 @@ import java.util.Map;
 
 public class SeminarValidation {
     
-    
+    public static boolean isValid(Map<String,String> map) {
+        boolean valid = true;
+        for (String value : validate(map).values()) {
+            if (value != null) {
+                valid = false;
+            }
+        }
+        return valid;
+    }
     
     public static Map<String,String> validate(Map<String,String> map){
         Map<String,String> errors = new HashMap<String, String>();
