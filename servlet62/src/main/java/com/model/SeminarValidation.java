@@ -2,7 +2,9 @@ package com.model;
 
 import static com.model.Seminar.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -10,49 +12,52 @@ public class SeminarValidation {
     
     public static boolean isValid(Map<String,String> map) {
         boolean valid = true;
-        for (String value : validate(map).values()) {
-            if (value != null) {
+        for (List<String> value : validate(map).values()) {
+            if (!value.isEmpty()) {
                 valid = false;
             }
         }
         return valid;
     }
     
-    public static Map<String,String> validate(Map<String,String> map){
-        Map<String,String> errors = new HashMap<String, String>();
+    public static Map<String,List<String>> validate(Map<String,String> map){
+        Map<String,List<String>> errors = new HashMap<String, List<String>>();
         
         for (String field : map.keySet()) {
             errors.put(field, validateField(field, map.get(field)));
         }
-        
         return errors;
     }
     
-    private static String validateField(String key, String value) {
+    private static List<String> validateField(String key, String value) {
+        List<String> errors = new ArrayList<String>();
         if (key.equals(NAME)) {
-            return mandatoryField(value);}
+            mandatoryField(value, errors);
+            maximumNumberOfChar(value, errors, 15);
+        }
         if (key.equals(LOCATION)) {
-            return mandatoryField(value);}
+            mandatoryField(value, errors);
+            maximumNumberOfChar(value, errors, 20);    
+        }
         if (key.equals(TOTAL_SEATS)) {
-            return positiveInteger(value);}
+            positiveInteger(value, errors, 100);}
         if (key.equals(START)) {
-            return mandatoryField(value);}
-        else {return null;}
-        
-        
+            mandatoryField(value, errors);}
+        return errors;
     }
     
-    private static String mandatoryField(String value){
+    private static void mandatoryField(String value, List<String> errors){
         if (value.equals("")) {
-            return "Campo obbligatorio";}
-        else {
-            return null;}    
+            errors.add("Campo obbligatorio");}
+    }
+    
+    private static void maximumNumberOfChar(String value, List<String> errors, int numberOfChar){
+        if (value.length()>numberOfChar) {
+            errors.add("Il campo non può superare i "+numberOfChar+" caratteri");}
     }
 
-    private static String positiveInteger(String value){ 
-        if (Integer.parseInt(value) <= 0) {
-            return "Il numero di posti deve essere maggiore di 0";}
-        else {
-            return null;}    
+    private static void positiveInteger(String value, List<String> errors, int maxSeats){ 
+        if (Integer.parseInt(value) <= 0 || Integer.parseInt(value) > maxSeats) {
+            errors.add("Il numero di posti deve essere compreso tra 0 e "+ maxSeats);}    
     }
 }

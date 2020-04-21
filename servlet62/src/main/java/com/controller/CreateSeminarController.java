@@ -1,5 +1,6 @@
 package com.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -28,7 +29,7 @@ public class CreateSeminarController implements Controller{
     
     public View buildPage(Context context) {
         Map<String,String> fields = Seminar.getFields();
-        Map<String,String> errors = SeminarValidation.validate(context.requestMap());
+        Map<String,List<String>> errors = SeminarValidation.validate(context.requestMap()); // questo posso toglierlo
     
         if (context.post()) {
             errors = SeminarValidation.validate(context.requestMap());

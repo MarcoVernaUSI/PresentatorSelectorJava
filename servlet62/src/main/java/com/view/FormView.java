@@ -12,10 +12,10 @@ import com.github.manliogit.javatags.element.Element;
 public class FormView implements View  {
     private final String _action;
     private final Map<String, String> _fields;
-    private final Map<String, String> _errors;
+    private final Map<String, List<String>> _errors;
     private final Context _context;
     
-    public FormView(String action, Map<String, String> fields, Map<String, String> errors, Context context) {
+    public FormView(String action, Map<String, String> fields, Map<String, List<String>> errors, Context context) {
         _action = action;
        _fields = fields;
        _errors = errors;
@@ -41,7 +41,7 @@ public class FormView implements View  {
     private Element getButtons() {
         return form(attr("id -> back", "name -> back", "action -> /course"),
             div(attr( "id -> backBtn", "class-> col-sm-10"),
-                input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Back", "class -> btn btn-primary"))                                     )   
+                input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Back", "class -> btn btn-primary")))   
             );
     }
     
@@ -60,7 +60,7 @@ public class FormView implements View  {
         }
     
     
-    private List<Element> getFields(Map<String, String> errors) {
+    private List<Element> getFields(Map<String, List<String>> errors) {
         List<Element> fields = new ArrayList<Element>();
         
       
@@ -75,11 +75,15 @@ public class FormView implements View  {
             } else {  
                 String validationStyle;
                 Element[] Divs;
-                if (errors.get(field.getKey())!= null) {
+                if (!errors.get(field.getKey()).isEmpty()) {
                     validationStyle = "has-error";
-                    Divs = new Element[2];
+                    
+                    Divs = new Element[errors.get(field.getKey()).size()+1];
                     Divs[0] = getField(field);
-                    Divs[1] = span(attr("class -> help-block"), errors.get(field.getKey()));    
+                    
+                    for (int i = 1; i<errors.get(field.getKey()).size()+1; i++) {
+                        Divs[i] = span(attr("class -> help-block"), errors.get(field.getKey()).get(i-1));    
+                    }
                     
                 } else {
                     validationStyle = "has-success";
@@ -99,10 +103,7 @@ public class FormView implements View  {
         return fields;
     }
     
-    
-    
-    
-    
+
     private Element[] buildForm() {
         List<Element> fields = getFields(_errors);
         
