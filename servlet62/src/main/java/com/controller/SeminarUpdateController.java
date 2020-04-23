@@ -12,7 +12,7 @@ import com.view.FormView;
 import com.view.Layout;
 import com.view.View;
 
-public class UpdateController implements Controller{
+public class SeminarUpdateController implements Controller{
 
     
     @Override

@@ -128,7 +128,7 @@ public class SeminarMapper implements DbMapper<Seminar>{
         }
     }
 
-
+    // qui dovrei cancellare anche tutte le connessioni in enrollement
     @Override
     public void delete(String id) {
         PreparedStatement ps;

@@ -21,9 +21,9 @@ public class UpdateControllerTest {
     
     @Test
     public void handlesRoute() throws Exception {
-        assertTrue(new UpdateController().handles("/course/1"));
-        assertTrue(new UpdateController().handles("/course/2"));
-        assertTrue(new UpdateController().handles("/course/9"));
+        assertTrue(new SeminarUpdateController().handles("/course/1"));
+        assertTrue(new SeminarUpdateController().handles("/course/2"));
+        assertTrue(new SeminarUpdateController().handles("/course/9"));
     }
 
     
@@ -36,7 +36,7 @@ public class UpdateControllerTest {
             add(new Seminar(1, "Lugano", 10, "Corso di esempio", "Esempio", "01/01/2020"));
         }};
         
-        UpdateController controller = new UpdateController();
+        SeminarUpdateController controller = new SeminarUpdateController();
         Context context = new Context(request, response, new FakeDbConnection<Seminar>(data, DBop.FIND_BY_ID, 1));
         
         controller.execute(context);

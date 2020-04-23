@@ -7,7 +7,7 @@ import com.dbMapper.SeminarMapper;
 import com.view.Layout;
 import com.view.View;
 
-public class DeleteController implements Controller{
+public class SeminarDeleteController implements Controller{
 
     
     @Override
@@ -25,8 +25,10 @@ public class DeleteController implements Controller{
 
     public View buildPage(Context context) {
         String seminarId = context.requestUri().replaceAll("\\D", "");
-        new SeminarMapper(context.connection()).delete(seminarId);
-       
+        if (new SeminarMapper(context.connection()).findById(seminarId).getStudentsList().size() == 0) {
+            new SeminarMapper(context.connection()).delete(seminarId);
+        }
+        
         return SeminarListController.buildPage(context);
     }
     

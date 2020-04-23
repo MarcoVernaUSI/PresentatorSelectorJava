@@ -7,11 +7,15 @@ import java.util.List;
 
 import com.controller.Controller;
 import com.controller.CreateSeminarController;
-import com.controller.DeleteController;
+import com.controller.CreateStudentController;
 import com.controller.NotFoundController;
 import com.controller.SeminarController;
+import com.controller.SeminarDeleteController;
 import com.controller.SeminarListController;
-import com.controller.UpdateController;
+import com.controller.SeminarUpdateController;
+import com.controller.StudentDeleteController;
+import com.controller.StudentUpdateController;
+import com.controller.StudentsListController;
 
 public class ControllerFactory {
 
@@ -20,8 +24,12 @@ public class ControllerFactory {
 		    new SeminarListController(),
 		    new SeminarController(),
 		    new CreateSeminarController(),
-		    new DeleteController(),
-		    new UpdateController(),
+		    new SeminarDeleteController(),
+		    new SeminarUpdateController(),
+		    new StudentsListController(),
+		    new CreateStudentController(),
+		    new StudentUpdateController(),
+		    new StudentDeleteController(),
 		    new NotFoundController()
 		    )
 		);

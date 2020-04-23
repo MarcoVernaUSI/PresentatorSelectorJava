@@ -147,6 +147,33 @@ public class StudentMapper implements DbMapper<Student>{
         }
     }
     
+    public boolean isEnrolled(String id) {
+        try {
+            PreparedStatement ps = _connection.prepareStatement("select * from Enrollement where studentId = ?");
+            ps.setObject(1, id);
+            ResultSet rs = ps.executeQuery();
+            
+            List<Integer> ids = new ArrayList<Integer>();
+            while(rs.next()) {
+                ids.add(rs.getInt(1));
+            }
+            ps.close();
+            rs.close();
+            
+            if (ids.size()>0) {
+                return true;
+            } else {
+                return false;
+            }
+            
+            
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        
+        
+    }
+    
     
     public Seminar addStudentsTo(Seminar seminar) {
         try {
