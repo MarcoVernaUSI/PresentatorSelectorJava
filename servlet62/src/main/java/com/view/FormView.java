@@ -14,14 +14,15 @@ public class FormView implements View  {
     private final Map<String, String> _fields;
     private final Map<String, List<String>> _errors;
     private final Context _context;
+    private final Map<String, String> _defaultFields; 
     
-    public FormView(String action, Map<String, String> fields, Map<String, List<String>> errors, Context context) {
+    public FormView(String action, Map<String, String> fields, Map<String, List<String>> errors, Context context, Map<String, String> defaultFields) {
         _action = action;
        _fields = fields;
        _errors = errors;
        _context = context;
+       _defaultFields =defaultFields;
     }
-  
    
     @Override
     public Element[] getBody() {
@@ -46,14 +47,28 @@ public class FormView implements View  {
   //  }
     
     
+    private String format(String date) {
+        date = date.replaceAll("\\D", "-");
+        String year = date.substring(date.length()-4);
+        return year+"-"+date.substring(0, date.length()-5);
+    }
+    
     private Element getField(Map.Entry<String, String> field) {
             Element input = input(attr("type -> "+field.getValue(), "class -> form-control", "id -> "+
                 field.getKey(), "name -> "+field.getKey(), "placeholder -> "+field.getKey(), "value -> "
-                    +(_context.requestMap().get(field.getKey())==null ? "" : _context.requestMap().get(field.getKey()))));
+                    +(_defaultFields.get(field.getKey())==null ? "" : _defaultFields.get(field.getKey()))));
             
             if (field.getValue()=="number") {
                 input =input(attr("type -> "+field.getValue(), "min -> 0", "class -> form-control", "id -> "+
-                    field.getKey(), "name -> "+field.getKey(), "value -> "+(_context.requestMap().get(field.getKey())==null ? 0 : _context.requestMap().get(field.getKey())))); 
+                    field.getKey(), "name -> "+field.getKey(), "value -> "+(_defaultFields.get(field.getKey())==null ? 0 : _defaultFields.get(field.getKey())))); 
+            }
+            
+            
+            if (field.getValue()=="date") {
+                input = input(attr("type -> "+field.getValue(), "class -> form-control", "id -> "+
+                    field.getKey(), "name -> "+field.getKey(), "placeholder -> "+field.getKey(), "value -> "
+                        +(_defaultFields.get(field.getKey())==null ? "" : format(_defaultFields.get(field.getKey())))));
+                    
             }
             return input;
             

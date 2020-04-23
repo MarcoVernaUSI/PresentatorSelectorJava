@@ -32,18 +32,22 @@ public class UpdateController implements Controller{
 
     public View buildPage(Context context) {
         String seminarId = context.requestUri().replaceAll("\\D", "");
-       // Seminar seminar = new SeminarMapper(context.connection()).findById(seminarId);
+        Map<String,String> defaultFields = new SeminarMapper(context.connection()).findById(seminarId).getFieldsValues();
         
         
         Map<String,String> fields = Seminar.getFields();
         Map<String,List<String>> errors = SeminarValidation.validate(context.requestMap());
     
-        if (context.post() && SeminarValidation.isValid(context.requestMap())) {
-            new SeminarMapper(context.connection()).update(
-                new Seminar(context.requestMap()));   
-                return SeminarListController.buildPage(context);
-                }        
+        if (context.post()) {
+            defaultFields = context.requestMap();
+            
+            if (SeminarValidation.isValid(context.requestMap())) {
+                new SeminarMapper(context.connection()).update(
+                    new Seminar(context.requestMap()), seminarId);   
+                    return SeminarListController.buildPage(context);
+                }
+        }
          
-        return new FormView("/course/"+seminarId, fields, errors, context);
+        return new FormView("/course/"+seminarId, fields, errors, context, defaultFields);
     }
 }

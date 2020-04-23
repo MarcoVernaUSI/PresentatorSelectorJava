@@ -9,5 +9,7 @@ public class CreateSeminarControllerTest {
     @Test
     public void handlesRoute() throws Exception {
         assertTrue(new CreateSeminarController().handles("/course/create"));
-    }  
+        assertTrue(new CreateSeminarController().handles("/course/1"));
+           
+}  
 }

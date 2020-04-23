@@ -21,8 +21,8 @@ public class ControllerFactory {
 		    new SeminarController(),
 		    new CreateSeminarController(),
 		    new DeleteController(),
-		    new NotFoundController(),
-		    new UpdateController()
+		    new UpdateController(),
+		    new NotFoundController()
 		    )
 		);
 	}

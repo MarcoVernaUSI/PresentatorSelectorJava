@@ -9,5 +9,5 @@ public interface DbMapper<T> {
     int insert(T entry);
     void delete(String id);
     List<T> read(ResultSet rs);
-    void update(T entry); 
+    void update(T entry, String id); 
 }

@@ -73,16 +73,16 @@ public class SeminarMapper implements DbMapper<Seminar>{
     }
     
     @Override 
-    public void update(Seminar seminar) {
+    public void update(Seminar seminar, String id) {
         PreparedStatement ps;
         try {
-            ps = _connection.prepareStatement("update "+TableName+" set name = ?, description = ?, location = ?, totalSeats = ?, start = ? where id = ?)"); 
+            ps = _connection.prepareStatement("update seminar set name = ?,description = ?,location = ?,totalSeats = ?,start = ? where id = ?"); 
             ps.setObject(1, seminar.getName());
             ps.setObject(2, seminar.getDescription());
             ps.setObject(3, seminar.getLocation());
             ps.setObject(4, seminar.getTotalSeats());
             ps.setObject(5, seminar.getStartDate());
-            ps.setObject(6, seminar.getId());
+            ps.setObject(6, id);
             ps.executeUpdate();
             ps.close();
             

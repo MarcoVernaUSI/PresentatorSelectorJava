@@ -17,6 +17,7 @@ public class CreateSeminarController implements Controller{
     @Override
     public boolean handles(String route) {
         return Pattern.matches("^(/course/create|/)$", route);
+     //   return Pattern.matches("^(/course/)(create|/)?[\\d]?$", route);
     }
 
     @Override
@@ -36,6 +37,6 @@ public class CreateSeminarController implements Controller{
                  new Seminar(context.requestMap()));   
              return SeminarListController.buildPage(context);        
             } 
-        return new FormView("/course/create", fields, errors, context);
+        return new FormView("/course/create", fields, errors, context, context.requestMap());
     }
 }

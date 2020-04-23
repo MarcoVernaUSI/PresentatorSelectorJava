@@ -32,11 +32,13 @@ public class Seminar {
         _totalSeats = totalSeats;
         _courseName = courseName;
         _description = courseDescription;
-        _startDate = formatDate(startDate);
+       // _startDate = formatDate(startDate);
+        _startDate = startDate;
+        
         _enrollments = new ArrayList<Student>();
     }
     
-    private String formatDate(String date) {
+    private String format(String date) {
         date = date.replaceAll("\\D", ".");
         String year = date.substring(0, date.length()-6);
         return date.substring(date.length()-5)+"."+year;
@@ -79,7 +81,7 @@ public class Seminar {
     }
 
     public String getStartDate() {
-        return _startDate;
+        return format(_startDate);
     }
 
     public int getId() {
@@ -106,7 +108,17 @@ public class Seminar {
         fields.put(TOTAL_SEATS, "number");
         fields.put(START, "date");
         return fields;
-    }    
+    }
+    
+    public Map<String,String> getFieldsValues(){
+        Map<String,String> fields = new HashMap<String, String>();
+        fields.put(NAME, getName());
+        fields.put(DESCRIPTION, getDescription());
+        fields.put(LOCATION, getLocation());
+        fields.put(TOTAL_SEATS, String.valueOf((getTotalSeats())));
+        fields.put(START, getStartDate());
+        return fields;
+    }   
 }
 
 

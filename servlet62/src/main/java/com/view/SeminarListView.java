@@ -20,7 +20,7 @@ public class SeminarListView implements View {
     private Element buildTable() {        
         return div(attr("class -> row"),
             div(attr("class -> col-lg-8 col-md-8 col-sm-9"),
-                table(attr("class -> table table-striped"), tableHeader(), TableBody())
+                table(attr("class -> table table-striped", "style -> width: 100%"), tableHeader(), TableBody())
             )
           );
     }

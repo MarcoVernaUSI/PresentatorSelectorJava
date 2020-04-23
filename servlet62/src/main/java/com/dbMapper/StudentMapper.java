@@ -72,13 +72,13 @@ public class StudentMapper implements DbMapper<Student>{
 
     
     @Override 
-    public void update(Student student) {
+    public void update(Student student, String id) {
         PreparedStatement ps;
         try {
-            ps = _connection.prepareStatement("update "+TableName+" set firstName = ?, lastName = ? where id = ?)"); 
+            ps = _connection.prepareStatement("update "+TableName+" set firstName = ?, lastName = ? where id = ?"); 
             ps.setObject(1, student.getName());
             ps.setObject(2, student.getSurname());
-            ps.setObject(3, student.getId());
+            ps.setObject(3, id);
             ps.executeUpdate();
             ps.close();
             
