@@ -8,8 +8,6 @@ import com.model.Seminar;
 public class SeminarView implements View  {
  private final Seminar _seminar;
     
-    
-
     public SeminarView(Seminar seminar) {
         _seminar = seminar;
     }

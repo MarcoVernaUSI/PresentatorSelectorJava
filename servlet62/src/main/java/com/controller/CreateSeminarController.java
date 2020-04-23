@@ -29,7 +29,7 @@ public class CreateSeminarController implements Controller{
     }
     
     public View buildPage(Context context) {
-        Map<String,String> fields = Seminar.getFields();
+        Map<String,String> fields = Seminar.getFieldsTypes();
         Map<String,List<String>> errors = SeminarValidation.validate(context.requestMap());
     
         if (context.post() && SeminarValidation.isValid(context.requestMap())) {

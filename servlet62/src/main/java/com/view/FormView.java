@@ -29,55 +29,24 @@ public class FormView implements View  {
         return new Element[]{
                 div(attr("class -> row"),
                     div(attr("class -> col-md-6 col-md-offset-3"),
-                //        h1(attr("class -> page-header text-center"), "Create new Seminar"),
                         form(attr("class -> form-horizontal", "name -> createForm","role -> form", "method -> post", "action -> "+_action),
                             buildForm()       
                                 )
                             )
-                 //   getButtons()
                     ),
         };
     }
     
-  //  private Element getButtons() {
-  //      return form(attr("id -> back", "name -> back", "action -> /course"),
-  //          div(attr( "id -> backBtn", "class-> col-sm-10"),
-  //              input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Back", "class -> btn btn-primary")))   
-  //          );
-  //  }
-    
-    
-    private String format(String date) {
-        date = date.replaceAll("\\D", "-");
-        String year = date.substring(date.length()-4);
-        return year+"-"+date.substring(0, date.length()-5);
-    }
     
     private Element getField(Map.Entry<String, String> field) {
-            Element input = input(attr("type -> "+field.getValue(), "class -> form-control", "id -> "+
-                field.getKey(), "name -> "+field.getKey(), "placeholder -> "+field.getKey(), "value -> "
-                    +(_defaultFields.get(field.getKey())==null ? "" : _defaultFields.get(field.getKey()))));
-            
-            if (field.getValue()=="number") {
-                input =input(attr("type -> "+field.getValue(), "min -> 0", "class -> form-control", "id -> "+
-                    field.getKey(), "name -> "+field.getKey(), "value -> "+(_defaultFields.get(field.getKey())==null ? 0 : _defaultFields.get(field.getKey())))); 
-            }
-            
-            
-            if (field.getValue()=="date") {
-                input = input(attr("type -> "+field.getValue(), "class -> form-control", "id -> "+
-                    field.getKey(), "name -> "+field.getKey(), "placeholder -> "+field.getKey(), "value -> "
-                        +(_defaultFields.get(field.getKey())==null ? "" : format(_defaultFields.get(field.getKey())))));
-                    
-            }
-            return input;
-            
+        return input(attr("type -> "+field.getValue(), "min -> 0","class -> form-control", "id -> "+
+            field.getKey(), "name -> "+field.getKey(), "placeholder -> "+field.getKey(), 
+            "value -> "+(_defaultFields.get(field.getKey())==null ? "" : _defaultFields.get(field.getKey()))));
         }
     
     
     private List<Element> getFields(Map<String, List<String>> errors) {
         List<Element> fields = new ArrayList<Element>();
-        
       
         for(Map.Entry<String, String> field : _fields.entrySet()) {
             if(!_context.post()) {

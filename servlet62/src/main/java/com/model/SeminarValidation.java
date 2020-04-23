@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class SeminarValidation {
+public abstract class SeminarValidation {
     
     public static boolean isValid(Map<String,String> map) {
         boolean valid = true;

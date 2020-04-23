@@ -35,7 +35,7 @@ public class UpdateController implements Controller{
         Map<String,String> defaultFields = new SeminarMapper(context.connection()).findById(seminarId).getFieldsValues();
         
         
-        Map<String,String> fields = Seminar.getFields();
+        Map<String,String> fields = Seminar.getFieldsTypes();
         Map<String,List<String>> errors = SeminarValidation.validate(context.requestMap());
     
         if (context.post()) {

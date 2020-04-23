@@ -32,21 +32,13 @@ public class Seminar {
         _totalSeats = totalSeats;
         _courseName = courseName;
         _description = courseDescription;
-       // _startDate = formatDate(startDate);
         _startDate = startDate;
         
         _enrollments = new ArrayList<Student>();
     }
     
-    private String format(String date) {
-        date = date.replaceAll("\\D", ".");
-        String year = date.substring(0, date.length()-6);
-        return date.substring(date.length()-5)+"."+year;
-    }
-    
     public Seminar(Map<String, String> inputs){
         this(
-            //Integer.parseInt(inputs.get(ID)),
             -1,
             inputs.get(LOCATION),
             Integer.parseInt(inputs.get(TOTAL_SEATS)),
@@ -81,7 +73,13 @@ public class Seminar {
     }
 
     public String getStartDate() {
-        return format(_startDate);
+        return _startDate;
+    }
+    
+    public String getFormattedDate() {
+        String date = _startDate.replaceAll("\\D", ".");
+        String year = date.substring(0, date.length()-6);
+        return date.substring(date.length()-5)+"."+year;
     }
 
     public int getId() {
@@ -100,7 +98,7 @@ public class Seminar {
         _details = details;
     }
     
-    public static Map<String,String> getFields(){
+    public static Map<String,String> getFieldsTypes(){
         Map<String,String> fields = new HashMap<String, String>();
         fields.put(NAME, "text");
         fields.put(DESCRIPTION, "text");

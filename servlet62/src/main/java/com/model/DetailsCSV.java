@@ -40,7 +40,7 @@ public class DetailsCSV implements Details{
     }
     
     private String newRow(Student student) {
-        return "\""+_seminar.getId()+"\";\""+_seminar.getName()+"\";\""+_seminar.getLocation()+"\";\""+_seminar.getStartDate()+"\";\""+_seminar.getTotalSeats()+"\";\""+_seminar.getDescription()+"\";\""+student.getId()+"\";\""+student.getName()+"\";\""+student.getSurname()+"\"";
+        return "\""+_seminar.getId()+"\";\""+_seminar.getName()+"\";\""+_seminar.getLocation()+"\";\""+_seminar.getFormattedDate()+"\";\""+_seminar.getTotalSeats()+"\";\""+_seminar.getDescription()+"\";\""+student.getId()+"\";\""+student.getName()+"\";\""+student.getSurname()+"\"";
     }
     
     private String header() {

@@ -47,37 +47,16 @@ public class SeminarListView implements View {
             th(a(attr("href -> /course/" + seminar.getId()),seminar.getName())),
             td(text(seminar.getLocation())),
             td(text((String.valueOf(seminar.getSeatLeft())))),
-            td(text(seminar.getStartDate())),
+            td(text(seminar.getFormattedDate())),
             td(a(attr("href -> /course/csv/" + seminar.getId()),"get")),
             td(a(attr("href -> /course/html/" + seminar.getId()),"get")),
             td(a(attr("href -> /course/delete/" + seminar.getId()),"delete"))
         );
     }
 
-    public Element getHeader() {
-        return div(attr("class -> row"),
-            div(attr("class -> col-lg-8 col-md-7 col-sm-6"),
-                h1("Seminar" ),
-                p(attr("class -> lead"),
-                  text("Select seminar")
-                )
-             )
-         );
-    }
-    
-  //  private Element getButtons() {
-  //      return form(attr("id -> addSeminar", "name -> addSeminar", "action -> /course/create"),
-  //          div(attr( "id -> addSeminarBtn"),
-  //              input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Add Seminar", "class -> btn btn-primary"))                                     )   
-  //          );
-  //  }
-
-
     @Override
     public Element[] getBody() {
         Element[] elements ={buildTable()};
-        //Element[] elements ={getHeader(),buildTable(), getButtons()};
-        
         return elements;
     }
     

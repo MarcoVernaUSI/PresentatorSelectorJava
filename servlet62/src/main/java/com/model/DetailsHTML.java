@@ -28,7 +28,7 @@ public class DetailsHTML implements Details{
         List<Element> rows = new ArrayList<Element>();
         rows.add(buildRow("Nome",_seminar.getName()));
         rows.add(buildRow("Luogo",_seminar.getLocation()));
-        rows.add(buildRow("Data",_seminar.getStartDate()));
+        rows.add(buildRow("Data",_seminar.getFormattedDate()));
         rows.add(buildRow("Posti totali",String.valueOf(_seminar.getSeatLeft())));
         return tbody(rows);
     }
