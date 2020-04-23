@@ -28,22 +28,22 @@ public class FormView implements View  {
         return new Element[]{
                 div(attr("class -> row"),
                     div(attr("class -> col-md-6 col-md-offset-3"),
-                        h1(attr("class -> page-header text-center"), "Create new Seminar"),
+                //        h1(attr("class -> page-header text-center"), "Create new Seminar"),
                         form(attr("class -> form-horizontal", "name -> createForm","role -> form", "method -> post", "action -> "+_action),
                             buildForm()       
                                 )
-                            ),
-                    getButtons()
+                            )
+                 //   getButtons()
                     ),
         };
     }
     
-    private Element getButtons() {
-        return form(attr("id -> back", "name -> back", "action -> /course"),
-            div(attr( "id -> backBtn", "class-> col-sm-10"),
-                input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Back", "class -> btn btn-primary")))   
-            );
-    }
+  //  private Element getButtons() {
+  //      return form(attr("id -> back", "name -> back", "action -> /course"),
+  //          div(attr( "id -> backBtn", "class-> col-sm-10"),
+  //              input(attr("id -> btn", "name -> submit", "type -> submit",  "value -> Back", "class -> btn btn-primary")))   
+  //          );
+  //  }
     
     
     private Element getField(Map.Entry<String, String> field) {

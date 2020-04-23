@@ -12,11 +12,12 @@ import com.view.FormView;
 import com.view.Layout;
 import com.view.View;
 
-public class CreateSeminarController implements Controller{
+public class UpdateController implements Controller{
 
+    
     @Override
     public boolean handles(String route) {
-        return Pattern.matches("^(/course/create|/)$", route);
+        return Pattern.matches("^(/course/)[\\d]+$", route);
     }
 
     @Override
@@ -24,18 +25,25 @@ public class CreateSeminarController implements Controller{
         context.response().setContentType("text/html");
         context.response().setCharacterEncoding("UTF-8");
 
-        context.response().getWriter().write(new Layout("Create Seminar", buildPage(context)).build().render());
+        
+        context.response().getWriter().write(
+            new Layout("Seminar", buildPage(context)).build().render());
     }
-    
+
     public View buildPage(Context context) {
+        String seminarId = context.requestUri().replaceAll("\\D", "");
+       // Seminar seminar = new SeminarMapper(context.connection()).findById(seminarId);
+        
+        
         Map<String,String> fields = Seminar.getFields();
         Map<String,List<String>> errors = SeminarValidation.validate(context.requestMap());
     
         if (context.post() && SeminarValidation.isValid(context.requestMap())) {
-             new SeminarMapper(context.connection()).insert(
-                 new Seminar(context.requestMap()));   
-             return SeminarListController.buildPage(context);        
-            } 
-        return new FormView("/course/create", fields, errors, context);
+            new SeminarMapper(context.connection()).update(
+                new Seminar(context.requestMap()));   
+                return SeminarListController.buildPage(context);
+                }        
+         
+        return new FormView("/course/"+seminarId, fields, errors, context);
     }
 }

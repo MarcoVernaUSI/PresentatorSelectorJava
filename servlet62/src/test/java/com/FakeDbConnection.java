@@ -24,10 +24,19 @@ public class FakeDbConnection<T> implements Connection{
     
     private final List<T> _data;
     private final DBop _operation;
+    private final int _dbIndex;
     
     public FakeDbConnection(List<T> data, DBop operation) {
         _data = data;
         _operation = operation;
+        _dbIndex = 0;
+    }
+
+    
+    public FakeDbConnection(List<T> data, DBop operation, int dbIndex) {
+        _data = data;
+        _operation = operation;
+        _dbIndex = dbIndex;
     }
     
     private FakeResultSet<T> queryResult() {
@@ -36,7 +45,7 @@ public class FakeDbConnection<T> implements Connection{
         case FIND_ALL:
             return  new FakeResultSet<T>(_data);
         case FIND_BY_ID:
-            return new FakeResultSet<T>(_data);
+            return new FakeResultSet<T>(_data.subList(_dbIndex-1, _dbIndex));
         case INSERT:
             return new FakeResultSet<T>(_data);
         case DELETE:

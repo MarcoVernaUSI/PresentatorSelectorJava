@@ -71,6 +71,26 @@ public class SeminarMapper implements DbMapper<Seminar>{
         }
         return entries;
     }
+    
+    @Override 
+    public void update(Seminar seminar) {
+        PreparedStatement ps;
+        try {
+            ps = _connection.prepareStatement("update "+TableName+" set name = ?, description = ?, location = ?, totalSeats = ?, start = ? where id = ?)"); 
+            ps.setObject(1, seminar.getName());
+            ps.setObject(2, seminar.getDescription());
+            ps.setObject(3, seminar.getLocation());
+            ps.setObject(4, seminar.getTotalSeats());
+            ps.setObject(5, seminar.getStartDate());
+            ps.setObject(6, seminar.getId());
+            ps.executeUpdate();
+            ps.close();
+            
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @Override
     public int insert(Seminar seminar) {

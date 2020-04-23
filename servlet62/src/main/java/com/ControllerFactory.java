@@ -11,6 +11,7 @@ import com.controller.DeleteController;
 import com.controller.NotFoundController;
 import com.controller.SeminarController;
 import com.controller.SeminarListController;
+import com.controller.UpdateController;
 
 public class ControllerFactory {
 
@@ -20,7 +21,8 @@ public class ControllerFactory {
 		    new SeminarController(),
 		    new CreateSeminarController(),
 		    new DeleteController(),
-		    new NotFoundController()
+		    new NotFoundController(),
+		    new UpdateController()
 		    )
 		);
 	}

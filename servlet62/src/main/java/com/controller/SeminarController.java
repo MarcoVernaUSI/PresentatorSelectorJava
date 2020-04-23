@@ -23,7 +23,8 @@ public class SeminarController implements Controller{
         context.response().setContentType("text/html");
         context.response().setCharacterEncoding("UTF-8");
         
-        context.response().getWriter().write(new Layout("Seminar details", buildPage(context)).build().render());
+        context.response().getWriter().write(
+            new Layout("Seminar details", buildPage(context)).build().render());
     }
 
     public SeminarView buildPage(Context context) {

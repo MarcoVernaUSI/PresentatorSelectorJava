@@ -42,8 +42,8 @@ public class SeminarListControllerTest {
         
         controller.execute(context);
 
-        assertThat(response.message(), containsString("form"));
-
+        assertThat(response.message(), containsString("Corso di esempio"));
+        assertThat(response.message(), containsString("Corso di esempio 2"));    
 	}
 	
 	@Test
