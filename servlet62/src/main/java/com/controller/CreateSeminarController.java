@@ -13,10 +13,12 @@ import com.view.Layout;
 import com.view.View;
 
 public class CreateSeminarController implements Controller{
+    String _route;
 
     @Override
     public boolean handles(String route) {
         return Pattern.matches("^(/course/create|/)$", route);
+        
      //   return Pattern.matches("^(/course/)(create|/)?[\\d]?$", route);
     }
 
@@ -30,9 +32,9 @@ public class CreateSeminarController implements Controller{
     
     public View buildPage(Context context) {
         Map<String,String> fields = Seminar.getFieldsTypes();
-        Map<String,List<String>> errors = SeminarValidation.validate(context.requestMap());
+        Map<String,List<String>> errors = new SeminarValidation().validate(context.requestMap());
     
-        if (context.post() && SeminarValidation.isValid(context.requestMap())) {
+        if (context.post() && new SeminarValidation().isValid(context.requestMap())) {
              new SeminarMapper(context.connection()).insert(
                  new Seminar(context.requestMap()));   
              return SeminarListController.buildPage(context);        

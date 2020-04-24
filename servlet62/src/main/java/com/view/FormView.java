@@ -41,7 +41,8 @@ public class FormView implements View  {
     private Element getField(Map.Entry<String, String> field) {
         return input(attr("type -> "+field.getValue(), "min -> 0","class -> form-control", "id -> "+
             field.getKey(), "name -> "+field.getKey(), "placeholder -> "+field.getKey(), 
-            "value -> "+(_defaultFields.get(field.getKey())==null ? "" : _defaultFields.get(field.getKey()))));
+            "value -> "+(_defaultFields.get(field.getKey())==null ? (field.getValue() == "number" ? 0 : "") 
+                : _defaultFields.get(field.getKey()))));
         }
     
     

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.github.manliogit.javatags.element.Element;
 
-public class Seminar {
+public class Seminar{
     
     public static final String ID = "id";
     public static final String NAME = "name";
@@ -116,7 +116,7 @@ public class Seminar {
         fields.put(TOTAL_SEATS, String.valueOf((getTotalSeats())));
         fields.put(START, getStartDate());
         return fields;
-    }   
+    }
 }
 
 

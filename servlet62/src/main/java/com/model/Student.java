@@ -3,7 +3,7 @@ package com.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Student {
+public class Student{
     public static final String ID = "id";
     public static final String FIRSTNAME = "firstName";
     public static final String LASTNAME = "lastName";
@@ -51,5 +51,5 @@ public class Student {
         fields.put(FIRSTNAME, getName());
         fields.put(LASTNAME, getSurname());
         return fields;
-    }  
+    }
 }

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import com.Context;
 import com.dbMapper.SeminarMapper;
 import com.model.Seminar;
-import com.model.SeminarValidation;
+import com.model.Validation;
 import com.view.FormView;
 import com.view.Layout;
 import com.view.View;
@@ -36,12 +36,12 @@ public class SeminarUpdateController implements Controller{
         
         
         Map<String,String> fields = Seminar.getFieldsTypes();
-        Map<String,List<String>> errors = SeminarValidation.validate(context.requestMap());
+        Map<String,List<String>> errors = Validation.validate(context.requestMap());
     
         if (context.post()) {
             defaultFields = context.requestMap();
             
-            if (SeminarValidation.isValid(context.requestMap())) {
+            if (Validation.isValid(context.requestMap())) {
                 new SeminarMapper(context.connection()).update(
                     new Seminar(context.requestMap()), seminarId);   
                     return SeminarListController.buildPage(context);
