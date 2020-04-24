@@ -25,9 +25,9 @@ public class SeminarDeleteController implements Controller{
 
     public View buildPage(Context context) {
         String seminarId = context.requestUri().replaceAll("\\D", "");
-        if (new SeminarMapper(context.connection()).findById(seminarId).getStudentsList().size() == 0) {
+     //   if (new SeminarMapper(context.connection()).findById(seminarId).getStudentsList().size() == 0) {
             new SeminarMapper(context.connection()).delete(seminarId);
-        }
+     //   }
         
         return SeminarListController.buildPage(context);
     }

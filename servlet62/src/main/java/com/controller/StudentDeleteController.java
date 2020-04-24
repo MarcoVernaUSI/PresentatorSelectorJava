@@ -25,9 +25,9 @@ public class StudentDeleteController implements Controller{
 
     public View buildPage(Context context) {
         String studentId = context.requestUri().replaceAll("\\D", "");
-        if (!(new StudentMapper(context.connection()).isEnrolled(studentId))) {
+     //   if (!(new StudentMapper(context.connection()).isEnrolled(studentId))) {
             new StudentMapper(context.connection()).delete(studentId);
-        }
+     //   }
         
         return StudentsListController.buildPage(context);
     }

@@ -138,6 +138,11 @@ public class SeminarMapper implements DbMapper<Seminar>{
             ps.executeUpdate();
             ps.close();
             
+            ps = _connection.prepareStatement("delete from Enrollement where seminarId = ?");
+            ps.setObject(1, id);
+            ps.executeUpdate();
+            ps.close();
+            
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
