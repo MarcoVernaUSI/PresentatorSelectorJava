@@ -1,6 +1,5 @@
 package com.controller;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -8,6 +7,7 @@ import java.util.regex.Pattern;
 import com.Context;
 import com.dbMapper.StudentMapper;
 import com.model.Student;
+import com.model.StudentValidation;
 import com.view.FormView;
 import com.view.Layout;
 import com.view.View;
@@ -29,12 +29,14 @@ public class CreateStudentController implements Controller{
     
     public View buildPage(Context context) {
         Map<String,String> fields = Student.getFieldsTypes();
+        Map<String,List<String>> errors = new StudentValidation().validate(context.requestMap());
         
-        if (context.post()) {
+        
+        if (context.post() && new StudentValidation().isValid(context.requestMap())) {
              new StudentMapper(context.connection()).insert(
                  new Student(context.requestMap()));   
              return StudentsListController.buildPage(context);        
             } 
-        return new FormView("/student/create", fields, Collections.<String, List<String>>emptyMap(), context, context.requestMap());
+        return new FormView("/student/create", fields, errors, context, context.requestMap());
     }
 }
