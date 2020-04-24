@@ -1,5 +1,7 @@
 package com.model;
 
+import static java.util.Arrays.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,6 +118,10 @@ public class Seminar{
         fields.put(TOTAL_SEATS, String.valueOf((getTotalSeats())));
         fields.put(START, getStartDate());
         return fields;
+    }
+    
+    public static Iterable<String> getFieldList(){
+        return asList(NAME, LOCATION, SEATS_LEFT, START);
     }
 }
 

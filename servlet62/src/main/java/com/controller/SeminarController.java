@@ -15,7 +15,6 @@ public class SeminarController implements Controller{
     
     @Override
     public boolean handles(String route) {
-    //    return Pattern.matches("^(/course/)(html/)?(csv/)?[\\d]+$", route);
         return Pattern.matches("^(/course/)(html/|csv/)[\\d]+$", route);
         
     }

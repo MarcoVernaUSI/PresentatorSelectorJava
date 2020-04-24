@@ -1,6 +1,9 @@
 package com.model;
 
+import static java.util.Arrays.*;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Student{
@@ -52,4 +55,8 @@ public class Student{
         fields.put(LASTNAME, getSurname());
         return fields;
     }
+    
+    public static List<String> getFieldList(){
+        return asList(FIRSTNAME, LASTNAME);     
+    }  
 }
