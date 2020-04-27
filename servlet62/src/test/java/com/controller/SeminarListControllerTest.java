@@ -26,7 +26,7 @@ public class SeminarListControllerTest {
 
 	@Test
 	public void handlesRoute() throws Exception {
-		assertTrue(new ListController<Seminar>(new SeminarEntity()).handles(ROUTE_SEMINAR_LIST));
+		assertTrue(new ListController(new SeminarEntity()).handles(ROUTE_SEMINAR_LIST));
 	}
 	
 	@Test
@@ -38,7 +38,7 @@ public class SeminarListControllerTest {
             add(new Seminar(2, "Mendrisio", 5, "Corso di esempio 2", "Esempio 2", "01/02/2020"));
         }};
         
-        ListController<Seminar> controller = new ListController<Seminar>(new SeminarEntity());
+        ListController controller = new ListController(new SeminarEntity());
         Context context = new Context(request, response, new FakeDbConnection<Seminar>(data, DBop.FIND_ALL));
         
         controller.execute(context);
@@ -57,7 +57,7 @@ public class SeminarListControllerTest {
 	        add(new Seminar(2, "Mendrisio", 5, "Corso di esempio 2", "Esempio 2", "01/02/2020"));
 	    }};
 	    
-	    ListController<Seminar> controller = new ListController<Seminar>(new SeminarEntity());
+	    ListController controller = new ListController(new SeminarEntity());
         Context context = new Context(request, response, new FakeDbConnection<Seminar>(data, DBop.FIND_ALL));
 	       
 	    SeminarListView result = (SeminarListView) controller.buildPage(context);
