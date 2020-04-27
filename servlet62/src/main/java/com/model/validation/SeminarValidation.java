@@ -1,4 +1,4 @@
-package com.model;
+package com.model.validation;
 
 import static com.model.Seminar.*;
 

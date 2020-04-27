@@ -13,8 +13,8 @@ import com.DBop;
 import com.FakeDbConnection;
 import com.FakeHttpServletRequest;
 import com.FakeHttpServletResponse;
+import com.controller.entities.SeminarEntity;
 import com.model.Seminar;
-import com.model.SeminarEntity;
 import com.view.SeminarListView;
 
 

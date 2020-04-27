@@ -3,22 +3,22 @@ package com.controller;
 import java.util.regex.Pattern;
 
 import com.Context;
-import com.model.Entity;
+import com.controller.entities.Entity;
 import com.view.Layout;
 import com.view.View;
 
-public class ListController<T> implements Controller{
+public class ListController implements Controller{
     
     
-    Entity<T> _entity;
+    Entity _entity;
      
-    public ListController(Entity<T> entity) {
+    public ListController(Entity entity) {
         _entity = entity;
     }
 
     @Override
     public boolean handles(String route) {
-        return Pattern.matches("^(/"+_entity.getRouteRoot()+"|/)$", route);
+        return Pattern.matches("^(/"+_entity.getRoute()+"|/)$", route);
     }
 
     @Override
@@ -30,9 +30,6 @@ public class ListController<T> implements Controller{
     }
     
     public View buildPage(Context context) {
-        Iterable<T> seminars = _entity.getMapper(context).findAll();
-        Iterable<String> header = _entity.getFieldList();   
-        
-        return  _entity.getListView(seminars, header);
+        return  _entity.getListView(context);
     }
 }

@@ -1,26 +1,23 @@
 package com.controller;
 
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.Context;
-import com.model.Entity;
-import com.view.FormView;
+import com.controller.entities.Entity;
 import com.view.Layout;
 import com.view.View;
 
-public class CreateController<T> implements Controller{
+public class CreateController implements Controller{
     
-    Entity<T> _entity;
+    Entity _entity;
     
-    public CreateController(Entity<T> entity) {
+    public CreateController(Entity entity) {
         _entity = entity;
     }
 
     @Override
     public boolean handles(String route) {
-        return Pattern.matches("^(/"+_entity.getRouteRoot()+"/create|/)$", route);
+        return Pattern.matches("^(/"+_entity.getRoute()+"/create|/)$", route);
      }
 
     @Override
@@ -32,14 +29,13 @@ public class CreateController<T> implements Controller{
     }
     
     public View buildPage(Context context) {
-        Map<String,String> fields = _entity.getFieldsTypes();
-        Map<String,List<String>> errors = _entity.validate(context.requestMap());
-    
-        if (context.post() && _entity.isValid(context.requestMap())) {
-             _entity.getMapper(context).insert(
-                 _entity.build(context.requestMap()));   
-             return _entity.getListView(context);        
-            } 
-        return new FormView(context.requestUri(), fields, errors, context, context.requestMap());
+        
+        if (context.post()) {
+            if(_entity.isValid(context)) {
+             _entity.create(context);   
+             return _entity.getListView(context);
+            }}
+        
+        return _entity.getFormView(context);
     }
 }

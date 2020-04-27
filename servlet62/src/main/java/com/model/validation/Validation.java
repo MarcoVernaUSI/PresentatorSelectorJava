@@ -1,4 +1,4 @@
-package com.model;
+package com.model.validation;
 
 import java.util.HashMap;
 import java.util.List;

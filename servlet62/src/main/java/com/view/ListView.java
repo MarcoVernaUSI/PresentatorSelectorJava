@@ -9,11 +9,9 @@ import com.github.manliogit.javatags.element.Element;
 public abstract class ListView<T> implements View {
     
     private final Iterable<T> _entries;
-    private final Iterable<String> _header;
     
-    public ListView(Iterable<T> seminars, Iterable<String> header) {
+    public ListView(Iterable<T> seminars) {
         _entries = seminars;
-        _header = header;
     }
 
     private Element buildTable() {        
@@ -27,7 +25,7 @@ public abstract class ListView<T> implements View {
     
     private Element tableHeader() {
         List<Element> list = new ArrayList<Element>();
-        for (String component : _header) {
+        for (String component : getTableHeader()) {
             list.add(th(text(component)));
         }
         return thead(tr(group(list)));
@@ -42,7 +40,9 @@ public abstract class ListView<T> implements View {
     }
     
 
-    public abstract Element buildRow(T entry);
+    protected abstract Element buildRow(T entry);
+    
+    protected abstract Iterable<String> getTableHeader();
 
     @Override
     public Element[] getBody() {

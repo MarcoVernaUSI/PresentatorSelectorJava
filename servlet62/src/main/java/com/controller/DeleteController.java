@@ -3,21 +3,21 @@ package com.controller;
 import java.util.regex.Pattern;
 
 import com.Context;
-import com.model.Entity;
+import com.controller.entities.Entity;
 import com.view.Layout;
 import com.view.View;
 
-public class DeleteController<T> implements Controller{
+public class DeleteController implements Controller{
 
-    Entity<T> _entity;
+    Entity _entity;
     
-    public DeleteController(Entity<T> entity) {
+    public DeleteController(Entity entity) {
         _entity = entity;
     }
     
     @Override
     public boolean handles(String route) {
-        return Pattern.matches("^(/"+ _entity.getRouteRoot() +"/delete/)[\\d]+$", route);
+        return Pattern.matches("^(/"+ _entity.getRoute() +"/delete/)[\\d]+$", route);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class DeleteController<T> implements Controller{
 
     public View buildPage(Context context) {
         String id = context.requestUri().replaceAll("\\D", "");
-        _entity.getMapper(context).delete(id);
+        _entity.delete(context, id);
         
         return _entity.getListView(context);
     }

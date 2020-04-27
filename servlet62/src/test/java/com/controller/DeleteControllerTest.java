@@ -4,10 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.controller.entities.SeminarEntity;
+import com.controller.entities.StudentEntity;
 import com.model.Seminar;
-import com.model.SeminarEntity;
 import com.model.Student;
-import com.model.StudentEntity;
 
 public class DeleteControllerTest {
     @Test
