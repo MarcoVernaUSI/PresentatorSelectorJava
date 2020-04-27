@@ -1,24 +1,51 @@
 package com.controller.entities;
 
+import java.sql.Connection;
 import java.util.Map;
 
 import com.Context;
+import com.dbMapper.DbMapper;
+import com.model.validation.Validation;
 import com.view.View;
 
-
-// tolgo passaggio di context ovunque
-public interface Entity {
+public abstract class Entity {
     
-    String getRoute();
+    String _route;
+    Class<DbMapper> _dbMapperClass;
+    Validation _validation;
     
-    boolean isValid(Context context);
-    void create(Context context);
-    void update(Context context, String id);
-    void delete(Context context, String id);
+    public Entity(String route, Class dbMapper, Validation validation) {
+        _route = route;
+        _dbMapperClass = dbMapper;
+        _validation = validation;
+   }
     
-    View getListView(Context context);
-    View getFormView(Context context);
-    View getFormView(Context context, Map<String,String> defaultFields);
     
-    Map<String,String> getFieldsValues(Context context, String id);
+    public String getRoute() {
+        return _route;
+    };
+    
+    public boolean isValid(Map<String,String> contextMap) {
+        return _validation.isValid(contextMap);
+    }
+    
+    public DbMapper getDbMapper(Context context) {
+        try {
+            return _dbMapperClass.getConstructor(Connection.class).newInstance(context.connection());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }        
+    }
+    
+    public abstract Map<String,String> getValues(Context context, String id);
+    
+    
+    public abstract View getListView(Context context);
+    
+    
+    public abstract View getFormView(Context context);
+    
+    
+    public abstract View getFormView(Context context, Map<String,String> defaultFields);
+    
 }

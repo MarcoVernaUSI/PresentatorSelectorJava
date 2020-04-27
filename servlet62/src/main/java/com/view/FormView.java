@@ -9,25 +9,24 @@ import java.util.Map;
 import com.Context;
 import com.github.manliogit.javatags.element.Element;
 
-public class FormView implements View  {
+public abstract class FormView implements View  {
     private final String _action;
-    private final Map<String, String> _fields;
-    private final Map<String, List<String>> _errors;
     private final Context _context;
     private final Map<String, String> _defaultFields; 
     
-    public FormView(String action, Map<String, String> fields, Map<String, List<String>> errors, Context context, Map<String, String> defaultFields) {
+   
+    
+    public FormView(String action, Context context, Map<String, String> defaultFields) {
         _action = action;
-       _fields = fields;
-       _errors = errors;
        _context = context;
        _defaultFields =defaultFields;
     }
+    
    
     @Override
     public Element[] getBody() {
         return new Element[]{
-                div(attr("class -> row"),
+                div(attr("clfields;ass -> row"),
                     div(attr("class -> col-md-6 col-md-offset-3"),
                         form(attr("class -> form-horizontal", "name -> createForm","role -> form", "method -> post", "action -> "+_action),
                             buildForm()       
@@ -49,7 +48,7 @@ public class FormView implements View  {
     private List<Element> getFields(Map<String, List<String>> errors) {
         List<Element> fields = new ArrayList<Element>();
       
-        for(Map.Entry<String, String> field : _fields.entrySet()) {
+        for(Map.Entry<String, String> field : getFields().entrySet()) {
             if(!_context.post()) {
                 fields.add(div(attr("class -> form-group"),
                 label(attr("for -> "+field.getKey(), "class -> col-sm-2 control-label"), field.getKey()),
@@ -90,7 +89,7 @@ public class FormView implements View  {
     
 
     private Element[] buildForm() {
-        List<Element> fields = getFields(_errors);
+        List<Element> fields = getFields(getErrors());
         
         fields.add(
         div(attr("class -> form-group"),
@@ -107,4 +106,7 @@ public class FormView implements View  {
         
     }
 
+    protected abstract Map<String, String> getFields();
+    
+    protected abstract Map<String, List<String>> getErrors();
 }

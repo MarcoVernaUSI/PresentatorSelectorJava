@@ -30,7 +30,7 @@ public class DeleteController implements Controller{
 
     public View buildPage(Context context) {
         String id = context.requestUri().replaceAll("\\D", "");
-        _entity.delete(context, id);
+        _entity.getDbMapper(context).delete(id);
         
         return _entity.getListView(context);
     }

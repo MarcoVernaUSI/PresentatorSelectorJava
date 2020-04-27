@@ -34,12 +34,13 @@ public class UpdateController implements Controller{
 
     public View buildPage(Context context) {
         String id = context.requestUri().replaceAll("\\D", "");
-        Map<String,String> defaultFields = _entity.getFieldsValues(context, id);
+        Map<String,String> defaultFields = _entity.getValues(context, id);
+        
         
         if (context.post()) {
             defaultFields = context.requestMap();
-            if (_entity.isValid(context)) {
-                _entity.update(context, id);                
+            if (_entity.isValid(context.requestMap())) {
+                _entity.getDbMapper(context).update(context.requestMap(), id);                
                 return _entity.getListView(context);
             }
         } 

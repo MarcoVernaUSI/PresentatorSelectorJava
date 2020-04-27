@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.FakeResultSet;
 import com.model.Seminar;
@@ -72,7 +73,8 @@ public class StudentMapper implements DbMapper<Student>{
 
     
     @Override 
-    public void update(Student student, String id) {
+    public void update(Map<String, String> entry, String id) {
+        Student student = new Student(entry);
         PreparedStatement ps;
         try {
             ps = _connection.prepareStatement("update "+TableName+" set firstName = ?, lastName = ? where id = ?"); 
@@ -89,7 +91,8 @@ public class StudentMapper implements DbMapper<Student>{
     }
     
     @Override
-    public int insert(Student student) {
+    public int insert(Map<String, String> entry) {
+        Student student = new Student(entry);
         try {
             PreparedStatement ps;
             ps = _connection.prepareStatement("insert into "+TableName+" (firstName, lastName ) values (?,?)", Statement.RETURN_GENERATED_KEYS);

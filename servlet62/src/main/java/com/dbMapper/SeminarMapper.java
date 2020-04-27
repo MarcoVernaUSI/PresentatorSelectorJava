@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.FakeResultSet;
 import com.model.Seminar;
-import com.model.Student;
 
 
 public class SeminarMapper implements DbMapper<Seminar>{
@@ -73,7 +73,8 @@ public class SeminarMapper implements DbMapper<Seminar>{
     }
     
     @Override 
-    public void update(Seminar seminar, String id) {
+    public void update(Map<String, String> entry, String id) {
+        Seminar seminar= new Seminar(entry);
         PreparedStatement ps;
         try {
             ps = _connection.prepareStatement("update seminar set name = ?,description = ?,location = ?,totalSeats = ?,start = ? where id = ?"); 
@@ -93,7 +94,8 @@ public class SeminarMapper implements DbMapper<Seminar>{
     }
 
     @Override
-    public int insert(Seminar seminar) {
+    public int insert(Map<String, String> entry) {
+        Seminar seminar= new Seminar(entry);
         PreparedStatement ps;
         try {
             ps = _connection.prepareStatement("insert into "+TableName+" (name, description, location, totalSeats, start) values (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS); 
@@ -108,19 +110,21 @@ public class SeminarMapper implements DbMapper<Seminar>{
 
             ps.close();
             
-            for (Student student : seminar.getStudentsList()) {
-                int studentId = new StudentMapper(_connection).getStudentId(student);
+            // Commentato perchè all'aggiunta di un nuovo corso non vi sono mai studenti già iscritti, Ma può servire dopo per agiungere le iscrizioni
+            
+            //for (Student student : seminar.getStudentsList()) {
+            //    int studentId = new StudentMapper(_connection).getStudentId(student);
                 
-                if (studentId == -1){
-                    studentId =new StudentMapper(_connection).insert(student);        
-                }
+            //    if (studentId == -1){
+            //        studentId =new StudentMapper(_connection).insert(student);        
+            //    }
                 
-                PreparedStatement  ps2 = _connection.prepareStatement("insert into Enrollement (studentId, seminarId ) values (?,?)");
-                ps2.setObject(1, studentId);
-                ps2.setObject(2, seminarId);
-                ps2.executeUpdate();
-                ps2.close();    
-            }
+            //    PreparedStatement  ps2 = _connection.prepareStatement("insert into Enrollement (studentId, seminarId ) values (?,?)");
+            //    ps2.setObject(1, studentId);
+            //    ps2.setObject(2, seminarId);
+            //    ps2.executeUpdate();
+            //    ps2.close();    
+            //}
             return seminarId;
             
         } catch (SQLException e) {
@@ -128,7 +132,6 @@ public class SeminarMapper implements DbMapper<Seminar>{
         }
     }
 
-    // qui dovrei cancellare anche tutte le connessioni in enrollement
     @Override
     public void delete(String id) {
         PreparedStatement ps;

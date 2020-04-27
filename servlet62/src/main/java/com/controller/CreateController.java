@@ -31,8 +31,8 @@ public class CreateController implements Controller{
     public View buildPage(Context context) {
         
         if (context.post()) {
-            if(_entity.isValid(context)) {
-             _entity.create(context);   
+            if(_entity.isValid(context.requestMap())) {
+             _entity.getDbMapper(context).insert(context.requestMap());   
              return _entity.getListView(context);
             }}
         
