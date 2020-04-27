@@ -1,5 +1,6 @@
 package com.controller;
 
+import static com.model.Seminar.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -32,6 +33,12 @@ public class UpdateControllerTest {
     @Test
     public void execute()  throws Exception  {
         FakeHttpServletRequest request = new FakeHttpServletRequest(ROUTE_SEMINAR_LIST);
+        request.setParameter(NAME, "Corso di Esempio modificato");
+        request.setParameter(DESCRIPTION, "Esempio");
+        request.setParameter(LOCATION, "Lugano");
+        request.setParameter(TOTAL_SEATS, "10");
+        request.setParameter(START,  "01/01/2020");
+        
         FakeHttpServletResponse response = new FakeHttpServletResponse();
         List<Seminar> data = new ArrayList<Seminar>() {{
             add(new Seminar(1, "Lugano", 10, "Corso di esempio", "Esempio", "01/01/2020"));
@@ -42,7 +49,32 @@ public class UpdateControllerTest {
         
         controller.execute(context);
 
-        assertThat(response.message(), containsString("gahdfhdh"));
+        assertThat(response.message(), containsString("Corso di esempio"));
+    }
+    
+
+    @Test
+    public void update()  throws Exception  {
+        FakeHttpServletRequest request = new FakeHttpServletRequest(ROUTE_SEMINAR_LIST, "POST");
+        request.setParameter(NAME, "Corso di Esempio modificato");
+        request.setParameter(DESCRIPTION, "Esempio");
+        request.setParameter(LOCATION, "Lugano");
+        request.setParameter(TOTAL_SEATS, "10");
+        request.setParameter(START,  "01/01/2020");
+        
+        FakeHttpServletResponse response = new FakeHttpServletResponse();
+        List<Seminar> data = new ArrayList<Seminar>() {{
+            add(new Seminar(1, "Lugano", 10, "Corso di esempio", "Esempio", "01/01/2020"));
+        }};
+        
+        UpdateController controller = new UpdateController(new SeminarEntity());
+        Context context = new Context(request, response, new FakeDbConnection<Seminar>(data, DBop.FIND_BY_ID, 1));
+        
+        controller.execute(context);
+
+        assertThat(response.message(), containsString("Corso di Esempio modificato"));
+        
+        
 
     }
     

@@ -14,15 +14,6 @@ import com.controller.Controller;
 
 public class Servlet extends HttpServlet {
 
-	
-//	private SQLiteConnectionPoolDataSource _ds;
-//	_ds = new SQLiteConnectionPoolDataSource();
-//	_ds.setUrl("jdbc:sqlite:/path");
-	
-//	private HikariDataSource _ds;
-//  _ds = new HikariDataSource();
-//	_ds.setJdbcUrl("jdbc:sqlite:/path");
-	
 	private DataSource _ds;
 	
 	@Override

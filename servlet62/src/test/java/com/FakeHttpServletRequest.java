@@ -82,7 +82,7 @@ public class FakeHttpServletRequest implements HttpServletRequest {
 
     @Override
     public Map getParameterMap() {
-        return null;
+        return _parameters;
     }
 
     @Override
